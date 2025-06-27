@@ -1,9 +1,14 @@
 export interface ICharacter {
     id: string;
     name: string;
-    importance: 'main' | 'secondary' | 'minor';
+    importance: PriorityType;
     characteristics: string;
     about: string;
+}
+export enum PriorityType {
+    MAIN = "Main",
+    SECONDARY = "Secondary",
+    MINOR = 'Minor'
 }
 
 export interface IPlot {

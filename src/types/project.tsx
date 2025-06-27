@@ -15,13 +15,15 @@ export interface IProject {
     id: string;
     projectName: string
     type: ProjectType;
+    title: string;
+    description: string;
 }
 
 export enum ProjectType {
     NOVEL = 'Novel',
-    SHORT_STORY = 'Short-story',
     TRILOGY = 'Trilogy',
     NON_FICTION = 'Non-fiction',
     RESEARCH = 'Research',
-    POETRY = 'Poetry'
+    POETRY = 'Poetry',
+    THESIS = 'Thesis'
 }

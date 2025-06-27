@@ -13,6 +13,7 @@ import MainHeader from "@/components/MainHeader.tsx";
 import { setCurrentSection} from "@/store/project/actions.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
+import {ProjectType} from "@/types/project.tsx";
 
 const MainContent = () => {
   const location = useLocation();
@@ -21,19 +22,17 @@ const MainContent = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const template = location.state?.template || 'Novel';
+  const template = location.state?.template as ProjectType || ProjectType.NOVEL;
 
   const getSections = () => {
     switch (template) {
-      case 'Novel':
+      case ProjectType.NOVEL:
         return [ESections.General, ESections.Characters, ESections.World, ESections.Plots,ESections.Manuscript, ESections.Resources];
-      case 'Short-story':
-        return [ESections.General, ESections.Characters, ESections.World,ESections.Manuscript, ESections.Resources];
-      case 'Trilogy':
+      case ProjectType.THESIS:
         return [ESections.General,ESections.Manuscript, ESections.References, ESections.Bibliography, ESections.Resources];
-      case 'Poetry':
+      case ProjectType.POETRY:
         return [ESections.General,ESections.Manuscript, ESections.References];
-      case 'Non-fiction':
+      case ProjectType.NON_FICTION:
         return [ESections.Any, ESections.General,ESections.Manuscript, ESections.Illustrations, ESections.Resources];
       default:
         return [ESections.General,ESections.Manuscript, ESections.Resources];
@@ -73,7 +72,7 @@ const MainContent = () => {
               className="flex items-center space-x-2"
           > <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">Project</h2>
+          <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">{currentProject?.title ?? 'Project'}</h2>
           <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </Button>

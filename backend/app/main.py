@@ -3,8 +3,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import event, Engine
 
-from .data.entities.project_entities import ProjectList, BaseProject, FictionProject, NonFictionProject, TesisProject
+from .data.entities.project_entities import Base
 from .data.db.db import engine
+from .data.entities.sections.character_entities import Character
+from .data.entities.sections.plot_entities import Plot, PlotStep
+from .data.entities.sections.references_entities import ReferenceBase
+from .data.entities.sections.source_entities import Sources
+from .data.entities.sections.world_entities import World, WorldElement
 from .router.project_router import projects_router
 
 
@@ -18,19 +23,28 @@ def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(
-            ProjectList.metadata.create_all,
+            Base.metadata.create_all,
         )
         await conn.run_sync(
-            BaseProject.metadata.create_all,
+            ReferenceBase.metadata.create_all,
         )
         await conn.run_sync(
-            FictionProject.metadata.create_all,
+            Sources.metadata.create_all,
         )
         await conn.run_sync(
-            NonFictionProject.metadata.create_all,
+            Plot.metadata.create_all,
         )
         await conn.run_sync(
-            TesisProject.metadata.create_all
+            PlotStep.metadata.create_all,
+        )
+        await conn.run_sync(
+            World.metadata.create_all,
+        )
+        await conn.run_sync(
+            WorldElement.metadata.create_all,
+        )
+        await conn.run_sync(
+            Character.metadata.create_all,
         )
     yield
 

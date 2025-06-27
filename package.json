@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev-backend": "source backend/.venv/bin/activate && uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "tsc && vite build && electron-builder",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

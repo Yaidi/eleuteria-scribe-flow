@@ -17,6 +17,9 @@ class BaseProject(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     projectListID = Column(Integer, ForeignKey("project_lists.id"))
+    project_name = Column(String)
+    word_goal = Column(Integer)
+    words = Column(Integer)
     title = Column(String)
     subtitle = Column(String)
     author = Column(String)
@@ -35,7 +38,8 @@ class FictionProject(BaseProject):
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
     series = Column(String)
-    volume = Column(String)
+    volume = Column(Integer)
+    duration = Column(String) # Indicar si es Novela o Trilogia
     genre = Column(String)
     license = Column(String)
     situation = Column(String)
@@ -53,11 +57,11 @@ class NonFictionProject(BaseProject):
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
     series = Column(String)
-    volume = Column(String)
+    volume = Column(Integer)
     license = Column(String)
 
     __mapper_args__ = {
-        "polymorphic_identity": "nonfiction"
+        "polymorphic_identity": "non-fiction"
     }
 
 # ───── Thesis ─────
@@ -65,7 +69,18 @@ class ThesisProject(BaseProject):
     __tablename__ = "thesis_projects"
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+    duration = Column(String) # Indicar si es Articulo/Research o Tesis
 
     __mapper_args__ = {
         "polymorphic_identity": "thesis"
+    }
+
+# ───── Poetry ─────
+class PoetryProject(BaseProject):
+    __tablename__ = "poetry_projects"
+
+    id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "poetry"
     }

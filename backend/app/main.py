@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from sqlalchemy import event, Engine
+from starlette.middleware.cors import CORSMiddleware
 
 from .data.entities.project_entities import ProjectList, BaseProject, FictionProject, NonFictionProject, TesisProject
 from .data.db.db import engine
@@ -37,6 +38,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(projects_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ⚠️ Esto permite TODOS los orígenes
+    allow_credentials=True,
+    allow_methods=["*"],   # Permite todos los métodos (GET, POST, etc.)
+    allow_headers=["*"],   # Permite todos los headers
+)
 
 @app.get("/")
 def root():

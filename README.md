@@ -76,10 +76,6 @@ This project is built with:
 ## Current Models And Relations Diagram
 ![Models And Relations](eleuteria_data_models.drawio.png)
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and click on Share -> Publish.
-
 ## Backend setup:
 To setup and run backend you need to follow these steps:
 

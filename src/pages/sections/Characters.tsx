@@ -1,21 +1,21 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Plus} from "lucide-react";
-import { ICharacter} from "@/types/sections.ts";
+import {ICharacter, PriorityType} from "@/types/sections.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {addCharacter} from "@/store/sections/action.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/store/config.tsx";
+import {useDispatch} from "react-redux";
 import FormsCharacters from "@/components/FormsCharacters.tsx";
+import {useSections} from "@/hooks/useSections.ts";
 
 const Characters = () => {
-    const { characters } = useSelector((state: RootState) => state.sections);
+    const {characters}  = useSections()
     const dispatch = useDispatch();
 
     const add = () => {
         const newCharacter: ICharacter = {
             id: Date.now().toString(),
             name: '',
-            importance: 'minor',
+            importance: PriorityType.MINOR,
             characteristics: '',
             about: ''
         };

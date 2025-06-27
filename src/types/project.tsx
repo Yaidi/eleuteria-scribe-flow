@@ -15,8 +15,6 @@ export interface IProject {
     id: string;
     projectName: string
     type: ProjectType;
-    title: string;
-    description: string;
 }
 
 export enum ProjectType {
@@ -25,5 +23,6 @@ export enum ProjectType {
     NON_FICTION = 'Non-fiction',
     RESEARCH = 'Research',
     POETRY = 'Poetry',
-    THESIS = 'Thesis'
+    THESIS = 'Thesis',
+    ILLUSTRATED = 'Illustrated'
 }

@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({activeSection}) => {
                   <h3 className="font-semibold text-sm text-gray-700">Characters</h3>
               </div>
 
-              {['Principal', 'Secondary', 'Minor'].map((role) => (
+              {['Main', 'Secondary', 'Minor'].map((role) => (
                   <div key={role} className="space-y-1">
                       <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide">
                           {role}

@@ -4,7 +4,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {Button} from "@/components/ui/button.tsx";
 import {Trash2} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea.tsx";
-import {ICharacter} from "@/types/sections.ts";
+import {ICharacter, PriorityType} from "@/types/sections.ts";
 import React from "react";
 import {removeCharacter, updateInfoCharacter} from "@/store/sections/action.ts";
 import {useDispatch} from "react-redux";
@@ -38,7 +38,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character}) => {
                     </div>
                     <div>
                         <Label>Importance</Label>
-                        <Select name="importance" value={character.importance} onValueChange={(value: 'main' | 'secondary' | 'minor') => update({
+                        <Select name="importance" value={character.importance} onValueChange={(value: PriorityType) => update({
                             id: character.id,
                             importance: value
                         })}>

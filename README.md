@@ -60,6 +60,22 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Naming conventions for PRs
+| Type       | When to use?                                                 |
+|------------|--------------------------------------------------------------|
+| `feat`     | New functionality                                            |
+| `fix`      | Bug fixes                                                    |
+| `refactor` | Change internal structure without change functionality       |
+| `chore`    | Minor changes: updates, scripts, lint, configs               |
+| `docs`     | Documentation changes                                        |
+| `style`    | Format changes, spaces, commas, without impact functionality |
+| `test`     | Add or improve tests                                         |
+| `perf`     | Improve performance                                          |
+| `build`    | Build changes, dependencies, CI/CD                           |
+
+## Current Models And Relations Diagram
+![Models And Relations](eleuteria_data_models.drawio.png)
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and click on Share -> Publish.

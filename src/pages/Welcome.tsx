@@ -1,16 +1,16 @@
-
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useNavigate } from 'react-router-dom';
-import { Moon, Sun, BookOpen, FileText, GraduationCap, Heart, Image, Plus, PlusCircle } from 'lucide-react';
+import {useState} from 'react';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Textarea} from '@/components/ui/textarea';
+import {useNavigate} from 'react-router-dom';
+import {BookOpen, FileText, GraduationCap, Heart, Image, Moon, Plus, PlusCircle, Sun} from 'lucide-react';
 import {addProjectFetch} from "@/store/Projects/slice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store/config.tsx";
+import {ProjectType} from "@/types/project.tsx";
 
 interface TemplateStructure {
   sections: string[];
@@ -21,10 +21,6 @@ const templates: Record<string, TemplateStructure> = {
   Novel: {
     sections: ['General', 'Characters', 'World', 'Plots', 'Manuscript', 'Resources'],
     description: 'Perfect for long-form fiction with complex characters and world-building'
-  },
-  'Short-story': {
-    sections: ['General', 'Characters', 'World', 'Resume', 'Manuscript', 'Resources'],
-    description: 'Ideal for short stories and novellas with focused narratives'
   },
   Trilogy: {
     sections: ['General', 'Manuscript', 'References', 'Bibliography', 'Resources'],
@@ -41,7 +37,8 @@ const templates: Record<string, TemplateStructure> = {
 };
 
 const Welcome = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const featureEnabled = import.meta.env.VITE_FEATURES;
+  const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.NOVEL);
   const [darkMode, setDarkMode] = useState(false);
   const [customTemplate, setCustomTemplate] = useState({
     title: '',
@@ -52,14 +49,26 @@ const Welcome = () => {
   const [newBook, setNewBook] = useState({ title: '' });
   const navigate = useNavigate();
 
-  const handleTemplateSelect = (template: string) => {
+  const handleTemplateSelect = (template: ProjectType) => {
     setSelectedTemplate(template);
   };
 
-  const handleCreateProject = (type: string) => {
-    dispatch(addProjectFetch({projectListID: 1, type }))
-    navigate('/main', { state: { projectType: type, template: selectedTemplate, customTemplate, newBook } });
+  const handleCreateProject = async (type: ProjectType) => {
+    try {
+      await dispatch(addProjectFetch({ projectListID: 1, type })).unwrap();
+      navigate('/main', {
+        state: {
+          projectType: type,
+          template: selectedTemplate,
+          customTemplate,
+          newBook
+        }
+      });
+    } catch (error) {
+      console.error('Error al crear el proyecto:', error);
+    }
   };
+
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -86,7 +95,7 @@ const Welcome = () => {
           <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-4">Choose Template</h2>
 
           <button
-            onClick={() => handleTemplateSelect('Novel')}
+            onClick={() => handleTemplateSelect(ProjectType.NOVEL)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
               selectedTemplate === 'Novel' 
                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
@@ -98,23 +107,8 @@ const Welcome = () => {
               <span className="font-medium text-slate-800 dark:text-slate-200">Novel</span>
             </div>
           </button>
-
           <button
-            onClick={() => handleTemplateSelect('Short-story')}
-            className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'Short-story' 
-                ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
-                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <FileText className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-slate-800 dark:text-slate-200">Story Book</span>
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleTemplateSelect('Trilogy')}
+            onClick={() => handleTemplateSelect(ProjectType.THESIS)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
               selectedTemplate === 'Trilogy' 
                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
@@ -128,7 +122,7 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('Poetry')}
+            onClick={() => handleTemplateSelect(ProjectType.POETRY)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
               selectedTemplate === 'Poetry' 
                 ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20' 
@@ -142,7 +136,7 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('Non-fiction')}
+            onClick={() => handleTemplateSelect(ProjectType.ILLUSTRATED)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
               selectedTemplate === 'Non-fiction' 
                 ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' 
@@ -155,33 +149,40 @@ const Welcome = () => {
             </div>
           </button>
 
-          <button
-            onClick={() => handleTemplateSelect('custom')}
-            className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'custom' 
-                ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' 
-                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <Plus className="w-5 h-5 text-indigo-600" />
-              <span className="font-medium text-slate-800 dark:text-slate-200">Create New Template</span>
-            </div>
-          </button>
+          {
+              featureEnabled == 'true' && (
+                  <>
+                <button
+                    onClick={() => handleTemplateSelect(ProjectType.TRILOGY)}
+                    className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
+                        selectedTemplate === ProjectType.TRILOGY
+                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Plus className="w-5 h-5 text-indigo-600" />
+                    <span className="font-medium text-slate-800 dark:text-slate-200">Create New Template</span>
+                  </div>
+                </button>
+            <button
+            onClick={() => handleTemplateSelect(ProjectType.NON_FICTION)}
+          className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
+              selectedTemplate === ProjectType.NON_FICTION
+                  ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+          }`}
+        >
+          <div className="flex items-center space-x-3">
+            <PlusCircle className="w-5 h-5 text-teal-600" />
+            <span className="font-medium text-slate-800 dark:text-slate-200">Create New Book</span>
+          </div>
+        </button>
+            </>
+              )
+          }
 
-          <button
-            onClick={() => handleTemplateSelect('new')}
-            className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'new' 
-                ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20' 
-                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
-            }`}
-          >
-            <div className="flex items-center space-x-3">
-              <PlusCircle className="w-5 h-5 text-teal-600" />
-              <span className="font-medium text-slate-800 dark:text-slate-200">Create New Book</span>
-            </div>
-          </button>
+
         </div>
       </div>
 
@@ -225,79 +226,84 @@ const Welcome = () => {
           </Card>
         )}
 
-        {selectedTemplate === 'custom' && (
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>Create Custom Template</CardTitle>
-              <CardDescription>Design your own project structure</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="template-title">Template Title</Label>
-                  <Input
-                    id="template-title"
-                    value={customTemplate.title}
-                    onChange={(e) => setCustomTemplate({...customTemplate, title: e.target.value})}
-                    placeholder="Enter template name"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="manuscript-number">Number of Manuscripts</Label>
-                  <Select value={customTemplate.manuscriptNumber} onValueChange={(value) => setCustomTemplate({...customTemplate, manuscriptNumber: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select number" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="3">3</SelectItem>
-                      <SelectItem value="4">4</SelectItem>
-                      <SelectItem value="5">5</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="sections">Additional Sections</Label>
-                  <Textarea
-                    id="sections"
-                    value={customTemplate.sections}
-                    onChange={(e) => setCustomTemplate({...customTemplate, sections: e.target.value})}
-                    placeholder="Enter section names separated by commas (e.g., World, Resources, Notes)"
-                  />
-                </div>
-                <Button onClick={() => handleCreateProject('custom')} className="w-full">
-                  Create Template
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {
+          featureEnabled == 'true' && (
+              <>
+                {selectedTemplate === ProjectType.NON_FICTION && (
+                    <Card className="max-w-2xl mx-auto">
+                      <CardHeader>
+                        <CardTitle>Create Custom Template</CardTitle>
+                        <CardDescription>Design your own project structure</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="template-title">Template Title</Label>
+                            <Input
+                                id="template-title"
+                                value={customTemplate.title}
+                                onChange={(e) => setCustomTemplate({...customTemplate, title: e.target.value})}
+                                placeholder="Enter template name"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="manuscript-number">Number of Manuscripts</Label>
+                            <Select value={customTemplate.manuscriptNumber} onValueChange={(value) => setCustomTemplate({...customTemplate, manuscriptNumber: value})}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select number" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1">1</SelectItem>
+                                <SelectItem value="2">2</SelectItem>
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="4">4</SelectItem>
+                                <SelectItem value="5">5</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="sections">Additional Sections</Label>
+                            <Textarea
+                                id="sections"
+                                value={customTemplate.sections}
+                                onChange={(e) => setCustomTemplate({...customTemplate, sections: e.target.value})}
+                                placeholder="Enter section names separated by commas (e.g., World, Resources, Notes)"
+                            />
+                          </div>
+                          <Button onClick={() => handleCreateProject(ProjectType.NON_FICTION)} className="w-full">
+                            Create Template
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                )}
 
-        {selectedTemplate === 'new' && (
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>Create New Book</CardTitle>
-              <CardDescription>Start writing your new project</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="book-title">Book Title</Label>
-                  <Input
-                    id="book-title"
-                    value={newBook.title}
-                    onChange={(e) => setNewBook({...newBook, title: e.target.value})}
-                    placeholder="Enter your book title"
-                  />
-                </div>
-                <Button onClick={() => handleCreateProject('new')} className="w-full">
-                  Create Book
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                {selectedTemplate === ProjectType.NON_FICTION && (
+                    <Card className="max-w-2xl mx-auto">
+                      <CardHeader>
+                        <CardTitle>Create New Book</CardTitle>
+                        <CardDescription>Start writing your new project</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="book-title">Book Title</Label>
+                            <Input
+                                id="book-title"
+                                value={newBook.title}
+                                onChange={(e) => setNewBook({...newBook, title: e.target.value})}
+                                placeholder="Enter your book title"
+                            />
+                          </div>
+                          <Button onClick={() => handleCreateProject(ProjectType.NON_FICTION)} className="w-full">
+                            Create Book
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                )}</>
+            )
+        }
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {addProject, getProjects} from "@/store/Projects/actions.ts";
 import {ProjectData} from "@/types/project.tsx";
 import {getCurrentProject} from "@/store/project/actions.ts";
-import {Requests} from "@/types/requests.ts";
+import {RequestAddProject} from "@/types/requestAddProject.ts";
 
 export const projectsFetch = createAsyncThunk<ProjectData[]>(
     getProjects.type,
@@ -28,9 +28,9 @@ export const getProjectFetch = createAsyncThunk<ProjectData[], string>(
     }
 )
 
-export const addProjectFetch = createAsyncThunk<ProjectData, Requests>(
+export const addProjectFetch = createAsyncThunk<ProjectData, RequestAddProject>(
     addProject.type,
-    async (body: Requests) => {
+    async (body: RequestAddProject) => {
         const response = await fetch(`/api/addProject`, {
             method: 'POST',
             headers: {

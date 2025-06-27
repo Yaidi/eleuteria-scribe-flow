@@ -3,14 +3,15 @@ import {Plus, Trash2} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {IPlot} from "@/types/sections.ts";
 import {Input} from "@/components/ui/input.tsx";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/config.tsx";
+import {useDispatch} from "react-redux";
 import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
-import {addPlot, removePlot, updatePlot} from "@/store/sections/action.ts";
+import {addPlot, removePlot, updatePlot} from "@/store/sections/plots/action.ts";
+import {useSections} from "@/hooks/useSections.ts";
 
 const Plot = () => {
-    const { plots } = useSelector((state: RootState) => state.sections)
+    const { plots } = useSections()
+    const dispatch = useDispatch()
 
     const add = () => {
         const newPlot: IPlot = {
@@ -20,15 +21,15 @@ const Plot = () => {
             manuscriptReference: '',
             characters: []
         };
-        addPlot(newPlot);
+        dispatch(addPlot(newPlot))
     };
 
     const update = (plot: Partial<IPlot>) => {
-        updatePlot(plot)
+        dispatch(updatePlot(plot))
     };
 
     const remove = (id: string) => {
-        removePlot(id)
+        dispatch(removePlot(id))
     };
     return (
         <Card>

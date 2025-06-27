@@ -31,15 +31,28 @@ export interface IGeneral {
     author: string;
     subtitle: string;
     series: string;
-    volume: string;
-    genre: string;
+    volume: number;
+    genre: GenreType;
     license: string;
+}
+export enum GenreType {
+    Romance = "Romance"
 }
 
 export interface IChapter {
     id: string;
     title: string;
     description: string;
+    scenes: Scene[];
+}
+
+export interface Scene {
+    id: string
+    title: string
+    content: string
+    wordCount: number
+    wordGoal: number
+    characters: string[]
 }
 
 export enum ESections {

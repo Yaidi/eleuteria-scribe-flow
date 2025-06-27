@@ -16,14 +16,28 @@ projects_router = APIRouter()
 # Define el endpoint
 @projects_router.get("/getProjectList")
 async def get_project_list(
-    id: int,
     session: AsyncSession = Depends(get_session)
 ):
+
     result = await session.execute(
-        select(BaseProject).where(BaseProject.projectListID == id)
+        select(BaseProject).where(BaseProject.projectListID == 1)
     )
-    projects = result.scalars().all()
-    return {"projects": [projects]}
+    if len(result.scalars().all()) == 0:
+        new_list = ProjectList()
+        session.add(new_list)
+        await session.commit()
+        await session.refresh(new_list)
+        result_with_fresh_list = await session.execute(
+            select(BaseProject).where(BaseProject.projectListID == 1)
+        )
+        projects = result_with_fresh_list.scalars().all()
+        return {"projects": [projects]}
+    else:
+        result = await session.execute(
+            select(BaseProject).where(BaseProject.projectListID == 1)
+        )
+        projects_list = result.scalars().all()
+        return {"projects": [projects_list]}
 
 # 🔹 POST /createProject
 @projects_router.post("/addProject", response_model=BaseProjectSchema)
@@ -52,12 +66,3 @@ async def get_project(
         raise HTTPException(status_code=404, detail="Project not found")
 
     return project_schema_factory(project)
-
-
-@projects_router.post("/createProjectList")
-async def create_project_list(session: AsyncSession = Depends(get_session)):
-    new_list = ProjectList()
-    session.add(new_list)
-    await session.commit()
-    await session.refresh(new_list)
-    return {"id": new_list.id}

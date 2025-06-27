@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import event, Engine
 
 from .data.entities.project_entities import ProjectList, BaseProject, FictionProject, NonFictionProject, TesisProject
@@ -38,6 +39,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(projects_router)
 
+app.add_middleware(
+     CORSMiddleware,
+     allow_origins=["*"],  # ⚠️ Esto permite TODOS los orígenes
+     allow_credentials=True,
+     allow_methods=["*"],   # Permite todos los métodos (GET, POST, etc.)
+     allow_headers=["*"],   # Permite todos los headers
+     )
 @app.get("/")
 def root():
     return {"status": "API funcionando"}

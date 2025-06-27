@@ -22,22 +22,16 @@ async def get_project_list(
     result = await session.execute(
         select(BaseProject).where(BaseProject.projectListID == 1)
     )
-    if len(result.scalars().all()) == 0:
+    projects_list = result.scalars().all()
+
+    if len(projects_list) == 0:
         new_list = ProjectList()
         session.add(new_list)
         await session.commit()
         await session.refresh(new_list)
-        result_with_fresh_list = await session.execute(
-            select(BaseProject).where(BaseProject.projectListID == 1)
-        )
-        projects = result_with_fresh_list.scalars().all()
-        return {"projects": [projects]}
+        return {"projects": []}
     else:
-        result = await session.execute(
-            select(BaseProject).where(BaseProject.projectListID == 1)
-        )
-        projects_list = result.scalars().all()
-        return {"projects": [projects_list]}
+        return {"projects": projects_list}
 
 # 🔹 POST /createProject
 @projects_router.post("/addProject", response_model=BaseProjectSchema)

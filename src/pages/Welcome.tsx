@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
 import { Moon, Sun, BookOpen, FileText, GraduationCap, Heart, Image, Plus, PlusCircle } from 'lucide-react';
+import {addProject} from "@/store/Projects/actions.ts";
+import {useDispatch} from "react-redux";
 
 interface TemplateStructure {
   sections: string[];

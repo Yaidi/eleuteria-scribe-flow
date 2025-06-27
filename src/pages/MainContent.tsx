@@ -1,41 +1,39 @@
-import {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import { useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {Button} from '@/components/ui/button';
-import { Moon, Sun} from 'lucide-react';
+import {ArrowLeft, Moon, Settings, Sun} from 'lucide-react';
 import General from "@/pages/sections/General.tsx";
 import Characters from "@/pages/sections/Characters.tsx";
 import Plot from "@/pages/sections/Plot.tsx";
 import World from "@/pages/sections/World.tsx";
 import Manuscript from "@/pages/sections/Manuscript.tsx";
-import {ESections} from "@/types/sections.tsx";
+import {ESections} from "@/types/sections.ts";
 import Sidebar from "@/pages/Sidebar.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/store/config.tsx";
 import MainHeader from "@/components/MainHeader.tsx";
 import { setCurrentSection} from "@/store/project/actions.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/store/config.tsx";
 
 const MainContent = () => {
   const location = useLocation();
   const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
-  useEffect(() => {
-  }, [dispatch])
-
-  const template = location.state?.template || 'novel';
+  const template = location.state?.template || 'Novel';
 
   const getSections = () => {
     switch (template) {
-      case 'novel':
+      case 'Novel':
         return [ESections.General, ESections.Characters, ESections.World, ESections.Plots,ESections.Manuscript, ESections.Resources];
-      case 'story':
+      case 'Short-story':
         return [ESections.General, ESections.Characters, ESections.World,ESections.Manuscript, ESections.Resources];
-      case 'thesis':
+      case 'Trilogy':
         return [ESections.General,ESections.Manuscript, ESections.References, ESections.Bibliography, ESections.Resources];
-      case 'poems':
+      case 'Poetry':
         return [ESections.General,ESections.Manuscript, ESections.References];
-      case 'illustrated':
+      case 'Non-fiction':
         return [ESections.Any, ESections.General,ESections.Manuscript, ESections.Illustrations, ESections.Resources];
       default:
         return [ESections.General,ESections.Manuscript, ESections.Resources];
@@ -68,6 +66,13 @@ const MainContent = () => {
     <div className={`min-h-screen flex ${darkMode ? 'dark' : ''}`}>
       <div className="">
         <header className="w-full flex items-center justify-start p-6">
+          <Button
+              variant="ghost"
+              size="sm"
+              onClick={()=> navigate('/')}
+              className="flex items-center space-x-2"
+          > <ArrowLeft className="w-4 h-4" />
+          </Button>
           <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">Project</h2>
           <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -90,13 +95,22 @@ const MainContent = () => {
                   </button>
               ))}
             </section>
+            <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-start"
+            >
+              <Settings className="w-4 h-4 mr-2" />
+              Settings
+            </Button>
           </nav>
             <Sidebar activeSection={currentSection}></Sidebar>
         </section>
       </div>
-      <main className="flex bg-white dark:bg-slate-800 p-8 overflow-auto">
+      <main className="flex flex-col bg-white dark:bg-slate-800 p-8 overflow-auto w-full">
         {
-          currentProject != undefined && (
+          currentProject != undefined &&
+            (
                 <MainHeader currentProject={currentProject} currentSection={currentSection} ></MainHeader>
             )
         }

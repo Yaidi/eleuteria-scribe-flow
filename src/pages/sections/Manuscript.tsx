@@ -1,5 +1,5 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {ESections} from "@/types/sections.tsx";
+import {ESections} from "@/types/sections.ts";
 import React from "react";
 
 interface ManuscriptProps {

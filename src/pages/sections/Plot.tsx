@@ -1,7 +1,7 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Plus, Trash2} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea.tsx";
-import {IPlot} from "@/types/sections.tsx";
+import {IPlot} from "@/types/sections.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";

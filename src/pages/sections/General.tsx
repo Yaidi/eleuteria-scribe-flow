@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
 import {updateGeneral} from "@/store/sections/action.ts";
 import {useEffect, useState} from "react";
-import {IGeneral} from "@/types/sections.tsx";
+import {IGeneral} from "@/types/sections.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
 const General = () => {

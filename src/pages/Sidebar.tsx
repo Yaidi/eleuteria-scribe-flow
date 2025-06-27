@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {ESections} from "@/types/sections.tsx";
+import {ESections} from "@/types/sections.ts";
 import React from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";

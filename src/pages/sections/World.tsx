@@ -2,7 +2,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@radix-ui/react-select";
 import {Plus, Trash2} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea.tsx";
-import {IWorld} from "@/types/sections.tsx";
+import {IWorld} from "@/types/sections.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
 import {addWorld, removeWorld, updateInfoWorld} from "@/store/sections/action.ts";

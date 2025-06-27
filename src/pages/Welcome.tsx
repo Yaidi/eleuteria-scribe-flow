@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { useNavigate } from 'react-router-dom';
 import { Moon, Sun, BookOpen, FileText, GraduationCap, Heart, Image, Plus, PlusCircle } from 'lucide-react';
-import {addProject} from "@/store/Projects/actions.ts";
+import {addProjectFetch} from "@/store/Projects/slice.ts";
 import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/store/config.tsx";
 
 interface TemplateStructure {
   sections: string[];
@@ -17,23 +18,23 @@ interface TemplateStructure {
 }
 
 const templates: Record<string, TemplateStructure> = {
-  novel: {
+  Novel: {
     sections: ['General', 'Characters', 'World', 'Plots', 'Manuscript', 'Resources'],
     description: 'Perfect for long-form fiction with complex characters and world-building'
   },
-  story: {
+  'Short-story': {
     sections: ['General', 'Characters', 'World', 'Resume', 'Manuscript', 'Resources'],
     description: 'Ideal for short stories and novellas with focused narratives'
   },
-  thesis: {
+  Trilogy: {
     sections: ['General', 'Manuscript', 'References', 'Bibliography', 'Resources'],
     description: 'Academic writing with proper citation and reference management'
   },
-  poems: {
+  Poetry: {
     sections: ['General', 'Manuscript', 'References', 'Themes'],
     description: 'Poetry collections with thematic organization'
   },
-  illustrated: {
+  'Non-fiction': {
     sections: ['Legal and Credits', 'General', 'Manuscript', 'Illustrations', 'Resources', 'Final page'],
     description: 'Picture books and illustrated works with visual elements'
   }
@@ -47,6 +48,7 @@ const Welcome = () => {
     manuscriptNumber: '',
     sections: ''
   });
+  const dispatch = useDispatch<AppDispatch>()
   const [newBook, setNewBook] = useState({ title: '' });
   const navigate = useNavigate();
 
@@ -55,6 +57,7 @@ const Welcome = () => {
   };
 
   const handleCreateProject = (type: string) => {
+    dispatch(addProjectFetch({projectListID: 1, type }))
     navigate('/main', { state: { projectType: type, template: selectedTemplate, customTemplate, newBook } });
   };
 
@@ -81,11 +84,11 @@ const Welcome = () => {
 
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-4">Choose Template</h2>
-          
+
           <button
-            onClick={() => handleTemplateSelect('novel')}
+            onClick={() => handleTemplateSelect('Novel')}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'novel' 
+              selectedTemplate === 'Novel' 
                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
                 : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
@@ -97,9 +100,9 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('story')}
+            onClick={() => handleTemplateSelect('Short-story')}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'story' 
+              selectedTemplate === 'Short-story' 
                 ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
                 : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
@@ -111,9 +114,9 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('thesis')}
+            onClick={() => handleTemplateSelect('Trilogy')}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'thesis' 
+              selectedTemplate === 'Trilogy' 
                 ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
                 : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
@@ -125,9 +128,9 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('poems')}
+            onClick={() => handleTemplateSelect('Poetry')}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'poems' 
+              selectedTemplate === 'Poetry' 
                 ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20' 
                 : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
@@ -139,9 +142,9 @@ const Welcome = () => {
           </button>
 
           <button
-            onClick={() => handleTemplateSelect('illustrated')}
+            onClick={() => handleTemplateSelect('Non-fiction')}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === 'illustrated' 
+              selectedTemplate === 'Non-fiction' 
                 ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' 
                 : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}

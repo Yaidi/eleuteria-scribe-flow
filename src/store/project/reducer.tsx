@@ -1,8 +1,8 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {addProject} from "@/store/Projects/actions.ts";
 import {ProjectData} from "@/types/project.tsx";
-import {ESections} from "@/types/sections.tsx";
+import {ESections} from "@/types/sections.ts";
 import {getCurrentProject, setCurrentSection} from "@/store/project/actions.ts";
+import {addProjectFetch} from "@/store/Projects/slice.ts";
 
 export interface IProjectReducer {
     currentSection: ESections,
@@ -23,7 +23,7 @@ export const ProjectReducer = createReducer(initialState, (builder) => {
                currentProject: payload
             });
         })
-        .addCase(addProject, (state, {payload}) => {
+        .addCase(addProjectFetch.fulfilled, (state, {payload}) => {
             return ({
                 ...state,
                 currentProject: payload

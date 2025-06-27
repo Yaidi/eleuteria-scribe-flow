@@ -1,4 +1,4 @@
-import {ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.tsx";
+import {ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.ts";
 
 export interface ProjectSections {
     wordGoal: number;

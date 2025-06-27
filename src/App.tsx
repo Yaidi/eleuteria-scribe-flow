@@ -8,16 +8,18 @@ import Welcome from "./pages/Welcome";
 import MainContent from "./pages/MainContent";
 import NotFound from "./pages/NotFound";
 import {useEffect} from "react";
-import {getProjects} from "@/store/Projects/actions.ts";
-import {IProjectsReducer} from "@/store/Projects/reducer.ts";
-import {connect} from "react-redux";
+import {projectsFetch} from "@/store/Projects/slice.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/store/config.tsx";
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    getProjects()
-  }, [])
+    dispatch(projectsFetch());
+  }, [dispatch]);
 
   return (
       <QueryClientProvider client={queryClient}>
@@ -28,19 +30,13 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/main" element={<MainContent />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>
   );
-}
+};
 
-function mapStateToProps(state: IProjectsReducer): IProjectsReducer {
-  return {
-    projects: state.projects
-  }
-}
+export default App;
 
-export default connect(mapStateToProps, {getProjects})(App);

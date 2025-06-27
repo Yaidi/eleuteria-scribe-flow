@@ -1,5 +1,5 @@
 import {createAction} from "@reduxjs/toolkit";
-import {IChapter, ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.tsx";
+import {IChapter, ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.ts";
 import {ISectionsReducer} from "@/store/sections/reducer.ts";
 
 export const addCharacter = createAction<ICharacter>('[Character] Add Product to cart');

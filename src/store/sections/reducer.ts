@@ -7,7 +7,7 @@ import {
     removeCharacter,
     removeWorld, updateGeneral, updateInfoCharacter
 } from "@/store/sections/action.ts";
-import {IChapter, ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.tsx";
+import {IChapter, ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.ts";
 
 export interface ISectionsReducer {
     general: IGeneral,

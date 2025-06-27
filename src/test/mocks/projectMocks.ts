@@ -1,4 +1,4 @@
-import { ICharacter, IGeneral, IPlot, IWorld, IChapter } from "@/types/sections.tsx";
+import { ICharacter, IGeneral, IPlot, IWorld, IChapter } from "@/types/sections.ts";
 import {ProjectSections, ProjectData, IProject, ProjectType} from "@/types/project.tsx";
 
 // Mock data for ICharacter

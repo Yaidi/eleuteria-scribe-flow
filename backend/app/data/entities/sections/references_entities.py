@@ -1,9 +1,8 @@
-# ───── ReferenceBase ─────
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 
 from backend.app.data.entities.project_entities import Base
 
-
+# ───── ReferenceBase ─────
 class ReferenceBase(Base):
     __tablename__ = "reference_base"
     id = Column(Integer, primary_key=True)

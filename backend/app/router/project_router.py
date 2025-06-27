@@ -6,10 +6,11 @@ from sqlalchemy.orm import Query, with_polymorphic
 from backend.app.data.db.db import get_session
 from backend.app.data.entities.project_entities import BaseProject, ProjectList, FictionProject, NonFictionProject, \
     ThesisProject
-from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory
+from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory, \
+    update_project_object_from_request
 
 from backend.app.schemas.project_schemas import BaseProjectSchema, \
-    CreateProjectRequest, ProjectItemUnionSchema
+    CreateProjectRequest, ProjectItemUnionSchema, UpdateProjectRequest
 
 projects_router = APIRouter()
 
@@ -60,3 +61,22 @@ async def get_project(
         raise HTTPException(status_code=404, detail="Project not found")
 
     return project_schema_factory(project)
+
+@projects_router.post("/updateProject", response_model=ProjectItemUnionSchema)
+async def update_project(
+    data: UpdateProjectRequest,
+    session: AsyncSession = Depends(get_session)
+):
+    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
+    result = await session.execute(select(project_polymorphic).where(BaseProject.id == data.id))
+    project_to_update = result.scalar_one_or_none()
+
+    if not project_to_update:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    if project_to_update:
+        update_project_object_from_request(data, project_to_update)
+        await session.commit()
+        await session.refresh(project_to_update)
+
+    return project_schema_factory(project_to_update)

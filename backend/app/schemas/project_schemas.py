@@ -5,9 +5,9 @@ from typing import Optional, List, Literal, Union
 class BaseProjectSchema(BaseModel):
     id: int
     projectListID: int
-    title: Optional[str] = None
-    subtitle: Optional[str] = None
-    author: Optional[str] = None
+    title: Optional[str] = ""
+    subtitle: Optional[str] = ""
+    author: Optional[str] = ""
     type: str
 
     model_config = ConfigDict(from_attributes=True)
@@ -15,23 +15,23 @@ class BaseProjectSchema(BaseModel):
 # ───── Project Types Schemas ─────
 class FictionProjectSchema(BaseProjectSchema):
     type: Literal["fiction"]
-    series: Optional[str]
-    volume: Optional[str]
-    genre: Optional[str]
-    license: Optional[str]
-    situation: Optional[str]
-    resume_phrase: Optional[str]
-    resume_paragraph: Optional[str]
-    resume_page: Optional[str]
+    series: Optional[str] = ""
+    volume: Optional[str] = ""
+    genre: Optional[str] = ""
+    license: Optional[str] = ""
+    situation: Optional[str] = ""
+    resume_phrase: Optional[str] = ""
+    resume_paragraph: Optional[str] = ""
+    resume_page: Optional[str] = ""
 
 class NonFictionProjectSchema(BaseProjectSchema):
     type: Literal["nonfiction"]
-    series: Optional[str]
-    volume: Optional[str]
-    license: Optional[str]
+    series: Optional[str] = ""
+    volume: Optional[str] = ""
+    license: Optional[str] = ""
 
-class TesisProjectSchema(BaseProjectSchema):
-    type: Literal["tesis"]
+class ThesisProjectSchema(BaseProjectSchema):
+    type: Literal["thesis"]
 
 class BaseProjectItemSchema(BaseProjectSchema):
     type: Literal["base"]
@@ -40,7 +40,7 @@ class BaseProjectItemSchema(BaseProjectSchema):
 ProjectItemUnionSchema = Union[
     FictionProjectSchema,
     NonFictionProjectSchema,
-    TesisProjectSchema,
+    ThesisProjectSchema,
     BaseProjectItemSchema,
 ]
 
@@ -53,14 +53,3 @@ class ProjectListResponse(BaseModel):
 class CreateProjectRequest(BaseModel):
     type: str
     projectListID: int
-    title: Optional[str] = ""
-    subtitle: Optional[str] = ""
-    author: Optional[str] = ""
-    series: Optional[str] = ""
-    volume: Optional[str] = ""
-    genre: Optional[str] = ""
-    license: Optional[str] = ""
-    situation: Optional[str] = ""
-    resume_phrase: Optional[str] = ""
-    resume_paragraph: Optional[str] = ""
-    resume_page: Optional[str] = ""

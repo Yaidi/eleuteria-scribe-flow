@@ -5,7 +5,7 @@ from sqlalchemy.orm import Query, with_polymorphic
 
 from backend.app.data.db.db import get_session
 from backend.app.data.entities.project_entities import BaseProject, ProjectList, FictionProject, NonFictionProject, \
- TesisProject
+    ThesisProject
 from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory
 
 from backend.app.schemas.project_schemas import BaseProjectSchema, \
@@ -34,7 +34,7 @@ async def get_project_list(
         return {"projects": projects_list}
 
 # 🔹 POST /createProject
-@projects_router.post("/addProject", response_model=BaseProjectSchema)
+@projects_router.post("/addProject", response_model=ProjectItemUnionSchema)
 async def create_project(
     data: CreateProjectRequest,
     session: AsyncSession = Depends(get_session)
@@ -44,15 +44,15 @@ async def create_project(
     session.add(new_project)
     await session.commit()
     await session.refresh(new_project)
-    return BaseProjectSchema.model_validate(new_project)
+    return project_schema_factory(new_project)
 
-# 🔹 GET /getProject?id=123
+# 🔹 GET /getProject
 @projects_router.get("/getProject", response_model=ProjectItemUnionSchema)
 async def get_project(
     id: int,
     session: AsyncSession = Depends(get_session)
 ):
-    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, TesisProject])
+    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
     result = await session.execute(select(project_polymorphic).where(BaseProject.id == id))
     project = result.scalar_one_or_none()
 

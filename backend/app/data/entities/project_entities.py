@@ -60,12 +60,12 @@ class NonFictionProject(BaseProject):
         "polymorphic_identity": "nonfiction"
     }
 
-# ───── Tesis ─────
-class TesisProject(BaseProject):
-    __tablename__ = "tesis_projects"
+# ───── Thesis ─────
+class ThesisProject(BaseProject):
+    __tablename__ = "thesis_projects"
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
 
     __mapper_args__ = {
-        "polymorphic_identity": "tesis"
+        "polymorphic_identity": "thesis"
     }

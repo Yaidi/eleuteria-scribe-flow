@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import event, Engine
 
-from .data.entities.project_entities import ProjectList, BaseProject, FictionProject, NonFictionProject, Tesis
+from .data.entities.project_entities import ProjectList, BaseProject, FictionProject, NonFictionProject, TesisProject
 from .data.db.db import engine
 from .router.project_router import projects_router
 
@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
             NonFictionProject.metadata.create_all,
         )
         await conn.run_sync(
-            Tesis.metadata.create_all
+            TesisProject.metadata.create_all
         )
     yield
 

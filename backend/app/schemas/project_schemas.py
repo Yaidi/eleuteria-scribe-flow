@@ -1,12 +1,10 @@
 from pydantic import BaseModel, ConfigDict
-
-from typing import Optional, List
+from typing import Optional, List, Literal, Union
 
 # ───── BaseProject Response ─────
-class BaseProjectResponse(BaseModel):
+class BaseProjectSchema(BaseModel):
     id: int
     projectListID: int
-    projectName: str
     title: Optional[str] = None
     subtitle: Optional[str] = None
     author: Optional[str] = None
@@ -14,20 +12,55 @@ class BaseProjectResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-# ───── ProjectList Response ─────
-class ProjectListItem(BaseModel):
-    id: int
-    projectName: str
+# ───── Project Types Schemas ─────
+class FictionProjectSchema(BaseProjectSchema):
+    type: Literal["fiction"]
+    series: Optional[str]
+    volume: Optional[str]
+    genre: Optional[str]
+    license: Optional[str]
+    situation: Optional[str]
+    resume_phrase: Optional[str]
+    resume_paragraph: Optional[str]
+    resume_page: Optional[str]
 
-    model_config = ConfigDict(from_attributes=True)
+class NonFictionProjectSchema(BaseProjectSchema):
+    type: Literal["nonfiction"]
+    series: Optional[str]
+    volume: Optional[str]
+    license: Optional[str]
+
+class TesisProjectSchema(BaseProjectSchema):
+    type: Literal["tesis"]
+
+class BaseProjectItemSchema(BaseProjectSchema):
+    type: Literal["base"]
+
+# Union with discrimination
+ProjectItemUnionSchema = Union[
+    FictionProjectSchema,
+    NonFictionProjectSchema,
+    TesisProjectSchema,
+    BaseProjectItemSchema,
+]
+
+# ───── ProjectList Response ─────
 
 class ProjectListResponse(BaseModel):
-    projects: List[ProjectListItem]
+    projects: List[ProjectItemUnionSchema]
 
 # Para creación de proyecto
 class CreateProjectRequest(BaseModel):
+    type: str
     projectListID: int
-    projectName: str
-    title: Optional[str] = None
-    subtitle: Optional[str] = None
-    author: Optional[str] = None
+    title: Optional[str] = ""
+    subtitle: Optional[str] = ""
+    author: Optional[str] = ""
+    series: Optional[str] = ""
+    volume: Optional[str] = ""
+    genre: Optional[str] = ""
+    license: Optional[str] = ""
+    situation: Optional[str] = ""
+    resume_phrase: Optional[str] = ""
+    resume_paragraph: Optional[str] = ""
+    resume_page: Optional[str] = ""

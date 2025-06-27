@@ -17,7 +17,6 @@ class BaseProject(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     projectListID = Column(Integer, ForeignKey("project_lists.id"))
-    projectName = Column(String, nullable=False)
     title = Column(String)
     subtitle = Column(String)
     author = Column(String)
@@ -62,7 +61,7 @@ class NonFictionProject(BaseProject):
     }
 
 # ───── Tesis ─────
-class Tesis(BaseProject):
+class TesisProject(BaseProject):
     __tablename__ = "tesis_projects"
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)

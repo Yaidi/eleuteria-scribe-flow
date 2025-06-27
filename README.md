@@ -64,6 +64,19 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and click on Share -> Publish.
 
+## Backend setup:
+To setup and run backend you need to follow these steps:
+
+1 - run on terminal: 
+```
+cd backend && python3 -m venv .venv && source .venv/bin/activate && pip3 install -r requirements.txt
+```
+
+2 - you can run: ```npm run dev-backend```
+
+3 - Backend will be running on: http://localhost:8000
+
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!

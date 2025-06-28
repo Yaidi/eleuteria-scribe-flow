@@ -16,6 +16,7 @@ export interface ProjectData extends IProject, Partial<ProjectSections> {}
 
 export interface IProject {
     id: number;
+    projectListID: number
     projectName: string
     type: ProjectType;
 }

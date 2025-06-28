@@ -1,1 +1,1 @@
-export * from './projectMocks.ts';
+export * from "./projectMocks.ts";

@@ -5,11 +5,11 @@ import { IWorld } from "@/types/sections";
 const initialState: IWorld[] = [];
 
 export const worldReducer = createReducer(initialState, (builder) => {
-    builder
-        .addCase(addWorld, (state, { payload }) => {
-            state.push(payload);
-        })
-        .addCase(removeWorld, (state, { payload }) => {
-            return state.filter(w => w.id !== payload);
-        });
+  builder
+    .addCase(addWorld, (state, { payload }) => {
+      state.push(payload);
+    })
+    .addCase(removeWorld, (state, { payload }) => {
+      return state.filter((w) => w.id !== payload);
+    });
 });

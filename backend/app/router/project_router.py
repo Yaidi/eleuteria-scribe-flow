@@ -7,10 +7,10 @@ from backend.app.data.db.db import get_session
 from backend.app.data.entities.project_entities import BaseProject, ProjectList, FictionProject, NonFictionProject, \
     ThesisProject
 from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory, \
-    update_project_object_from_request
+    update_project_object_from_request, update_project_type_on_response
 
 from backend.app.schemas.project_schemas import BaseProjectSchema, \
-    CreateProjectRequest, ProjectItemUnionSchema, UpdateProjectRequest
+    CreateProjectRequest, UpdateProjectRequest
 
 projects_router = APIRouter()
 
@@ -25,6 +25,10 @@ async def get_project_list(
     )
     projects_list = result.scalars().all()
 
+    projects_list_response = []
+    for project in projects_list:
+        projects_list_response.append(update_project_type_on_response(project))
+
     if len(projects_list) == 0:
         new_list = ProjectList()
         session.add(new_list)
@@ -32,10 +36,10 @@ async def get_project_list(
         await session.refresh(new_list)
         return {"projects": []}
     else:
-        return {"projects": projects_list}
+        return {"projects": projects_list_response}
 
 # 🔹 POST /createProject
-@projects_router.post("/addProject", response_model=ProjectItemUnionSchema)
+@projects_router.post("/addProject", response_model=BaseProjectSchema)
 async def create_project(
     data: CreateProjectRequest,
     session: AsyncSession = Depends(get_session)
@@ -48,7 +52,7 @@ async def create_project(
     return project_schema_factory(new_project)
 
 # 🔹 GET /getProject
-@projects_router.get("/getProject", response_model=ProjectItemUnionSchema)
+@projects_router.get("/getProject", response_model=BaseProjectSchema)
 async def get_project(
     id: int,
     session: AsyncSession = Depends(get_session)
@@ -62,7 +66,7 @@ async def get_project(
 
     return project_schema_factory(project)
 
-@projects_router.post("/updateProject", response_model=ProjectItemUnionSchema)
+@projects_router.post("/updateProject", response_model=BaseProjectSchema)
 async def update_project(
     data: UpdateProjectRequest,
     session: AsyncSession = Depends(get_session)

@@ -12,7 +12,7 @@ def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectS
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,
-        "project_name": project.project_name,
+        "projectName": project.project_name,
     }
     return MinimalBaseProjectSchema(**base_kwargs)
 

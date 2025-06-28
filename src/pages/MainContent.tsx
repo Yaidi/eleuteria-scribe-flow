@@ -12,8 +12,8 @@ import Sidebar from "@/pages/Sidebar.tsx";
 import MainHeader from "@/components/MainHeader.tsx";
 import {setCurrentSection} from "@/store";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/store/config.tsx";
-import {ProjectType} from "@/types/project.ts";
+import {AppDispatch, RootState} from "@/store/config.tsx";
+import { ProjectType} from "@/types/project.ts";
 import {getCurrentId} from "@/store/electron/actions.ts";
 import {getProjectFetch} from "@/store/projects/slice.ts";
 
@@ -21,17 +21,17 @@ const MainContent = () => {
   const location = useLocation();
   const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
   const [darkMode, setDarkMode] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate();
 
   const template = location.state?.template as ProjectType || ProjectType.NOVEL;
 
   useEffect(() => {
-    getCurrentId().then((id: number) => {
-          if (id && !currentProject) {
-            getProjectFetch(id)
-          }
-        });
+      getCurrentId().then((id: number) => {
+        if (!currentProject) {
+          dispatch(getProjectFetch(id))
+        }
+      });
   }, [currentProject, dispatch]);
 
   const getSections = () => {

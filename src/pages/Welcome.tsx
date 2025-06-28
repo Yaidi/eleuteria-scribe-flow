@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
@@ -7,7 +7,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {Textarea} from '@/components/ui/textarea';
 import {useNavigate} from 'react-router-dom';
 import {BookOpen, FileText, GraduationCap, Heart, Image, Moon, Plus, PlusCircle, Sun} from 'lucide-react';
-import {addProjectFetch} from "@/store/projects/slice.ts";
+import {addProjectFetch, projectsFetch} from "@/store/projects/slice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store/config.tsx";
 import {ProjectType} from "@/types/project.ts";
@@ -52,6 +52,10 @@ const Welcome = () => {
   const handleTemplateSelect = (template: ProjectType) => {
     setSelectedTemplate(template);
   };
+
+  useEffect(() => {
+    dispatch(projectsFetch());
+  }, [dispatch]);
 
   const handleCreateProject = async (type: ProjectType) => {
     try {

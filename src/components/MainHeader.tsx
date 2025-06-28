@@ -42,14 +42,14 @@ const MainHeader: React.FC<MainHeaderProps> = ({currentProject, currentSection})
     };
 
     return (
-        <header className="px-6 py-4 border-b bg-amber-300 border-gray-200 bg-white/90 backdrop-blur-sm flex items-center justify-between">
+        <header className="px-6 py-4 border-b border-gray-200  backdrop-blur-sm flex items-center justify-between">
             <div className="flex justify-between items-center space-x-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold dark:text-white text-gray-800">
                         {currentSection.toString()}
                     </h1>
                     <div className="flex items-center space-x-4 mt-1">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs dark:border-gray-50">
                             {currentProject.type}
                         </Badge>
                         {

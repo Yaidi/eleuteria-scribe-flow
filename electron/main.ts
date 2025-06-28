@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { fileURLToPath } from 'node:url'
+import '@/store/electron/main';
 import path from 'node:path'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 

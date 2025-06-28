@@ -5,7 +5,7 @@ import {Textarea} from "@/components/ui/textarea.tsx";
 import {IWorld} from "@/types/sections.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
-import {addWorld, removeWorld, updateInfoWorld} from "@/store/sections/action.ts";
+import {addWorld, removeWorld, updateInfoWorld} from "@/store";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Button} from "@/components/ui/button.tsx";

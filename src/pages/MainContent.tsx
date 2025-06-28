@@ -13,7 +13,7 @@ import MainHeader from "@/components/MainHeader.tsx";
 import { setCurrentSection} from "@/store/project/actions.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
-import {ProjectType} from "@/types/project.tsx";
+import {ProjectType} from "@/types/project.ts";
 
 const MainContent = () => {
   const location = useLocation();
@@ -72,7 +72,7 @@ const MainContent = () => {
               className="flex items-center space-x-2"
           > <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">{currentProject?.title ?? 'Project'}</h2>
+          <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">{currentProject?.projectName ?? 'Project'}</h2>
           <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </Button>

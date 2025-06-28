@@ -6,7 +6,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {useDispatch} from "react-redux";
 import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
-import {addPlot, removePlot, updatePlot} from "@/store/sections/plots/action.ts";
+import {addPlot, removePlot, updatePlot} from "@/store";
 import {useSections} from "@/hooks/useSections.ts";
 
 const Plot = () => {

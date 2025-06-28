@@ -1,4 +1,4 @@
-import {ProjectType} from "@/types/project.tsx";
+import {ProjectType} from "@/types/project.ts";
 
 export interface RequestAddProject {
     "projectListID": 1,

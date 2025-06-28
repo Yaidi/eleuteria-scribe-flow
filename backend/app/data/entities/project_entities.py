@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
+
 # ───── ProjectList ─────
 class ProjectList(Base):
     __tablename__ = "project_lists"
@@ -10,6 +11,7 @@ class ProjectList(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     projects = relationship("BaseProject", back_populates="project_list")
+
 
 # ───── BaseProject ─────
 class BaseProject(Base):
@@ -32,6 +34,7 @@ class BaseProject(Base):
         "polymorphic_on": type
     }
 
+
 # ───── FictionProject ─────
 class FictionProject(BaseProject):
     __tablename__ = "fiction_projects"
@@ -39,7 +42,7 @@ class FictionProject(BaseProject):
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
     series = Column(String)
     volume = Column(Integer)
-    duration = Column(String) # Indicar si es Novela o Trilogia
+    duration = Column(String)  # Indicar si es Novela o Trilogia
     genre = Column(String)
     license = Column(String)
     situation = Column(String)
@@ -50,6 +53,7 @@ class FictionProject(BaseProject):
     __mapper_args__ = {
         "polymorphic_identity": "fiction"
     }
+
 
 # ───── NonFictionProject ─────
 class NonFictionProject(BaseProject):
@@ -64,16 +68,18 @@ class NonFictionProject(BaseProject):
         "polymorphic_identity": "non-fiction"
     }
 
+
 # ───── Thesis ─────
 class ThesisProject(BaseProject):
     __tablename__ = "thesis_projects"
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
-    duration = Column(String) # Indicar si es Articulo/Research o Tesis
+    duration = Column(String)  # Indicar si es Articulo/Research o Tesis
 
     __mapper_args__ = {
         "polymorphic_identity": "thesis"
     }
+
 
 # ───── Poetry ─────
 class PoetryProject(BaseProject):
@@ -84,3 +90,27 @@ class PoetryProject(BaseProject):
     __mapper_args__ = {
         "polymorphic_identity": "poetry"
     }
+
+
+templates = [
+    {
+        "type": "Novel",
+        "sections": ["General", "Characters", "World", "Plots", "Manuscript", "Resources"],
+        "description": "Perfect for long-form fiction with complex characters and world-building"
+    },
+    {
+        "type": "Thesis",
+        "sections": ["General", "Manuscript", "References", "Bibliography", "Resources"],
+        "description": "Academic writing with proper citation and reference management"
+    },
+    {
+        "type": "Poetry",
+        "sections": ["General", "Manuscript", "References", "Themes"],
+        "description": "Poetry collections with thematic organization"
+    },
+    {
+        "type": "Ilustrated",
+        "sections": ["Legal and Credits", "General", "Manuscript", "Illustrations", "Resources", "Final page"],
+        "description": "Picture books and illustrated works with visual elements"
+    }
+]

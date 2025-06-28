@@ -1,15 +1,31 @@
+from typing import List
+
 from backend.app.data.entities.project_entities import FictionProject, NonFictionProject, BaseProject, \
     ThesisProject, PoetryProject
-from backend.app.schemas.project_schemas import CreateProjectRequest, ProjectItemUnionSchema, FictionProjectSchema, \
-    NonFictionProjectSchema, BaseProjectItemSchema, ThesisProjectSchema, UpdateProjectRequest, PoetryProjectSchema, \
-    General, Sections
+from backend.app.schemas.project_schemas import CreateProjectRequest, \
+    UpdateProjectRequest, General, Sections, BaseProjectSchema, ProjectListResponse, MinimalBaseProjectSchema
 
+
+def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectSchema:
+
+    base_kwargs = {
+        "id": project.id,
+        "projectListID": project.projectListID,
+        "project_name": project.project_name,
+    }
+    return MinimalBaseProjectSchema(**base_kwargs)
 
 def create_project_object_from_request(data: CreateProjectRequest):
-    match data.type:
-        case "fiction":
+    match data.type.lower():
+        case "novel":
             return FictionProject(
                 projectListID=data.projectListID,
+                duration=data.type
+            )
+        case "trilogy":
+            return FictionProject(
+                projectListID=data.projectListID,
+                duration=data.type
             )
         case "non-fiction":
             return NonFictionProject(
@@ -18,6 +34,12 @@ def create_project_object_from_request(data: CreateProjectRequest):
         case "thesis":
             return ThesisProject(
                 projectListID=data.projectListID,
+                duration=data.type
+            )
+        case "research":
+            return ThesisProject(
+                projectListID=data.projectListID,
+                duration=data.type
             )
         case "poetry":
             return PoetryProject(
@@ -54,7 +76,7 @@ def update_project_object_from_request(data: UpdateProjectRequest, project_to_up
         project_to_update.volume = data.sections.general.volume
 
 
-def project_schema_factory(project) -> ProjectItemUnionSchema:
+def project_schema_factory(project) -> BaseProjectSchema:
     # Construir `general` desde los atributos comunes
     general = General(
         title=project.title,
@@ -76,21 +98,18 @@ def project_schema_factory(project) -> ProjectItemUnionSchema:
         general=general
     )
 
+    project_type = project.type.capitalize()
+
+    if project_type == "Fiction" or project_type == "Thesis":
+        project_type = getattr(project, "duration", "")
+    elif project_type == "Base":
+        project_type = "Book"
+
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,
         "project_name": project.project_name,
-        "type": project.type,
+        "type": project_type,
         "sections": sections
     }
-
-    if isinstance(project, FictionProject):
-        return FictionProjectSchema(**base_kwargs)
-    elif isinstance(project, NonFictionProject):
-        return NonFictionProjectSchema(**base_kwargs)
-    elif isinstance(project, ThesisProject):
-        return ThesisProjectSchema(**base_kwargs)
-    elif project.type == "poetry":
-        return PoetryProjectSchema(**base_kwargs)
-    else:
-        return BaseProjectItemSchema(**base_kwargs)
+    return BaseProjectSchema(**base_kwargs)

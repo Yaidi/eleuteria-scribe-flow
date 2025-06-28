@@ -29,34 +29,16 @@ class BaseProjectSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-# ───── Tipos específicos ─────
-class FictionProjectSchema(BaseProjectSchema):
-    type: Literal["fiction"]
+class MinimalBaseProjectSchema(BaseModel):
+    id: int
+    projectListID: int
+    project_name: Optional[str] = ""
 
-class NonFictionProjectSchema(BaseProjectSchema):
-    type: Literal["non-fiction"]
-
-class ThesisProjectSchema(BaseProjectSchema):
-    type: Literal["thesis"]
-
-class PoetryProjectSchema(BaseProjectSchema):
-    type: Literal["poetry"]
-
-class BaseProjectItemSchema(BaseProjectSchema):
-    type: Literal["base"]
-
-# Union with discrimination
-ProjectItemUnionSchema = Union[
-    FictionProjectSchema,
-    NonFictionProjectSchema,
-    ThesisProjectSchema,
-    PoetryProjectSchema,
-    BaseProjectItemSchema,
-]
+    model_config = ConfigDict(from_attributes=True)
 
 # ───── ProjectList Response ─────
 class ProjectListResponse(BaseModel):
-    projects: List[ProjectItemUnionSchema]
+    projects: List[BaseProjectSchema]
 
 # Para creación de proyecto
 class CreateProjectRequest(BaseModel):

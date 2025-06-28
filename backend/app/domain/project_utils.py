@@ -102,6 +102,8 @@ def project_schema_factory(project) -> BaseProjectSchema:
 
     if project_type == "Fiction" or project_type == "Thesis":
         project_type = getattr(project, "duration", "")
+    elif project_type == "Base":
+        project_type = "Book"
 
     base_kwargs = {
         "id": project.id,

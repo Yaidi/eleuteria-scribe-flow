@@ -90,27 +90,3 @@ class PoetryProject(BaseProject):
     __mapper_args__ = {
         "polymorphic_identity": "poetry"
     }
-
-
-templates = [
-    {
-        "type": "Novel",
-        "sections": ["General", "Characters", "World", "Plots", "Manuscript", "Resources"],
-        "description": "Perfect for long-form fiction with complex characters and world-building"
-    },
-    {
-        "type": "Thesis",
-        "sections": ["General", "Manuscript", "References", "Bibliography", "Resources"],
-        "description": "Academic writing with proper citation and reference management"
-    },
-    {
-        "type": "Poetry",
-        "sections": ["General", "Manuscript", "References", "Themes"],
-        "description": "Poetry collections with thematic organization"
-    },
-    {
-        "type": "Ilustrated",
-        "sections": ["Legal and Credits", "General", "Manuscript", "Illustrations", "Resources", "Final page"],
-        "description": "Picture books and illustrated works with visual elements"
-    }
-]

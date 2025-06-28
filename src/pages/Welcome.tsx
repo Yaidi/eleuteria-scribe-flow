@@ -7,10 +7,10 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {Textarea} from '@/components/ui/textarea';
 import {useNavigate} from 'react-router-dom';
 import {BookOpen, FileText, GraduationCap, Heart, Image, Moon, Plus, PlusCircle, Sun} from 'lucide-react';
-import {addProjectFetch} from "@/store/Projects/slice.ts";
+import {addProjectFetch} from "@/store/projects/slice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "@/store/config.tsx";
-import {ProjectType} from "@/types/project.tsx";
+import {ProjectType} from "@/types/project.ts";
 
 interface TemplateStructure {
   sections: string[];

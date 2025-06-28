@@ -6,7 +6,7 @@ import {Trash2} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {ICharacter, PriorityType} from "@/types/sections.ts";
 import React from "react";
-import {removeCharacter, updateInfoCharacter} from "@/store/sections/action.ts";
+import {removeCharacter, updateInfoCharacter} from "@/store";
 import {useDispatch} from "react-redux";
 
 interface FormsCharactersProps {

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import {Label} from "@/components/ui/label.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/config.tsx";
-import {updateGeneral} from "@/store/sections/action.ts";
+import {updateGeneral} from "@/store";
 import {useEffect, useState} from "react";
 import {IGeneral} from "@/types/sections.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";

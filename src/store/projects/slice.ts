@@ -1,8 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {addProject, getProjects} from "@/store/Projects/actions.ts";
-import {ProjectData} from "@/types/project.tsx";
-import {getCurrentProject} from "@/store/project/actions.ts";
-import {RequestAddProject} from "@/types/requestAddProject.ts";
+import {addProject, getProjects, getCurrentProject} from "@/store";
+import {ProjectData} from "@/types/project.ts";
+import {RequestAddProject} from "@/types/requests.ts";
 
 export const projectsFetch = createAsyncThunk<ProjectData[]>(
     getProjects.type,

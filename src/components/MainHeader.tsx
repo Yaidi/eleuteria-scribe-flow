@@ -3,7 +3,7 @@ import {Badge} from "@/components/ui/badge.tsx";
 import {Progress} from "@/components/ui/progress.tsx";
 import { Save} from "lucide-react";
 import React, {useEffect, useState} from "react";
-import {ProjectData} from "@/types/project.tsx";
+import {ProjectData} from "@/types/project.ts";
 import {ESections} from "@/types/sections.ts";
 import {useToast} from "@/hooks/use-toast.ts";
 

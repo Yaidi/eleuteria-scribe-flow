@@ -1,5 +1,5 @@
 import {createAction} from "@reduxjs/toolkit";
-import {ProjectData} from "@/types/project.tsx";
+import {ProjectData} from "@/types/project.ts";
 
 export const addProject = createAction<ProjectData>('[Projects] Add Project');
 

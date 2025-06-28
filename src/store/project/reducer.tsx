@@ -1,5 +1,5 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {ProjectData} from "@/types/project.tsx";
+import {ProjectData} from "@/types/project.ts";
 import {ESections} from "@/types/sections.ts";
 import {getCurrentProject, setCurrentSection} from "@/store/project/actions.ts";
 import {addProjectFetch} from "@/store/Projects/slice.ts";

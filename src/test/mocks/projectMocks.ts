@@ -1,26 +1,26 @@
-import { ICharacter, IGeneral, IPlot, IWorld, IChapter } from "@/types/sections.ts";
-import {ProjectSections, ProjectData, IProject, ProjectType} from "@/types/project.tsx";
+import {GenreType, IChapter, ICharacter, IGeneral, IPlot, IWorld, PriorityType} from "@/types/sections.ts";
+import {IProject, ProjectData, ProjectSections, ProjectType} from "@/types/project.ts";
 
 // Mock data for ICharacter
 export const mockCharacters: ICharacter[] = [
   {
     id: "char-1",
     name: "John Doe",
-    importance: "main",
+    importance: PriorityType.MAIN,
     characteristics: "Brave, intelligent, and resourceful",
     about: "The protagonist of the story, a detective with a troubled past."
   },
   {
     id: "char-2",
     name: "Jane Smith",
-    importance: "secondary",
+    importance: PriorityType.SECONDARY,
     characteristics: "Clever, witty, and determined",
     about: "A journalist who helps John solve cases."
   },
   {
     id: "char-3",
     name: "Robert Johnson",
-    importance: "minor",
+    importance: PriorityType.MINOR,
     characteristics: "Mysterious, wealthy, and secretive",
     about: "A businessman with connections to the underworld."
   }
@@ -79,8 +79,8 @@ export const mockGeneral: IGeneral = {
   author: "A. Writer",
   subtitle: "A Detective's Journey",
   series: "The Metropolis Chronicles",
-  volume: "1",
-  genre: "Mystery/Thriller",
+  volume: 1,
+  genre: GenreType.Romance,
   license: "All Rights Reserved"
 };
 
@@ -89,17 +89,20 @@ export const mockChapters: IChapter[] = [
   {
     id: "chap-1",
     title: "The Beginning",
-    description: "John takes on a new case involving a missing person."
+    description: "John takes on a new case involving a missing person.",
+    scenes: []
   },
   {
     id: "chap-2",
     title: "The Investigation",
-    description: "John and Jane follow leads across the city."
+    description: "John and Jane follow leads across the city.",
+    scenes: []
   },
   {
     id: "chap-3",
     title: "The Revelation",
-    description: "The truth behind the disappearances is revealed."
+    description: "The truth behind the disappearances is revealed.",
+    scenes: []
   }
 ];
 
@@ -110,7 +113,10 @@ export const mockProjectSections: ProjectSections = {
   general: mockGeneral,
   characters: mockCharacters,
   plots: mockPlots,
-  world: mockWorld
+  world: mockWorld,
+  manuscript: {
+    chapters: mockChapters,
+  }
 };
 
 // Mock data for IProject
@@ -126,10 +132,3 @@ export const mockProjectData: ProjectData = {
   ...mockProjectSections
 };
 
-// Additional mock with partial data
-export const mockPartialProjectData: ProjectData = {
-  id: "proj-2",
-  projectName: "Unfinished Project",
-  general: mockGeneral,
-  characters: mockCharacters.slice(0, 1)
-};

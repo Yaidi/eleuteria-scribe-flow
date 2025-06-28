@@ -1,4 +1,4 @@
-import {ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.ts";
+import {IChapter, ICharacter, IGeneral, IPlot, IWorld} from "@/types/sections.ts";
 
 export interface ProjectSections {
     wordGoal: number;
@@ -7,6 +7,9 @@ export interface ProjectSections {
     characters: ICharacter[];
     plots: IPlot[];
     world: IWorld[];
+    manuscript: {
+        chapters: IChapter[]
+    }
 }
 
 export interface ProjectData extends IProject, Partial<ProjectSections> {}

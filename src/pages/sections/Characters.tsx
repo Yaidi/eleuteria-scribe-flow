@@ -2,7 +2,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Plus} from "lucide-react";
 import {ICharacter, PriorityType} from "@/types/sections.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {addCharacter} from "@/store/sections/action.ts";
+import {addCharacter} from "@/store";
 import {useDispatch} from "react-redux";
 import FormsCharacters from "@/components/FormsCharacters.tsx";
 import {useSections} from "@/hooks/useSections.ts";

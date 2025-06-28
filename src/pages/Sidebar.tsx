@@ -3,7 +3,7 @@ import {ESections} from "@/types/sections.ts";
 import React, {useState} from "react";
 import {Book, ChevronDown, ChevronRight, FileText, Plus} from "lucide-react";
 import {cn} from "@/lib/utils.ts";
-import {selectChapter, selectScene} from "@/store/sections/manuscript/actions.ts";
+import {selectChapter, selectScene} from "@/store";
 import {useSections} from "@/hooks/useSections.ts";
 
 interface SidebarProps {

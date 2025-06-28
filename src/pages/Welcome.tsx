@@ -22,7 +22,7 @@ const templates: Record<string, TemplateStructure> = {
     sections: ['General', 'Characters', 'World', 'Plots', 'Manuscript', 'Resources'],
     description: 'Perfect for long-form fiction with complex characters and world-building'
   },
-  Trilogy: {
+  Thesis: {
     sections: ['General', 'Manuscript', 'References', 'Bibliography', 'Resources'],
     description: 'Academic writing with proper citation and reference management'
   },

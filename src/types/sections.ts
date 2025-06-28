@@ -27,13 +27,17 @@ export interface IWorld {
 }
 
 export interface IGeneral {
-    title: string;
     author: string;
+    title: string;
     subtitle: string;
     series: string;
     volume: number;
     genre: GenreType;
     license: string;
+    situation: string;
+    resumePhrase: string;
+    resumeParagraph: string;
+    resumePage: string
 }
 export enum GenreType {
     Romance = "Romance"

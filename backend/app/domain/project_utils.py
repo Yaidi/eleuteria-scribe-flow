@@ -53,19 +53,19 @@ def create_project_object_from_request(data: CreateProjectRequest):
 def update_project_object_from_request(data: UpdateProjectRequest, project_to_update: BaseProject):
 
     project_to_update.projectListID = data.projectListID
-    project_to_update.project_name = data.project_name
+    project_to_update.project_name = data.projectName
     project_to_update.title = data.sections.general.title
     project_to_update.author = data.sections.general.author
     project_to_update.subtitle = data.sections.general.subtitle
     project_to_update.words = data.sections.words
-    project_to_update.word_goal = data.sections.word_goal
+    project_to_update.word_goal = data.sections.wordGoal
 
     if isinstance(project_to_update, FictionProject):
         project_to_update.genre = data.sections.general.genre
         project_to_update.license = data.sections.general.license
-        project_to_update.resume_phrase = data.sections.general.resume_phrase
-        project_to_update.resume_paragraph = data.sections.general.resume_paragraph
-        project_to_update.resume_page = data.sections.general.resume_page
+        project_to_update.resume_phrase = data.sections.general.resumePhrase
+        project_to_update.resume_paragraph = data.sections.general.resumeParagraph
+        project_to_update.resume_page = data.sections.general.resumePage
         project_to_update.series = data.sections.general.series
         project_to_update.situation = data.sections.general.situation
         project_to_update.volume = data.sections.general.volume
@@ -87,13 +87,13 @@ def project_schema_factory(project) -> BaseProjectSchema:
         genre=getattr(project, "genre", None),
         license=getattr(project, "license", None),
         situation=getattr(project, "situation", None),
-        resume_phrase=getattr(project, "resume_phrase", None),
-        resume_paragraph=getattr(project, "resume_paragraph", None),
-        resume_page=getattr(project, "resume_page", None),
+        resumePhrase=getattr(project, "resume_phrase", None),
+        resumeParagraph=getattr(project, "resume_paragraph", None),
+        resumePage=getattr(project, "resume_page", None),
     )
 
     sections = Sections(
-        word_goal=project.word_goal,
+        wordGoal=project.word_goal,
         words=project.words,
         general=general
     )
@@ -108,7 +108,7 @@ def project_schema_factory(project) -> BaseProjectSchema:
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,
-        "project_name": project.project_name,
+        "projectName": project.project_name,
         "type": project_type,
         "sections": sections
     }

@@ -7,20 +7,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Welcome from "./pages/Welcome";
 import MainContent from "./pages/MainContent";
 import NotFound from "./pages/NotFound";
-import {useEffect} from "react";
-import {projectsFetch} from "@/store/Projects/slice.ts";
-import {useDispatch} from "react-redux";
-import {AppDispatch} from "@/store/config.tsx";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(projectsFetch());
-  }, [dispatch]);
-
   return (
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>

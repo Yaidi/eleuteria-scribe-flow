@@ -1,6 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {SectionsReducer} from "@/store/sections/reducer.ts";
-import {ProjectsReducer} from "@/store/Projects/reducer.ts";
+import {ProjectsReducer} from "@/store/projects/reducer.ts";
 import {ProjectReducer} from "@/store/project/reducer.tsx";
 
 export const store = configureStore({

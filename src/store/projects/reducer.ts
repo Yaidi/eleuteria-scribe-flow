@@ -1,7 +1,7 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {addProject, removeProject, updateProject} from "@/store/projects/actions.ts";
 import {ProjectData} from "@/types/project.ts";
-import {projectsFetch} from "@/store/Projects/slice.ts";
+import {projectsFetch} from "@/store/projects/slice.ts";
+import {addProject, removeProject, updateProject} from "@/store";
 
 export interface IProjectsReducer {
     projects: ProjectData[]

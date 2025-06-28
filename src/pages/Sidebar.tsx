@@ -24,13 +24,13 @@ const Sidebar: React.FC<SidebarProps> = ({activeSection}) => {
 
     switch (activeSection) {
       case ESections.Characters:
-          return(<div className="space-y-2 bg-slate-50 dark:bg-slate-900 border-r rounded-t-sm border-slate-200 dark:border-slate-700 p-4">
+          return(<div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r rounded-t-sm border-slate-200 dark:border-slate-700 p-4">
               <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-sm text-gray-700">Characters</h3>
+                  <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">Characters</h3>
               </div>
               {['Main', 'Secondary', 'Minor'].map((role) => (
                   <div key={role} className="space-y-1">
-                      <h4 className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                      <h4 className="dark:text-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wide">
                           {role}
                       </h4>
                       {characters

@@ -4,6 +4,7 @@ from backend.app.data.entities.project_entities import FictionProject, NonFictio
     ThesisProject, PoetryProject
 from backend.app.schemas.project_schemas import CreateProjectRequest, \
     UpdateProjectRequest, General, Sections, BaseProjectSchema, ProjectListResponse, MinimalBaseProjectSchema
+from backend.app.schemas.world_schemas import WorldWithElementsSchema, WorldElementDetailedSchema
 
 
 def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectSchema:
@@ -51,32 +52,11 @@ def create_project_object_from_request(data: CreateProjectRequest):
             )
 
 def update_project_object_from_request(data: UpdateProjectRequest, project_to_update: BaseProject):
-
     project_to_update.projectListID = data.projectListID
     project_to_update.project_name = data.projectName
-    project_to_update.title = data.sections.general.title
-    project_to_update.author = data.sections.general.author
-    project_to_update.subtitle = data.sections.general.subtitle
-    project_to_update.words = data.sections.words
-    project_to_update.word_goal = data.sections.wordGoal
-
-    if isinstance(project_to_update, FictionProject):
-        project_to_update.genre = data.sections.general.genre
-        project_to_update.license = data.sections.general.license
-        project_to_update.resume_phrase = data.sections.general.resumePhrase
-        project_to_update.resume_paragraph = data.sections.general.resumeParagraph
-        project_to_update.resume_page = data.sections.general.resumePage
-        project_to_update.series = data.sections.general.series
-        project_to_update.situation = data.sections.general.situation
-        project_to_update.volume = data.sections.general.volume
-
-    if isinstance(project_to_update, NonFictionProject):
-        project_to_update.license = data.sections.general.license
-        project_to_update.series = data.sections.general.series
-        project_to_update.volume = data.sections.general.volume
 
 
-def project_schema_factory(project) -> BaseProjectSchema:
+def project_schema_factory(project, world = None, world_elements = None) -> BaseProjectSchema:
     # Construir `general` desde los atributos comunes
     general = General(
         title=project.title,
@@ -92,10 +72,34 @@ def project_schema_factory(project) -> BaseProjectSchema:
         resumePage=getattr(project, "resume_page", None),
     )
 
+    world_elements_schema = []
+
+    if world_elements:
+        for element in world_elements:
+            world_elements_schema.append(
+                WorldElementDetailedSchema(
+                    id = element.id,
+                    name = element.name,
+                    description = element.description,
+                    origin = element.origin,
+                    conflictCause = element.conflictCause,
+                    worldElementID = element.worldElementID,
+                    worldID = element.worldID,
+                )
+            )
+
+    world_schema = None
+    if world:
+        world_schema = WorldWithElementsSchema(
+            id=world.id,
+            world_elements=world_elements_schema,
+        )
+
     sections = Sections(
         wordGoal=project.word_goal,
         words=project.words,
-        general=general
+        general=general,
+        world=world_schema,
     )
 
     project_type = project.type.capitalize()

@@ -84,3 +84,18 @@ async def update_project(
         await session.refresh(project_to_update)
 
     return project_schema_factory(project_to_update)
+
+@projects_router.delete("/deleteProject/{project_id}", status_code=204)
+async def delete_project(
+    project_id: int,
+    session: AsyncSession = Depends(get_session)
+):
+    result = await session.execute(select(BaseProject).where(BaseProject.id == project_id))
+    project = result.scalar_one_or_none()
+
+    if not project:
+        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+
+    await session.delete(project)
+    await session.commit()
+    return

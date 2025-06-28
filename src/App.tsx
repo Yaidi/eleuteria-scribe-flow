@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
+  const hola = "holaa";
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -17,7 +18,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<Welcome />} />
+            <Route path="/" element={<Welcome />} />
             <Route path="/main" element={<MainContent />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

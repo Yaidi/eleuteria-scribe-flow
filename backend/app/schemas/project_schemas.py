@@ -10,12 +10,12 @@ class General(BaseModel):
     genre: Optional[str] = ""
     license: Optional[str] = ""
     situation: Optional[str] = ""
-    resume_phrase: Optional[str] = ""
-    resume_paragraph: Optional[str] = ""
-    resume_page: Optional[str] = ""
+    resumePhrase: Optional[str] = ""
+    resumeParagraph: Optional[str] = ""
+    resumePage: Optional[str] = ""
 
 class Sections(BaseModel):
-    word_goal: Optional[int] = 0
+    wordGoal: Optional[int] = 0
     words: Optional[int] = 0
     general: Optional[General]
 
@@ -23,7 +23,7 @@ class Sections(BaseModel):
 class BaseProjectSchema(BaseModel):
     id: int
     projectListID: int
-    project_name: Optional[str] = ""
+    projectName: Optional[str] = ""
     type: str
     sections: Optional[Sections] = None
 
@@ -32,7 +32,7 @@ class BaseProjectSchema(BaseModel):
 class MinimalBaseProjectSchema(BaseModel):
     id: int
     projectListID: int
-    project_name: Optional[str] = ""
+    projectName: Optional[str] = ""
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -49,5 +49,5 @@ class CreateProjectRequest(BaseModel):
 class UpdateProjectRequest(BaseModel):
     projectListID: int
     id: int
-    project_name: Optional[str] = ""
+    projectName: Optional[str] = ""
     sections: Optional[Sections]

@@ -1,23 +1,31 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Literal, Union
 
+from backend.app.schemas.world_schemas import WorldSchema, WorldWithElementsSchema
+
+
 class General(BaseModel):
-    title: Optional[str] = ""
-    subtitle: Optional[str] = ""
-    author: Optional[str] = ""
-    series: Optional[str] = ""
-    volume: Optional[int] = 1
-    genre: Optional[str] = ""
-    license: Optional[str] = ""
-    situation: Optional[str] = ""
-    resumePhrase: Optional[str] = ""
-    resumeParagraph: Optional[str] = ""
-    resumePage: Optional[str] = ""
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    author: Optional[str] = None
+    series: Optional[str] = None
+    volume: Optional[int] = None
+    genre: Optional[str] = None
+    license: Optional[str] = None
+    situation: Optional[str] = None
+    resumePhrase: Optional[str] = None
+    resumeParagraph: Optional[str] = None
+    resumePage: Optional[str] = None
 
 class Sections(BaseModel):
     wordGoal: Optional[int] = 0
     words: Optional[int] = 0
     general: Optional[General]
+    world: Optional[WorldWithElementsSchema] = None
+
+    model_config = {
+        "exclude_none": True  # 👈 Esto hace que `None` no se incluya en el JSON
+    }
 
 # ───── Proyecto base ─────
 class BaseProjectSchema(BaseModel):
@@ -49,5 +57,4 @@ class CreateProjectRequest(BaseModel):
 class UpdateProjectRequest(BaseModel):
     projectListID: int
     id: int
-    projectName: Optional[str] = ""
-    sections: Optional[Sections]
+    projectName: Optional[str] = None

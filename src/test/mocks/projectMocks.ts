@@ -121,7 +121,7 @@ export const mockProjectSections: ProjectSections = {
 
 // Mock data for IProject
 export const mockProject: IProject = {
-  id: "proj-1",
+  id: 1,
   projectName: "The Dark Streets",
   type: ProjectType.NOVEL,
 };

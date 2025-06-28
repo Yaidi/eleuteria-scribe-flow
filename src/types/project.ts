@@ -15,7 +15,7 @@ export interface ProjectSections {
 export interface ProjectData extends IProject, Partial<ProjectSections> {}
 
 export interface IProject {
-    id: string;
+    id: number;
     projectName: string
     type: ProjectType;
 }

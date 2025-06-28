@@ -13,6 +13,7 @@ from backend.app.domain.project_utils import create_project_object_from_request,
 from backend.app.schemas.project_schemas import BaseProjectSchema, \
     CreateProjectRequest, UpdateProjectRequest, General
 from backend.app.schemas.words_stats_schemas import WordStatsUpdate
+from backend.app.statics.load_static import load_static_content
 
 projects_router = APIRouter()
 
@@ -103,6 +104,12 @@ async def update_project(
         await session.refresh(project_to_update)
 
     return {"message": "Project info updated successfully"}
+
+@projects_router.get("/project/templates")
+async def update_project():
+    templates = load_static_content("backend/app/statics/project_templates.json")
+
+    return {"templates": templates}
 
 @projects_router.delete("/deleteProject/{project_id}", status_code=204)
 async def delete_project(

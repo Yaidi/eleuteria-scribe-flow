@@ -1,37 +1,38 @@
-import {createReducer} from "@reduxjs/toolkit";
-import {ProjectData} from "@/types/project.ts";
-import {ESections} from "@/types/sections.ts";
-import {getCurrentProject, setCurrentSection} from "@/store/project/actions.ts";
-import {addProjectFetch} from "@/store/Projects/slice.ts";
+import { createReducer } from "@reduxjs/toolkit";
+import { ProjectData } from "@/types/project.ts";
+import { ESections } from "@/types/sections.ts";
+import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
+import { setCurrentSection } from "@/store";
 
 export interface IProjectReducer {
-    currentSection: ESections,
-    currentProject: ProjectData | undefined
+  currentSection: ESections;
+  currentProject: ProjectData | undefined;
 }
-
 
 const initialState: IProjectReducer = {
-    currentSection: ESections.General,
-    currentProject: undefined
-}
+  currentSection: ESections.General,
+  currentProject: undefined,
+};
 
 export const ProjectReducer = createReducer(initialState, (builder) => {
-    builder
-        .addCase(getCurrentProject, (state, {payload}) => {
-            return ({
-               ...state,
-               currentProject: payload
-            });
-        })
-        .addCase(addProjectFetch.fulfilled, (state, {payload}) => {
-            return ({
-                ...state,
-                currentProject: payload
-            });
-    }).addCase(setCurrentSection, (state, {payload}) => {
-        return ({
-            ...state,
-            currentSection: payload
-        })
+  builder
+    .addCase(getProjectFetch.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        currentProject: payload,
+      };
     })
-})
+    .addCase(addProjectFetch.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        currentProject: payload,
+        projectId: payload.id,
+      };
+    })
+    .addCase(setCurrentSection, (state, { payload }) => {
+      return {
+        ...state,
+        currentSection: payload,
+      };
+    });
+});

@@ -5,21 +5,27 @@ This directory contains mock data for the project interfaces defined in the `src
 ## Available Mocks
 
 ### Character Mocks
+
 - `mockCharacters`: An array of character objects that implement the `ICharacter` interface.
 
 ### Plot Mocks
+
 - `mockPlots`: An array of plot objects that implement the `IPlot` interface.
 
 ### World Mocks
+
 - `mockWorld`: An array of world-building elements that implement the `IWorld` interface.
 
 ### General Information Mocks
+
 - `mockGeneral`: An object that implements the `IGeneral` interface with basic project information.
 
 ### Chapter Mocks
+
 - `mockChapters`: An array of chapter objects that implement the `IChapter` interface.
 
 ### Project Mocks
+
 - `mockProject`: A basic project object that implements the `IProject` interface.
 - `mockProjectSections`: An object that implements the `ProjectSections` interface.
 - `mockProjectData`: A complete project data object that implements the `ProjectData` interface.
@@ -31,10 +37,10 @@ Import the mocks from the mocks directory:
 
 ```typescript
 // Import specific mocks
-import { mockCharacters, mockPlots } from '@/mocks';
+import { mockCharacters, mockPlots } from "@/mocks";
 
 // Or import all mocks
-import * as mocks from '@/mocks';
+import * as mocks from "@/mocks";
 ```
 
 Example usage:
@@ -44,7 +50,7 @@ Example usage:
 function CharacterList() {
   // In a real application, this would come from an API or store
   const characters = mockCharacters;
-  
+
   return (
     <div>
       {characters.map(character => (

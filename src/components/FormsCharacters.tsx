@@ -21,11 +21,11 @@ interface FormsCharactersProps {
 
 const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   const dispatch = useDispatch();
-  const update = (charachter: Partial<ICharacter>) => {
-    dispatch(updateInfoCharacter(charachter));
+  const update = (info: Partial<ICharacter>) => {
+    dispatch(updateInfoCharacter(info));
   };
 
-  const remove = (id: string) => {
+  const remove = (id: number) => {
     dispatch(removeCharacter(id));
   };
 

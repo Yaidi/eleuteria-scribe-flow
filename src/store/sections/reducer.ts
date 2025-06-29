@@ -10,7 +10,7 @@ export interface ISectionsReducer {
   general: IGeneral;
   characters: ICharacter[];
   plots: IPlot[];
-  world: IWorld[];
+  world: IWorld;
   manuscript: IManuscriptReducer;
 }
 

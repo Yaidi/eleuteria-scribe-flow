@@ -1,8 +1,10 @@
 import { createAction } from "@reduxjs/toolkit";
-import { IWorld } from "@/types/sections.ts";
+import { IWorldElement } from "@/types/sections.ts";
 
-export const addWorld = createAction<IWorld>("[World] Add Element to World");
+export const addWorldElement = createAction<Partial<IWorldElement>>("[World] Add Element to World");
 
-export const updateInfoWorld = createAction<Partial<IWorld>>("[World] Add Element to World");
+export const updateWorldElement = createAction<Partial<IWorldElement>>(
+  "[World] Update Element to World",
+);
 
-export const removeWorld = createAction<string>("[World] Remove Element to World");
+export const removeWorldElement = createAction<number>("[World] Remove Element to World");

@@ -166,7 +166,7 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
             const indicatorColor = color || item.payload.fill || item.color;
 
             return (
@@ -269,7 +269,11 @@ const ChartLegendContent = React.forwardRef<
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
         return (
           <div
-            key={item.value}
+            key={
+              typeof item.value === "string" || typeof item.value === "number"
+                ? item.value
+                : String(item.value)
+            }
             className={cn(
               "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground",
             )}

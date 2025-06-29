@@ -80,20 +80,6 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             placeholder="Physical appearance, personality traits..."
           />
         </div>
-        <div>
-          <Label>About Character</Label>
-          <Textarea
-            name="about"
-            value={character.about}
-            onChange={(e) =>
-              update({
-                id: character.id,
-                about: e.target.value,
-              })
-            }
-            placeholder="Background story, motivations, role in the story..."
-          />
-        </div>
       </div>
     </div>
   );

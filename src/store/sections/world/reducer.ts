@@ -1,15 +1,29 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addWorld, removeWorld } from "@/store/sections";
+import { removeWorldElement } from "@/store/sections";
 import { IWorld } from "@/types/sections";
 
-const initialState: IWorld[] = [];
+export interface IWorldReducer {
+  world: IWorld;
+  currentWorldElement: number | null;
+}
+
+const initialState: IWorldReducer = {
+  world: {
+    id: 0,
+    baseWritingProjectID: 1,
+    worldElements: [],
+  },
+  currentWorldElement: null,
+};
 
 export const worldReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(addWorld, (state, { payload }) => {
-      state.push(payload);
-    })
-    .addCase(removeWorld, (state, { payload }) => {
-      return state.filter((w) => w.id !== payload);
-    });
+  builder.addCase(removeWorldElement, (state, { payload }) => {
+    return {
+      ...state,
+      world: {
+        ...state.world,
+        worldElements: state.world.worldElements.filter((element) => element.id !== payload),
+      },
+    };
+  });
 });

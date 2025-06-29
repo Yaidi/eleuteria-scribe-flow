@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 from backend.app.data.entities.project_entities import Base
 
+
 # ───── Character ─────
 class Character(Base):
     __tablename__ = "characters"

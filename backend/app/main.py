@@ -22,6 +22,7 @@ def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
@@ -58,13 +59,14 @@ app.include_router(world_router)
 app.include_router(character_router)
 
 app.add_middleware(
-     CORSMiddleware,
-     allow_origins=["*"],  # ⚠️ Esto permite TODOS los orígenes
-     allow_credentials=True,
-     allow_methods=["*"],   # Permite todos los métodos (GET, POST, etc.)
-     allow_headers=["*"],   # Permite todos los headers
-     )
+    CORSMiddleware,
+    allow_origins=["*"],  # ⚠️ Esto permite TODOS los orígenes
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos los headers
+)
+
+
 @app.get("/")
 def root():
     return {"status": "API funcionando"}
-

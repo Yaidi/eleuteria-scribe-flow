@@ -2,11 +2,13 @@ from sqlalchemy import Column, Integer, ForeignKey, String, Text
 
 from backend.app.data.entities.project_entities import Base
 
+
 # ───── World ─────
 class World(Base):
     __tablename__ = "worlds"
     id = Column(Integer, primary_key=True)
     baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
+
 
 # ───── WorldElement ─────
 class WorldElement(Base):

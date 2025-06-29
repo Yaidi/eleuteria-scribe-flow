@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 from backend.app.data.entities.project_entities import Base
 
+
 # ───── Plot ─────
 class Plot(Base):
     __tablename__ = "plots"
@@ -12,6 +13,7 @@ class Plot(Base):
     result = Column(Text)
     importance = Column(Integer)
     baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
+
 
 # ───── PlotStep ─────
 class PlotStep(Base):

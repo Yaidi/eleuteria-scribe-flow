@@ -5,9 +5,11 @@ from typing import Optional, List
 class WorldCreate(BaseModel):
     baseWritingProjectID: int
 
+
 class WorldSchema(WorldCreate):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
 
 class WorldElementCreate(BaseModel):
     name: str
@@ -17,11 +19,15 @@ class WorldElementCreate(BaseModel):
     worldElementID: Optional[int] = None
     worldID: int
 
+
 class WorldElementSchema(WorldElementCreate):
     id: int
     model_config = ConfigDict(from_attributes=True)
 
+
 """ For Get Project Response """
+
+
 class WorldElementDetailedSchema(BaseModel):
     id: int
     name: str

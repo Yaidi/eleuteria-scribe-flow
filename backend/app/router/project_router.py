@@ -4,25 +4,37 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import Query, with_polymorphic
 
 from backend.app.data.db.db import get_session
-from backend.app.data.entities.project_entities import BaseProject, ProjectList, FictionProject, NonFictionProject, \
-    ThesisProject
+from backend.app.data.entities.project_entities import (
+    BaseProject,
+    ProjectList,
+    FictionProject,
+    NonFictionProject,
+    ThesisProject,
+)
 from backend.app.data.entities.sections.character_entities import Character
 from backend.app.data.entities.sections.world_entities import World, WorldElement
-from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory, \
-    update_project_object_from_request, update_project_type_on_response
+from backend.app.domain.project_utils import (
+    create_project_object_from_request,
+    project_schema_factory,
+    update_project_object_from_request,
+    update_project_type_on_response,
+)
 
-from backend.app.schemas.project_schemas import BaseProjectSchema, \
-    CreateProjectRequest, UpdateProjectRequest, General
+from backend.app.schemas.project_schemas import (
+    BaseProjectSchema,
+    CreateProjectRequest,
+    UpdateProjectRequest,
+    General,
+)
 from backend.app.schemas.words_stats_schemas import WordStatsUpdate
 from backend.app.statics.load_static import load_static_content
 
 projects_router = APIRouter()
 
+
 # Define el endpoint
 @projects_router.get("/getProjectList")
-async def get_project_list(
-    session: AsyncSession = Depends(get_session)
-):
+async def get_project_list(session: AsyncSession = Depends(get_session)):
 
     result = await session.execute(
         select(BaseProject).where(BaseProject.projectListID == 1)
@@ -42,11 +54,11 @@ async def get_project_list(
     else:
         return {"projects": projects_list_response}
 
+
 # 🔹 POST /createProject
 @projects_router.post("/addProject", response_model=BaseProjectSchema)
 async def create_project(
-    data: CreateProjectRequest,
-    session: AsyncSession = Depends(get_session)
+    data: CreateProjectRequest, session: AsyncSession = Depends(get_session)
 ):
     new_project = create_project_object_from_request(data)
 
@@ -55,22 +67,28 @@ async def create_project(
     await session.refresh(new_project)
     return project_schema_factory(new_project)
 
+
 # 🔹 GET /getProject
 @projects_router.get("/getProject", response_model=BaseProjectSchema)
-async def get_project(
-    id: int,
-    session: AsyncSession = Depends(get_session)
-):
-    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
-    result = await session.execute(select(project_polymorphic).where(BaseProject.id == id))
+async def get_project(id: int, session: AsyncSession = Depends(get_session)):
+    project_polymorphic = with_polymorphic(
+        BaseProject, [FictionProject, NonFictionProject, ThesisProject]
+    )
+    result = await session.execute(
+        select(project_polymorphic).where(BaseProject.id == id)
+    )
     project = result.scalar_one_or_none()
-    characters_result = await session.execute(select(Character).where(Character.baseWritingProjectID == id))
+    characters_result = await session.execute(
+        select(Character).where(Character.baseWritingProjectID == id)
+    )
     character_list = characters_result.scalars().all()
 
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    world_result = await session.execute(select(World).where(World.baseWritingProjectID == id))
+    world_result = await session.execute(
+        select(World).where(World.baseWritingProjectID == id)
+    )
     world = world_result.scalar_one_or_none()
 
     if world is None:
@@ -87,15 +105,21 @@ async def get_project(
         )
         world_elements = world_elements_result.scalars().all()
 
-    return project_schema_factory(project, world, world_elements, characters=character_list)
+    return project_schema_factory(
+        project, world, world_elements, characters=character_list
+    )
+
 
 @projects_router.post("/updateProject", response_model_exclude_none=True)
 async def update_project(
-    data: UpdateProjectRequest,
-    session: AsyncSession = Depends(get_session)
+    data: UpdateProjectRequest, session: AsyncSession = Depends(get_session)
 ):
-    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
-    result = await session.execute(select(project_polymorphic).where(BaseProject.id == data.id))
+    project_polymorphic = with_polymorphic(
+        BaseProject, [FictionProject, NonFictionProject, ThesisProject]
+    )
+    result = await session.execute(
+        select(project_polymorphic).where(BaseProject.id == data.id)
+    )
     project_to_update = result.scalar_one_or_none()
 
     if not project_to_update:
@@ -108,18 +132,19 @@ async def update_project(
 
     return {"message": "Project info updated successfully"}
 
+
 @projects_router.get("/project/templates")
 async def update_project():
     templates = load_static_content("backend/app/statics/project_templates.json")
 
     return {"templates": templates}
 
+
 @projects_router.delete("/deleteProject/{project_id}", status_code=204)
-async def delete_project(
-    project_id: int,
-    session: AsyncSession = Depends(get_session)
-):
-    result = await session.execute(select(BaseProject).where(BaseProject.id == project_id))
+async def delete_project(project_id: int, session: AsyncSession = Depends(get_session)):
+    result = await session.execute(
+        select(BaseProject).where(BaseProject.id == project_id)
+    )
     project = result.scalar_one_or_none()
 
     if not project:
@@ -129,13 +154,14 @@ async def delete_project(
     await session.commit()
     return
 
+
 @projects_router.patch("/projects/{project_id}/word-stats")
 async def update_word_stats(
-    project_id: int,
-    data: WordStatsUpdate,
-    session: AsyncSession = Depends(get_session)
+    project_id: int, data: WordStatsUpdate, session: AsyncSession = Depends(get_session)
 ):
-    result = await session.execute(select(BaseProject).where(BaseProject.id == project_id))
+    result = await session.execute(
+        select(BaseProject).where(BaseProject.id == project_id)
+    )
     project = result.scalar_one_or_none()
 
     if not project:
@@ -150,15 +176,18 @@ async def update_word_stats(
     await session.refresh(project)
     return {"message": "Word stats updated successfully"}
 
+
 # ─── Endpoint ───
 @projects_router.patch("/projects/{project_id}/general")
 async def update_general_info(
-    project_id: int,
-    data: General,
-    session: AsyncSession = Depends(get_session)
+    project_id: int, data: General, session: AsyncSession = Depends(get_session)
 ):
-    project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
-    result = await session.execute(select(project_polymorphic).where(BaseProject.id == project_id))
+    project_polymorphic = with_polymorphic(
+        BaseProject, [FictionProject, NonFictionProject, ThesisProject]
+    )
+    result = await session.execute(
+        select(project_polymorphic).where(BaseProject.id == project_id)
+    )
     project = result.scalar_one_or_none()
 
     if not project:

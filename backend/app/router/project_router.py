@@ -6,6 +6,7 @@ from sqlalchemy.orm import Query, with_polymorphic
 from backend.app.data.db.db import get_session
 from backend.app.data.entities.project_entities import BaseProject, ProjectList, FictionProject, NonFictionProject, \
     ThesisProject
+from backend.app.data.entities.sections.character_entities import Character
 from backend.app.data.entities.sections.world_entities import World, WorldElement
 from backend.app.domain.project_utils import create_project_object_from_request, project_schema_factory, \
     update_project_object_from_request, update_project_type_on_response
@@ -63,6 +64,8 @@ async def get_project(
     project_polymorphic = with_polymorphic(BaseProject, [FictionProject, NonFictionProject, ThesisProject])
     result = await session.execute(select(project_polymorphic).where(BaseProject.id == id))
     project = result.scalar_one_or_none()
+    characters_result = await session.execute(select(Character).where(Character.baseWritingProjectID == id))
+    character_list = characters_result.scalars().all()
 
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -75,7 +78,7 @@ async def get_project(
         session.add(new_world)
         await session.commit()
         await session.refresh(new_world)
-        return project_schema_factory(project, new_world)
+        return project_schema_factory(project, new_world, characters=character_list)
 
     world_elements = []
     if world:
@@ -84,7 +87,7 @@ async def get_project(
         )
         world_elements = world_elements_result.scalars().all()
 
-    return project_schema_factory(project, world, world_elements)
+    return project_schema_factory(project, world, world_elements, characters=character_list)
 
 @projects_router.post("/updateProject", response_model_exclude_none=True)
 async def update_project(

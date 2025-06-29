@@ -1,9 +1,18 @@
 export interface ICharacter {
-  id: string;
   name: string;
   importance: PriorityType;
-  characteristics: string;
-  about: string;
+  motivation: string;
+  objetive: string;
+  conflict: string;
+  epiphany: string;
+  resume_frase: string;
+  resume_paragraph: string;
+  resume: string;
+  notes: string;
+  details: string;
+  baseWritingProjectID: number;
+  plotID: number;
+  id: number;
 }
 export enum PriorityType {
   MAIN = "Main",

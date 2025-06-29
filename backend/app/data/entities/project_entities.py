@@ -29,10 +29,7 @@ class BaseProject(Base):
 
     project_list = relationship("ProjectList", back_populates="projects")
 
-    __mapper_args__ = {
-        "polymorphic_identity": "base",
-        "polymorphic_on": type
-    }
+    __mapper_args__ = {"polymorphic_identity": "base", "polymorphic_on": type}
 
 
 # ───── FictionProject ─────
@@ -50,9 +47,7 @@ class FictionProject(BaseProject):
     resume_paragraph = Column(String)
     resume_page = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "fiction"
-    }
+    __mapper_args__ = {"polymorphic_identity": "fiction"}
 
 
 # ───── NonFictionProject ─────
@@ -64,9 +59,7 @@ class NonFictionProject(BaseProject):
     volume = Column(Integer)
     license = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "non-fiction"
-    }
+    __mapper_args__ = {"polymorphic_identity": "non-fiction"}
 
 
 # ───── Thesis ─────
@@ -76,9 +69,7 @@ class ThesisProject(BaseProject):
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
     duration = Column(String)  # Indicar si es Articulo/Research o Tesis
 
-    __mapper_args__ = {
-        "polymorphic_identity": "thesis"
-    }
+    __mapper_args__ = {"polymorphic_identity": "thesis"}
 
 
 # ───── Poetry ─────
@@ -87,6 +78,4 @@ class PoetryProject(BaseProject):
 
     id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "poetry"
-    }
+    __mapper_args__ = {"polymorphic_identity": "poetry"}

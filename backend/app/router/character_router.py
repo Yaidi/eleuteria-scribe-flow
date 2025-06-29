@@ -15,7 +15,7 @@ character_router = APIRouter(prefix="/characters", tags=["Characters"])
 # Crear personaje
 @character_router.post("/", response_model=CharacterSchema)
 async def create_character(data: CharacterCreate, session: AsyncSession = Depends(get_session)):
-    character = Character(**data.model_dump())
+    character = Character(baseWritingProjectID=data.baseWritingProjectID)
     session.add(character)
     await session.commit()
     await session.refresh(character)

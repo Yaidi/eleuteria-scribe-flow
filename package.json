@@ -16,11 +16,6 @@
     "test": "vitest",
     "test:watch": "vitest --watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged && npx tsc --noEmit -p tsconfig.json"
-    }
-  },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"

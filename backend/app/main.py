@@ -11,6 +11,7 @@ from .data.entities.sections.plot_entities import Plot, PlotStep
 from .data.entities.sections.references_entities import ReferenceBase
 from .data.entities.sections.source_entities import Sources
 from .data.entities.sections.world_entities import World, WorldElement
+from .router.character_router import character_router
 from .router.world_router import world_router
 from .router.project_router import projects_router
 
@@ -54,6 +55,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(projects_router)
 app.include_router(world_router)
+app.include_router(character_router)
 
 app.add_middleware(
      CORSMiddleware,

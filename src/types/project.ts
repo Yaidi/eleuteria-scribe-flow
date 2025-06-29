@@ -4,9 +4,9 @@ export interface ProjectSections {
   wordGoal: number;
   words: number;
   general: IGeneral;
+  world: IWorld;
   characters: ICharacter[];
   plots: IPlot[];
-  world: IWorld[];
   manuscript: {
     chapters: IChapter[];
   };

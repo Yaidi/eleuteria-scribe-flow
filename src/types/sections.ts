@@ -1,5 +1,5 @@
 export interface ICharacter {
-  id: string;
+  id: number;
   name: string;
   importance: PriorityType;
   characteristics: string;

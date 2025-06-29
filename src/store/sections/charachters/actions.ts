@@ -7,4 +7,4 @@ export const updateInfoCharacter = createAction<Partial<ICharacter>>(
   "[Character] Update Character",
 );
 
-export const removeCharacter = createAction<string>("[Character] Remove Character");
+export const removeCharacter = createAction<number>("[Character] Remove Character");

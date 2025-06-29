@@ -12,21 +12,21 @@ import { IProject, ProjectData, ProjectSections, ProjectType } from "@/types/pro
 // Mock data for ICharacter
 export const mockCharacters: ICharacter[] = [
   {
-    id: "char-1",
+    id: 1,
     name: "John Doe",
     importance: PriorityType.MAIN,
     characteristics: "Brave, intelligent, and resourceful",
     about: "The protagonist of the story, a detective with a troubled past.",
   },
   {
-    id: "char-2",
+    id: 2,
     name: "Jane Smith",
     importance: PriorityType.SECONDARY,
     characteristics: "Clever, witty, and determined",
     about: "A journalist who helps John solve cases.",
   },
   {
-    id: "char-3",
+    id: 3,
     name: "Robert Johnson",
     importance: PriorityType.MINOR,
     characteristics: "Mysterious, wealthy, and secretive",
@@ -90,6 +90,10 @@ export const mockGeneral: IGeneral = {
   volume: 1,
   genre: GenreType.Romance,
   license: "All Rights Reserved",
+  situation: "",
+  resumePhrase: "",
+  resumeParagraph: "",
+  resumePage: "",
 };
 
 // Mock data for IChapter
@@ -132,6 +136,7 @@ export const mockProject: IProject = {
   id: 1,
   projectName: "The Dark Streets",
   type: ProjectType.NOVEL,
+  projectListID: 0,
 };
 
 // Mock data for ProjectData

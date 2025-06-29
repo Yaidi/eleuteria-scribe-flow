@@ -10,6 +10,10 @@ const initialState: IGeneral = {
   volume: 0,
   genre: GenreType.Romance,
   license: "",
+  situation: "",
+  resumePhrase: "",
+  resumeParagraph: "",
+  resumePage: "",
 };
 
 export const generalReducer = createReducer(initialState, (builder) => {

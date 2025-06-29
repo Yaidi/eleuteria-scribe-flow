@@ -8,7 +8,8 @@
     "dev-backend": "source backend/.venv/bin/activate && uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "tsc && vite build && electron-builder",
     "build:dev": "vite build --mode development",
-    "lint": "eslint .",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "prepare": "husky",
@@ -25,7 +26,8 @@
       "prettier --write"
     ],
     "src/**/*.{ts,tsx}": [
-      "eslint ."
+      "eslint .",
+      "tsc --noEmit"
     ]
   },
   "dependencies": {

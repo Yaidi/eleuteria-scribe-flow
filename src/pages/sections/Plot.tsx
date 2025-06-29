@@ -10,7 +10,7 @@ import { addPlot, removePlot, updatePlot } from "@/store";
 import { useSections } from "@/hooks/useSections.ts";
 
 const Plot = () => {
-  const { plots } = useSections();
+  const { plots } = useSections().plots;
   const dispatch = useDispatch();
 
   const add = () => {

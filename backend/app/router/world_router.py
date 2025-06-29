@@ -6,7 +6,8 @@ from sqlalchemy.future import select
 
 from backend.app.data.db.db import get_session
 from backend.app.data.entities.sections.world_entities import World, WorldElement
-from backend.app.schemas.world_schemas import WorldSchema, WorldCreate, WorldElementSchema, WorldElementCreate
+from backend.app.schemas.world_schemas import WorldSchema, WorldCreate, WorldElementSchema, WorldElementCreate, \
+    WorldWithElementsSchema, WorldElementDetailedSchema
 
 world_router = APIRouter(prefix="/world", tags=["World"])
 
@@ -18,13 +19,37 @@ async def create_world(data: WorldCreate, session: AsyncSession = Depends(get_se
     await session.refresh(new_world)
     return new_world
 
-@world_router.get("/{world_id}", response_model=WorldSchema)
+@world_router.get("/{world_id}", response_model=WorldWithElementsSchema)
 async def get_world(world_id: int, session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(World).where(World.id == world_id))
     world = result.scalar_one_or_none()
     if not world:
         raise HTTPException(status_code=404, detail="World not found")
-    return world
+
+    elements_result = await session.execute(select(WorldElement).where(WorldElement.worldID == world_id))
+    world_elements = elements_result.scalars().all()
+
+    world_elements_schema = []
+
+    if world_elements:
+        for element in world_elements:
+            world_elements_schema.append(
+                WorldElementDetailedSchema(
+                    id = element.id,
+                    name = element.name,
+                    description = element.description,
+                    origin = element.origin,
+                    conflictCause = element.conflictCause,
+                    worldElementID = element.worldElementID,
+                    worldID = element.worldID,
+                )
+            )
+
+    complete_world = WorldWithElementsSchema(
+        id=world_id,
+        world_elements=world_elements_schema,
+    )
+    return complete_world
 
 @world_router.get("/from_project/{project_id}", response_model=WorldSchema)
 async def get_world_by_project_id(project_id: int, session: AsyncSession = Depends(get_session)):

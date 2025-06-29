@@ -30,9 +30,18 @@ export interface IPlot {
 
 export interface IWorld {
   id: string;
-  category: string;
-  title: string;
+  baseWritingProjectID: number;
+  worldElements: IWorldElement[];
+}
+
+export interface IWorldElement {
+  id: number;
+  name: string;
   description: string;
+  origin: string;
+  conflictCause: string;
+  worldElementID: number;
+  worldID: number;
 }
 
 export interface IGeneral {

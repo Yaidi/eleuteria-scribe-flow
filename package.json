@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx lint-staged"
+      "pre-commit": "npx lint-staged && npx tsc --noEmit -p tsconfig.json"
     }
   },
   "lint-staged": {
@@ -26,8 +26,7 @@
       "prettier --write"
     ],
     "src/**/*.{ts,tsx}": [
-      "eslint .",
-      "tsc --noEmit"
+      "eslint ."
     ]
   },
   "dependencies": {

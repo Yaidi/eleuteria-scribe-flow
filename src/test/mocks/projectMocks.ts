@@ -18,7 +18,6 @@ export const mockCharacters: ICharacter[] = [
     characteristics: "Brave, intelligent, and resourceful",
     motivation: "",
     objetive: "",
-    about: "",
     conflict: "",
     epiphany: "",
     resumePhrase: "",

@@ -1,18 +1,19 @@
 export interface ICharacter {
+  id: number;
   name: string;
   importance: PriorityType;
+  characteristics: string;
   motivation: string;
   objetive: string;
   conflict: string;
   epiphany: string;
-  resume_frase: string;
-  resume_paragraph: string;
+  resumePhrase: string;
+  resumeParagraph: string;
   resume: string;
   notes: string;
   details: string;
   baseWritingProjectID: number;
   plotID: number;
-  id: number;
 }
 export enum PriorityType {
   MAIN = "Main",
@@ -30,9 +31,18 @@ export interface IPlot {
 
 export interface IWorld {
   id: string;
-  category: string;
-  title: string;
+  baseWritingProjectID: number;
+  worldElements: IWorldElement[];
+}
+
+export interface IWorldElement {
+  id: number;
+  name: string;
   description: string;
+  origin: string;
+  conflictCause: string;
+  worldElementID: number;
+  worldID: number;
 }
 
 export interface IGeneral {

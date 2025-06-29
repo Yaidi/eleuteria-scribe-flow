@@ -18,6 +18,7 @@ class General(BaseModel):
     resumeParagraph: Optional[str] = None
     resumePage: Optional[str] = None
 
+
 class Sections(BaseModel):
     wordGoal: Optional[int] = 0
     words: Optional[int] = 0
@@ -29,6 +30,7 @@ class Sections(BaseModel):
         "exclude_none": True  # 👈 Esto hace que `None` no se incluya en el JSON
     }
 
+
 # ───── Proyecto base ─────
 class BaseProjectSchema(BaseModel):
     id: int
@@ -39,6 +41,7 @@ class BaseProjectSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class MinimalBaseProjectSchema(BaseModel):
     id: int
     projectListID: int
@@ -46,14 +49,17 @@ class MinimalBaseProjectSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 # ───── ProjectList Response ─────
 class ProjectListResponse(BaseModel):
     projects: List[BaseProjectSchema]
+
 
 # Para creación de proyecto
 class CreateProjectRequest(BaseModel):
     type: str
     projectListID: int
+
 
 # Para hacer update de proyecto
 class UpdateProjectRequest(BaseModel):

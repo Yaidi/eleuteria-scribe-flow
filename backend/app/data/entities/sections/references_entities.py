@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Text
 
 from backend.app.data.entities.project_entities import Base
 
+
 # ───── ReferenceBase ─────
 class ReferenceBase(Base):
     __tablename__ = "reference_base"
@@ -15,10 +16,8 @@ class ReferenceBase(Base):
     baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
     type = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "reference_base",
-        "polymorphic_on": type
-    }
+    __mapper_args__ = {"polymorphic_identity": "reference_base", "polymorphic_on": type}
+
 
 # ───── Book ─────
 class Book(ReferenceBase):
@@ -27,9 +26,8 @@ class Book(ReferenceBase):
     editorial = Column(String)
     ISBN = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "book"
-    }
+    __mapper_args__ = {"polymorphic_identity": "book"}
+
 
 # ───── Article ─────
 class Article(ReferenceBase):
@@ -41,9 +39,8 @@ class Article(ReferenceBase):
     DOI = Column(String)
     resume = Column(Text)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "article"
-    }
+    __mapper_args__ = {"polymorphic_identity": "article"}
+
 
 # ───── WebReference ─────
 class WebReference(ReferenceBase):
@@ -52,9 +49,8 @@ class WebReference(ReferenceBase):
     consult_date = Column(String)
     url = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "web_reference"
-    }
+    __mapper_args__ = {"polymorphic_identity": "web_reference"}
+
 
 # ───── Video ─────
 class Video(ReferenceBase):
@@ -64,9 +60,8 @@ class Video(ReferenceBase):
     platform = Column(String)
     relevant_timeframe = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "video"
-    }
+    __mapper_args__ = {"polymorphic_identity": "video"}
+
 
 # ───── Interview ─────
 class Interview(Base):
@@ -78,6 +73,4 @@ class Interview(Base):
     format = Column(String)
     fragments = Column(Text)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "interview"
-    }
+    __mapper_args__ = {"polymorphic_identity": "interview"}

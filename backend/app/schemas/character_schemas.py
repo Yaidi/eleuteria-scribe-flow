@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
+
 class CharacterBase(BaseModel):
     name: Optional[str] = None
     importance: Optional[int] = None
@@ -17,8 +18,10 @@ class CharacterBase(BaseModel):
     baseWritingProjectID: int
     plotID: Optional[int] = None
 
+
 class CharacterCreate(BaseModel):
     baseWritingProjectID: int
+
 
 class CharacterUpdate(BaseModel):
     name: Optional[str] = None
@@ -33,6 +36,7 @@ class CharacterUpdate(BaseModel):
     resume: Optional[str] = None
     notes: Optional[str] = None
     details: Optional[str] = None
+
 
 class CharacterSchema(CharacterBase):
     id: int

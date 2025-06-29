@@ -1,11 +1,26 @@
 from typing import List
 
-from backend.app.data.entities.project_entities import FictionProject, NonFictionProject, BaseProject, \
-    ThesisProject, PoetryProject
+from backend.app.data.entities.project_entities import (
+    FictionProject,
+    NonFictionProject,
+    BaseProject,
+    ThesisProject,
+    PoetryProject,
+)
 from backend.app.schemas.character_schemas import CharacterSchema
-from backend.app.schemas.project_schemas import CreateProjectRequest, \
-    UpdateProjectRequest, General, Sections, BaseProjectSchema, ProjectListResponse, MinimalBaseProjectSchema
-from backend.app.schemas.world_schemas import WorldWithElementsSchema, WorldElementDetailedSchema
+from backend.app.schemas.project_schemas import (
+    CreateProjectRequest,
+    UpdateProjectRequest,
+    General,
+    Sections,
+    BaseProjectSchema,
+    ProjectListResponse,
+    MinimalBaseProjectSchema,
+)
+from backend.app.schemas.world_schemas import (
+    WorldWithElementsSchema,
+    WorldElementDetailedSchema,
+)
 
 
 def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectSchema:
@@ -17,32 +32,21 @@ def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectS
     }
     return MinimalBaseProjectSchema(**base_kwargs)
 
+
 def create_project_object_from_request(data: CreateProjectRequest):
     match data.type.lower():
         case "novel":
-            return FictionProject(
-                projectListID=data.projectListID,
-                duration=data.type
-            )
+            return FictionProject(projectListID=data.projectListID, duration=data.type)
         case "trilogy":
-            return FictionProject(
-                projectListID=data.projectListID,
-                duration=data.type
-            )
+            return FictionProject(projectListID=data.projectListID, duration=data.type)
         case "non-fiction":
             return NonFictionProject(
                 projectListID=data.projectListID,
             )
         case "thesis":
-            return ThesisProject(
-                projectListID=data.projectListID,
-                duration=data.type
-            )
+            return ThesisProject(projectListID=data.projectListID, duration=data.type)
         case "research":
-            return ThesisProject(
-                projectListID=data.projectListID,
-                duration=data.type
-            )
+            return ThesisProject(projectListID=data.projectListID, duration=data.type)
         case "poetry":
             return PoetryProject(
                 projectListID=data.projectListID,
@@ -52,12 +56,17 @@ def create_project_object_from_request(data: CreateProjectRequest):
                 projectListID=data.projectListID,
             )
 
-def update_project_object_from_request(data: UpdateProjectRequest, project_to_update: BaseProject):
+
+def update_project_object_from_request(
+    data: UpdateProjectRequest, project_to_update: BaseProject
+):
     project_to_update.projectListID = data.projectListID
     project_to_update.project_name = data.projectName
 
 
-def project_schema_factory(project, world = None, world_elements = None, characters = None) -> BaseProjectSchema:
+def project_schema_factory(
+    project, world=None, world_elements=None, characters=None
+) -> BaseProjectSchema:
     # Construir `general` desde los atributos comunes
     general = General(
         title=project.title,
@@ -79,13 +88,13 @@ def project_schema_factory(project, world = None, world_elements = None, charact
         for element in world_elements:
             world_elements_schema.append(
                 WorldElementDetailedSchema(
-                    id = element.id,
-                    name = element.name,
-                    description = element.description,
-                    origin = element.origin,
-                    conflictCause = element.conflictCause,
-                    worldElementID = element.worldElementID,
-                    worldID = element.worldID,
+                    id=element.id,
+                    name=element.name,
+                    description=element.description,
+                    origin=element.origin,
+                    conflictCause=element.conflictCause,
+                    worldElementID=element.worldElementID,
+                    worldID=element.worldID,
                 )
             )
 
@@ -98,14 +107,16 @@ def project_schema_factory(project, world = None, world_elements = None, charact
 
     characters_schema = []
     if characters:
-        characters_schema = [CharacterSchema.model_validate(char) for char in characters]
+        characters_schema = [
+            CharacterSchema.model_validate(char) for char in characters
+        ]
 
     sections = Sections(
         wordGoal=project.word_goal,
         words=project.words,
         general=general,
         world=world_schema,
-        characters=characters_schema
+        characters=characters_schema,
     )
 
     project_type = project.type.capitalize()
@@ -120,6 +131,6 @@ def project_schema_factory(project, world = None, world_elements = None, charact
         "projectListID": project.projectListID,
         "projectName": project.project_name,
         "type": project_type,
-        "sections": sections
+        "sections": sections,
     }
     return BaseProjectSchema(**base_kwargs)

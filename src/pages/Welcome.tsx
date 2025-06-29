@@ -60,7 +60,7 @@ const templates: Record<string, TemplateStructure> = {
 };
 
 const Welcome = () => {
-  const featureEnabled = import.meta.env.VITE_FEATURES;
+  const featureEnabled = import.meta.env.VITE_FEATURES as string;
   const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.NOVEL);
   const [darkMode, setDarkMode] = useState(false);
   const [customTemplate, setCustomTemplate] = useState({
@@ -77,7 +77,7 @@ const Welcome = () => {
   };
 
   useEffect(() => {
-    dispatch(projectsFetch());
+    void dispatch(projectsFetch());
   }, [dispatch]);
 
   const handleCreateProject = async (type: ProjectType) => {
@@ -125,7 +125,7 @@ const Welcome = () => {
           <button
             onClick={() => handleTemplateSelect(ProjectType.NOVEL)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === "Novel"
+              selectedTemplate === ProjectType.NOVEL
                 ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
                 : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
             }`}
@@ -138,7 +138,7 @@ const Welcome = () => {
           <button
             onClick={() => handleTemplateSelect(ProjectType.THESIS)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === "Trilogy"
+              selectedTemplate === ProjectType.THESIS
                 ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                 : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
             }`}
@@ -152,7 +152,7 @@ const Welcome = () => {
           <button
             onClick={() => handleTemplateSelect(ProjectType.POETRY)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === "Poetry"
+              selectedTemplate === ProjectType.POETRY
                 ? "border-pink-500 bg-pink-50 dark:bg-pink-900/20"
                 : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
             }`}
@@ -166,7 +166,7 @@ const Welcome = () => {
           <button
             onClick={() => handleTemplateSelect(ProjectType.ILLUSTRATED)}
             className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-              selectedTemplate === "Non-fiction"
+              selectedTemplate === ProjectType.ILLUSTRATED
                 ? "border-orange-500 bg-orange-50 dark:bg-orange-900/20"
                 : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
             }`}
@@ -254,7 +254,10 @@ const Welcome = () => {
                     ))}
                   </div>
                 </div>
-                <Button onClick={() => handleCreateProject(selectedTemplate)} className="w-full">
+                <Button
+                  onClick={() => void handleCreateProject(selectedTemplate)}
+                  className="w-full"
+                >
                   Choose This Template
                 </Button>
               </div>
@@ -315,7 +318,7 @@ const Welcome = () => {
                       />
                     </div>
                     <Button
-                      onClick={() => handleCreateProject(ProjectType.NON_FICTION)}
+                      onClick={() => void handleCreateProject(ProjectType.NON_FICTION)}
                       className="w-full"
                     >
                       Create Template
@@ -343,7 +346,7 @@ const Welcome = () => {
                       />
                     </div>
                     <Button
-                      onClick={() => handleCreateProject(ProjectType.NON_FICTION)}
+                      onClick={() => void handleCreateProject(ProjectType.NON_FICTION)}
                       className="w-full"
                     >
                       Create Book

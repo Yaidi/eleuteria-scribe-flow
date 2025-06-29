@@ -1,7 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 import { ICharacter } from "@/types/sections.ts";
 
-export const addCharacter = createAction<ICharacter>("[Character] Add Character");
+export const addCharacter = createAction<Partial<ICharacter>>("[Character] Add Character");
 
 export const updateInfoCharacter = createAction<Partial<ICharacter>>(
   "[Character] Update Character",

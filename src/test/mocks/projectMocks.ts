@@ -16,21 +16,51 @@ export const mockCharacters: ICharacter[] = [
     name: "John Doe",
     importance: PriorityType.MAIN,
     characteristics: "Brave, intelligent, and resourceful",
-    about: "The protagonist of the story, a detective with a troubled past.",
+    motivation: "",
+    objetive: "",
+    conflict: "",
+    epiphany: "",
+    resumePhrase: "",
+    resumeParagraph: "",
+    resume: "",
+    notes: "",
+    details: "",
+    baseWritingProjectID: 0,
+    plotID: 0,
   },
   {
     id: 2,
     name: "Jane Smith",
     importance: PriorityType.SECONDARY,
     characteristics: "Clever, witty, and determined",
-    about: "A journalist who helps John solve cases.",
+    motivation: "",
+    objetive: "",
+    conflict: "",
+    epiphany: "",
+    resumePhrase: "",
+    resumeParagraph: "",
+    resume: "",
+    notes: "",
+    details: "",
+    baseWritingProjectID: 0,
+    plotID: 0,
   },
   {
     id: 3,
     name: "Robert Johnson",
     importance: PriorityType.MINOR,
     characteristics: "Mysterious, wealthy, and secretive",
-    about: "A businessman with connections to the underworld.",
+    motivation: "",
+    objetive: "",
+    conflict: "",
+    epiphany: "",
+    resumePhrase: "",
+    resumeParagraph: "",
+    resume: "",
+    notes: "",
+    details: "",
+    baseWritingProjectID: 0,
+    plotID: 0,
   },
 ];
 
@@ -60,26 +90,11 @@ export const mockPlots: IPlot[] = [
 ];
 
 // Mock data for IWorld
-export const mockWorld: IWorld[] = [
-  {
-    id: "world-1",
-    category: "Location",
-    title: "Metropolis City",
-    description: "A sprawling urban landscape with high crime rates and corrupt officials.",
-  },
-  {
-    id: "world-2",
-    category: "Organization",
-    title: "The Syndicate",
-    description: "A secret criminal organization that controls much of the city's underworld.",
-  },
-  {
-    id: "world-3",
-    category: "Item",
-    title: "The Artifact",
-    description: "A mysterious object that grants its owner unusual abilities.",
-  },
-];
+export const mockWorld: IWorld = {
+  id: 0,
+  baseWritingProjectID: 0,
+  worldElements: [],
+};
 
 // Mock data for IGeneral
 export const mockGeneral: IGeneral = {

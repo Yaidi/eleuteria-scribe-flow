@@ -12,12 +12,10 @@ const Characters = () => {
   const dispatch = useDispatch();
 
   const add = () => {
-    const newCharacter: ICharacter = {
-      id: Date.now().toString(),
+    const newCharacter: Partial<ICharacter> = {
       name: "",
       importance: PriorityType.MINOR,
       characteristics: "",
-      about: "",
     };
     dispatch(addCharacter(newCharacter));
   };

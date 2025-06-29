@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ESections } from "@/types/sections.ts";
+import { ESections, PriorityType } from "@/types/sections.ts";
 import React, { useState } from "react";
 import { Book, ChevronDown, ChevronRight, FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
@@ -27,13 +27,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
           <div className="flex items-center justify-between mb-3">
             <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">Characters</h3>
           </div>
-          {["Main", "Secondary", "Minor"].map((role) => (
+          {[PriorityType.MAIN, PriorityType.SECONDARY, PriorityType.MINOR].map((role) => (
             <div key={role} className="space-y-1">
               <h4 className="dark:text-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wide">
                 {role}
               </h4>
               {characters
-                .filter((char) => char.importance === role.toLowerCase())
+                .filter((char) => char.importance === role)
                 .map((character) => (
                   <Button
                     key={character.id}

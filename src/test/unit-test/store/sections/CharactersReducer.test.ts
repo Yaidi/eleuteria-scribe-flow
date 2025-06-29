@@ -25,11 +25,20 @@ describe("charactersReducer", () => {
 
     expect(nextState).toEqual([
       {
-        about: "The protagonist of the story, a detective with a troubled past.",
+        baseWritingProjectID: 0,
         characteristics: "Brave, intelligent, and resourceful",
+        conflict: "",
+        details: "",
+        epiphany: "",
         id: 1,
         importance: "Main",
+        motivation: "",
         name: "Alice Updated",
+        notes: "",
+        plotID: 0,
+        resume: "",
+        resumeParagraph: "",
+        resumePhrase: "",
         role: "Leader",
       },
     ]);

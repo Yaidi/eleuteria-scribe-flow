@@ -14,13 +14,14 @@ import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
 import { removeCharacter, updateInfoCharacter } from "@/store";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/config.tsx";
 
 interface FormsCharactersProps {
   character: ICharacter;
 }
 
 const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const update = (info: Partial<ICharacter>) => {
     dispatch(updateInfoCharacter(info));
   };

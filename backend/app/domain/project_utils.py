@@ -2,6 +2,7 @@ from typing import List
 
 from backend.app.data.entities.project_entities import FictionProject, NonFictionProject, BaseProject, \
     ThesisProject, PoetryProject
+from backend.app.schemas.character_schemas import CharacterSchema
 from backend.app.schemas.project_schemas import CreateProjectRequest, \
     UpdateProjectRequest, General, Sections, BaseProjectSchema, ProjectListResponse, MinimalBaseProjectSchema
 from backend.app.schemas.world_schemas import WorldWithElementsSchema, WorldElementDetailedSchema
@@ -56,7 +57,7 @@ def update_project_object_from_request(data: UpdateProjectRequest, project_to_up
     project_to_update.project_name = data.projectName
 
 
-def project_schema_factory(project, world = None, world_elements = None) -> BaseProjectSchema:
+def project_schema_factory(project, world = None, world_elements = None, characters = None) -> BaseProjectSchema:
     # Construir `general` desde los atributos comunes
     general = General(
         title=project.title,
@@ -95,11 +96,16 @@ def project_schema_factory(project, world = None, world_elements = None) -> Base
             world_elements=world_elements_schema,
         )
 
+    characters_schema = []
+    if characters:
+        characters_schema = [CharacterSchema.model_validate(char) for char in characters]
+
     sections = Sections(
         wordGoal=project.word_goal,
         words=project.words,
         general=general,
         world=world_schema,
+        characters=characters_schema
     )
 
     project_type = project.type.capitalize()

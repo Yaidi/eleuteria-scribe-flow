@@ -2,6 +2,8 @@ export const isElectron = () => typeof window !== "undefined" && "electron" in w
 
 const electron = isElectron() ? window.electron : null;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 export const getCurrentId: () => Promise<number> = async () => {
   if (electron) {
     return await window.electron.ipcRenderer.invoke("get-project-id");

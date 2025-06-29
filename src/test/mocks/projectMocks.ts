@@ -17,7 +17,7 @@ export const mockCharacters: ICharacter[] = [
     importance: PriorityType.MAIN,
     characteristics: "Brave, intelligent, and resourceful",
     motivation: "",
-    about: "",
+    about: "a",
     conflict: "",
     epiphany: "",
     resumePhrase: "",

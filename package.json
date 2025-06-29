@@ -5,16 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev-backend": "source backend/.venv/bin/activate && uvicorn backend.app.main:app --reload --host localhost --port 8000",
+    "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "tsc && vite build && electron-builder",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "format-backend": "source backend/.venv/bin/activate && black backend/ --line-length 88",
+    "format-backend": "black backend/ --line-length 88",
     "prepare": "husky",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test-backend": "backend/.venv/bin/pytest backend/tests",
+    "test:watch": "vitest --watch",
+    "install-backend": "cd backend && pip3 install -r requirements.txt"
   },
   "husky": {
     "hooks": {

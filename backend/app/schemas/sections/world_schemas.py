@@ -12,17 +12,26 @@ class WorldSchema(WorldCreate):
 
 
 class WorldElementCreate(BaseModel):
-    name: str
-    description: Optional[str] = ""
-    origin: Optional[str] = ""
-    conflictCause: Optional[str] = ""
-    worldElementID: Optional[int] = None
     worldID: int
 
 
 class WorldElementSchema(WorldElementCreate):
     id: int
+    name: Optional[str] = None
+    description: Optional[str] = None
+    origin: Optional[str] = None
+    conflictCause: Optional[str] = None
+    worldElementID: Optional[int] = None
     model_config = ConfigDict(from_attributes=True)
+
+
+class WorldElementUpdateSchema(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    origin: Optional[str] = None
+    conflictCause: Optional[str] = None
+    worldElementID: Optional[int] = None
+    worldID: Optional[int] = None  # En caso de permitir mover el elemento a otro mundo
 
 
 """ For Get Project Response """
@@ -30,7 +39,7 @@ class WorldElementSchema(WorldElementCreate):
 
 class WorldElementDetailedSchema(BaseModel):
     id: int
-    name: str
+    name: Optional[str]
     description: Optional[str] = ""
     origin: Optional[str] = ""
     conflictCause: Optional[str] = ""

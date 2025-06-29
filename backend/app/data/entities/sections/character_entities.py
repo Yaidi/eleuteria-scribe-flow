@@ -19,5 +19,7 @@ class Character(Base):
     resume = Column(Text)
     notes = Column(Text)
     details = Column(Text)
-    baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
-    plotID = Column(Integer, ForeignKey("plots.id"))
+    baseWritingProjectID = Column(
+        Integer, ForeignKey("base_projects.id", ondelete="CASCADE")
+    )
+    plotID = Column(Integer, ForeignKey("plots.id", ondelete="SET NULL"), nullable=True)

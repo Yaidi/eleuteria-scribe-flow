@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 
 from backend.app.data.db.db import get_session
 
-from backend.app.data.entities.sections.world_entities import World, WorldElement
 from backend.app.data.respositories.project_repository import ProjectRepository
 from backend.app.data.respositories.sections.character_repository import (
     CharacterRepository,

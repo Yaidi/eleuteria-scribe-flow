@@ -5,17 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev-backend": "source backend/.venv/bin/activate && uvicorn backend.app.main:app --reload --host localhost --port 8000",
+    "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "tsc && vite build && electron-builder",
     "build:dev": "vite build --mode development",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "format-backend": "source backend/.venv/bin/activate && black backend/ --line-length 88",
+    "format-backend": "black backend/ --line-length 88",
     "prepare": "husky",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
+    "test-coverage-backend": "backend/.venv/bin/coverage report",
+    "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
+    "test:watch": "vitest --watch",
+    "install-backend": "cd backend && pip3 install -r requirements.txt"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [

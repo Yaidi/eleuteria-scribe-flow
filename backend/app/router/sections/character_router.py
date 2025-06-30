@@ -4,8 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from backend.app.data.entities.sections.character_entities import Character
-from backend.app.data.entities.sections.plot_entities import Plot
-from backend.app.schemas.character_schemas import (
+from backend.app.data.respositories.sections.character_repository import (
+    CharacterRepository,
+)
+from backend.app.schemas.sections.character_schemas import (
     CharacterSchema,
     CharacterCreate,
     CharacterUpdate,
@@ -20,10 +22,8 @@ character_router = APIRouter(prefix="/characters", tags=["Characters"])
 async def create_character(
     data: CharacterCreate, session: AsyncSession = Depends(get_session)
 ):
-    character = Character(baseWritingProjectID=data.baseWritingProjectID)
-    session.add(character)
-    await session.commit()
-    await session.refresh(character)
+    repository = CharacterRepository(session)
+    character = await repository.create_character(data.baseWritingProjectID)
     return character
 
 
@@ -32,10 +32,8 @@ async def create_character(
 async def get_character(
     character_id: int, session: AsyncSession = Depends(get_session)
 ):
-    result = await session.execute(
-        select(Character).where(Character.id == character_id)
-    )
-    character = result.scalar_one_or_none()
+    repository = CharacterRepository(session)
+    character = repository.get_character(character_id)
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
     return character
@@ -48,10 +46,8 @@ async def get_character(
 async def get_characters_from_project(
     project_id: int, session: AsyncSession = Depends(get_session)
 ):
-    result = await session.execute(
-        select(Character).where(Character.baseWritingProjectID == project_id)
-    )
-    return result.scalars().all()
+    repository = CharacterRepository(session)
+    return await repository.get_list_by_project_id(project_id)
 
 
 # Eliminar personaje
@@ -59,14 +55,11 @@ async def get_characters_from_project(
 async def delete_character(
     character_id: int, session: AsyncSession = Depends(get_session)
 ):
-    result = await session.execute(
-        select(Character).where(Character.id == character_id)
-    )
-    character = result.scalar_one_or_none()
+    repository = CharacterRepository(session)
+    character = await repository.get_character(character_id)
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
-    await session.delete(character)
-    await session.commit()
+    await repository.delete_character(character)
     return {"message": "Character deleted successfully"}
 
 
@@ -77,16 +70,14 @@ async def update_character(
     data: CharacterUpdate,
     session: AsyncSession = Depends(get_session),
 ):
-    result = await session.execute(
-        select(Character).where(Character.id == character_id)
-    )
-    character = result.scalar_one_or_none()
+    repository = CharacterRepository(session)
+
+    character = await repository.get_character(character_id)
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
 
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(character, field, value)
 
-    await session.commit()
-    await session.refresh(character)
+    await repository.update_character(character)
     return character

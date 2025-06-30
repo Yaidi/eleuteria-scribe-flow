@@ -26,3 +26,4 @@ dist-electron
 *.sw?
 *.pyc
 *.db
+*.coverage

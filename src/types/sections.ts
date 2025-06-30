@@ -30,7 +30,7 @@ export interface IPlot {
 }
 
 export interface IWorld {
-  id: string;
+  id: number;
   baseWritingProjectID: number;
   worldElements: IWorldElement[];
 }

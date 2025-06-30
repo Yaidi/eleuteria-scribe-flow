@@ -132,9 +132,7 @@ const ChartTooltipContent = React.forwardRef<
       const key = `${labelKey || item.dataKey || item.name || "value"}`;
       const itemConfig = getPayloadConfigFromPayload(config, item, key);
       const value =
-        !labelKey && typeof label === "string"
-          ? config[label as keyof typeof config]?.label || label
-          : itemConfig?.label;
+        !labelKey && typeof label === "string" ? config[label]?.label || label : itemConfig?.label;
 
       if (labelFormatter) {
         return (
@@ -264,10 +262,13 @@ const ChartLegendContent = React.forwardRef<
       {payload.map((item) => {
         const key = `${nameKey || item.dataKey || "value"}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
-
         return (
           <div
-            key={item.value}
+            key={
+              typeof item.value === "string" || typeof item.value === "number"
+                ? item.value
+                : String(item.value)
+            }
             className={cn(
               "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground",
             )}
@@ -314,7 +315,7 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
     configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string;
   }
 
-  return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
+  return configLabelKey in config ? config[configLabelKey] : config[key];
 }
 
 export {

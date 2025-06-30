@@ -14,13 +14,14 @@ import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
 import { removeCharacter, updateInfoCharacter } from "@/store";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/config.tsx";
 
 interface FormsCharactersProps {
   character: ICharacter;
 }
 
 const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const update = (info: Partial<ICharacter>) => {
     dispatch(updateInfoCharacter(info));
   };
@@ -77,20 +78,6 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             value={character.characteristics}
             onChange={(e) => update({ id: character.id, characteristics: e.target.value })}
             placeholder="Physical appearance, personality traits..."
-          />
-        </div>
-        <div>
-          <Label>About Character</Label>
-          <Textarea
-            name="about"
-            value={character.about}
-            onChange={(e) =>
-              update({
-                id: character.id,
-                about: e.target.value,
-              })
-            }
-            placeholder="Background story, motivations, role in the story..."
           />
         </div>
       </div>

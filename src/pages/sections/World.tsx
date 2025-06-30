@@ -1,101 +1,58 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select";
 import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { IWorld } from "@/types/sections.ts";
+import { IWorldElement } from "@/types/sections.ts";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/config.tsx";
-import { addWorld, removeWorld, updateInfoWorld } from "@/store";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store";
 
 const World = () => {
-  const { world } = useSelector((state: RootState) => state.sections);
+  const { world } = useSelector((state: RootState) => state.sections.world);
 
-  const addWorldElement = () => {
-    const newElement: IWorld = {
-      id: Date.now().toString(),
-      category: "culture",
-      title: "",
-      description: "",
+  const add = () => {
+    const newElement: Partial<IWorldElement> = {
+      worldID: world.id,
     };
-    addWorld(newElement);
+    addWorldElement(newElement);
   };
 
-  const updateWorldElement = (world: Partial<IWorld>) => {
-    updateInfoWorld(world);
+  const update = (world: Partial<IWorldElement>) => {
+    updateWorldElement(world);
   };
 
-  const removeWorldElement = (id: string) => {
-    removeWorld(id);
+  const remove = (id: number) => {
+    removeWorldElement(id);
   };
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>World Building</CardTitle>
-        <Button onClick={addWorldElement} size="sm">
+        <Button onClick={add} size="sm">
           <Plus className="w-4 h-4 mr-2" />
           Add Element
         </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {world.map((element) => (
+          {world.worldElements.map((element) => (
             <div key={element.id} className="border rounded-lg p-4">
               <div className="flex justify-between items-start mb-4">
                 <div className="grid grid-cols-2 gap-4 flex-1">
                   <div>
-                    <Label>Category</Label>
-                    <Select
-                      name="category"
-                      value={element.category}
-                      onValueChange={(value) =>
-                        updateWorldElement({
-                          id: element.id,
-                          category: value,
-                        })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="culture">Culture</SelectItem>
-                        <SelectItem value="language">Language</SelectItem>
-                        <SelectItem value="tradition">Tradition</SelectItem>
-                        <SelectItem value="weather">Weather</SelectItem>
-                        <SelectItem value="geography">Geography</SelectItem>
-                        <SelectItem value="politics">Politics</SelectItem>
-                        <SelectItem value="religion">Religion</SelectItem>
-                        <SelectItem value="technology">Technology</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Title</Label>
+                    <Label>Name</Label>
                     <Input
                       name="title"
-                      value={element.title}
-                      onChange={(e) =>
-                        updateWorldElement({ title: e.target.value, id: element.id })
-                      }
+                      value={element.name}
+                      onChange={(e) => update({ name: e.target.value, id: element.id })}
                       placeholder="Element title"
                     />
                   </div>
                 </div>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => removeWorldElement(element.id)}
-                >
+                <Button variant="destructive" size="sm" onClick={() => remove(element.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -104,15 +61,13 @@ const World = () => {
                 <Textarea
                   name="description"
                   value={element.description}
-                  onChange={(e) =>
-                    updateWorldElement({ id: element.id, description: e.target.value })
-                  }
+                  onChange={(e) => update({ id: element.id, description: e.target.value })}
                   placeholder="Describe this world element in detail..."
                 />
               </div>
             </div>
           ))}
-          {world.length === 0 && (
+          {world.worldElements.length === 0 && (
             <div className="text-center py-8 text-slate-500">
               No world elements added yet. Click "Add Element" to get started.
             </div>

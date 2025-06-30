@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Location, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Moon, Settings, Sun } from "lucide-react";
 import General from "@/pages/sections/General.tsx";
@@ -16,20 +16,21 @@ import { AppDispatch, RootState } from "@/store/config.tsx";
 import { ProjectType } from "@/types/project.ts";
 import { getCurrentId } from "@/store/electron/actions.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
+import { LocationState } from "@/types/hooks.ts";
 
 const MainContent = () => {
-  const location = useLocation();
+  const location = useLocation() as Location<LocationState>;
   const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const template = (location.state?.template as ProjectType) || ProjectType.NOVEL;
+  const template = location.state?.template || ProjectType.NOVEL;
 
   useEffect(() => {
-    getCurrentId().then((id: number) => {
+    void getCurrentId().then((id: number) => {
       if (!currentProject) {
-        dispatch(getProjectFetch(id));
+        void dispatch(getProjectFetch(id));
       }
     });
   }, [currentProject, dispatch]);

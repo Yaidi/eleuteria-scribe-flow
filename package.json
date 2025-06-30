@@ -8,7 +8,8 @@
     "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "tsc && vite build && electron-builder",
     "build:dev": "vite build --mode development",
-    "lint": "eslint .",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "format-backend": "black backend/ --line-length 88",
@@ -20,14 +21,12 @@
     "test:watch": "vitest --watch",
     "install-backend": "cd backend && pip3 install -r requirements.txt"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged"
-    }
-  },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "eslint ."
     ],
     "**/*.py": [
       "black --quiet"
@@ -97,12 +96,14 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-redux": "^7.1.34",
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
     "@vitejs/plugin-react": "^4.6.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
-    "eslint": "^9.9.0",
+    "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",

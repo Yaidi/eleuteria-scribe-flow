@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addProject, getProjects, getCurrentProject } from "@/store";
+import { addProject, getCurrentProject, getProjects } from "@/store";
 import { ProjectData } from "@/types/project.ts";
 import { RequestAddProject } from "@/types/requests.ts";
 import { setCurrentId } from "@/store/electron/actions.ts";
@@ -9,8 +9,7 @@ export const projectsFetch = createAsyncThunk<ProjectData[]>(getProjects.type, a
   if (!response.ok) {
     throw new Error("Error fetching projects");
   }
-  const data: ProjectData[] = await response.json();
-  return data;
+  return (await response.json()) as ProjectData[];
 });
 
 export const getProjectFetch = createAsyncThunk<ProjectData, number>(
@@ -20,8 +19,7 @@ export const getProjectFetch = createAsyncThunk<ProjectData, number>(
     if (!response.ok) {
       throw new Error("Error fetching projects");
     }
-    const data: ProjectData = await response.json();
-    return data;
+    return (await response.json()) as ProjectData;
   },
 );
 
@@ -38,7 +36,7 @@ export const addProjectFetch = createAsyncThunk<ProjectData, RequestAddProject>(
     if (!response.ok) {
       throw new Error("Error fetching projects");
     }
-    const data: ProjectData = await response.json();
+    const data = (await response.json()) as ProjectData;
     await setCurrentId(data.id);
     return data;
   },

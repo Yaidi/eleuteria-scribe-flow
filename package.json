@@ -14,7 +14,9 @@
     "format-backend": "black backend/ --line-length 88",
     "prepare": "husky",
     "test": "vitest",
-    "test-backend": "backend/.venv/bin/pytest backend/tests",
+    "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
+    "test-coverage-backend": "backend/.venv/bin/coverage report",
+    "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
     "test:watch": "vitest --watch",
     "install-backend": "cd backend && pip3 install -r requirements.txt"
   },

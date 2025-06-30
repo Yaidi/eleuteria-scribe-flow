@@ -31,7 +31,7 @@ class WorldElementUpdateSchema(BaseModel):
     origin: Optional[str] = None
     conflictCause: Optional[str] = None
     worldElementID: Optional[int] = None
-    worldID: Optional[int] = None  # En caso de permitir mover el elemento a otro mundo
+    worldID: int
 
 
 """ For Get Project Response """

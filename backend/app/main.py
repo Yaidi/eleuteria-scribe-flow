@@ -11,12 +11,12 @@ from .data.entities.sections.plot_entities import Plot, PlotStep
 from .data.entities.sections.references_entities import ReferenceBase
 from .data.entities.sections.source_entities import Sources
 from .data.entities.sections.world_entities import World, WorldElement
-from .router.character_router import character_router
-from .router.world_router import world_router
+from backend.app.router.sections.character_router import character_router
+from backend.app.router.sections.world_router import world_router
 from .router.project_router import projects_router
 
 
-@event.listens_for(Engine, "connect")
+@event.listens_for(engine.sync_engine, "connect")
 def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")

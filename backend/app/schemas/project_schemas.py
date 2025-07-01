@@ -1,8 +1,8 @@
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, List, Literal, Union
+from typing import Optional, List
 
-from backend.app.schemas.character_schemas import CharacterSchema
-from backend.app.schemas.world_schemas import WorldSchema, WorldWithElementsSchema
+from backend.app.schemas.sections.character_schemas import CharacterSchema
+from backend.app.schemas.sections.world_schemas import WorldWithElementsSchema
 
 
 class General(BaseModel):

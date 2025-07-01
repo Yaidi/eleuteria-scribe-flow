@@ -1,5 +1,3 @@
-from typing import List
-
 from backend.app.data.entities.project_entities import (
     FictionProject,
     NonFictionProject,
@@ -7,17 +5,16 @@ from backend.app.data.entities.project_entities import (
     ThesisProject,
     PoetryProject,
 )
-from backend.app.schemas.character_schemas import CharacterSchema
+from backend.app.schemas.sections.character_schemas import CharacterSchema
 from backend.app.schemas.project_schemas import (
     CreateProjectRequest,
     UpdateProjectRequest,
     General,
     Sections,
     BaseProjectSchema,
-    ProjectListResponse,
     MinimalBaseProjectSchema,
 )
-from backend.app.schemas.world_schemas import (
+from backend.app.schemas.sections.world_schemas import (
     WorldWithElementsSchema,
     WorldElementDetailedSchema,
 )
@@ -57,9 +54,7 @@ def create_project_object_from_request(data: CreateProjectRequest):
             )
 
 
-def update_project_object_from_request(
-    data: UpdateProjectRequest, project_to_update: BaseProject
-):
+def update_project(data: UpdateProjectRequest, project_to_update: BaseProject):
     project_to_update.projectListID = data.projectListID
     project_to_update.project_name = data.projectName
 

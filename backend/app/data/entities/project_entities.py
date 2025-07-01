@@ -10,7 +10,9 @@ class ProjectList(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    projects = relationship("BaseProject", back_populates="project_list")
+    projects = relationship(
+        "BaseProject", back_populates="project_list", passive_deletes=True
+    )
 
 
 # ───── BaseProject ─────
@@ -18,7 +20,7 @@ class BaseProject(Base):
     __tablename__ = "base_projects"
 
     id = Column(Integer, primary_key=True, index=True)
-    projectListID = Column(Integer, ForeignKey("project_lists.id"))
+    projectListID = Column(Integer, ForeignKey("project_lists.id", ondelete="CASCADE"))
     project_name = Column(String)
     word_goal = Column(Integer)
     words = Column(Integer)
@@ -27,7 +29,9 @@ class BaseProject(Base):
     author = Column(String)
     type = Column(String, nullable=False)  # Needed for polymorphism
 
-    project_list = relationship("ProjectList", back_populates="projects")
+    project_list = relationship(
+        "ProjectList", back_populates="projects", passive_deletes=True
+    )
 
     __mapper_args__ = {"polymorphic_identity": "base", "polymorphic_on": type}
 
@@ -36,7 +40,9 @@ class BaseProject(Base):
 class FictionProject(BaseProject):
     __tablename__ = "fiction_projects"
 
-    id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+    id = Column(
+        Integer, ForeignKey("base_projects.id", ondelete="CASCADE"), primary_key=True
+    )
     series = Column(String)
     volume = Column(Integer)
     duration = Column(String)  # Indicar si es Novela o Trilogia
@@ -54,7 +60,9 @@ class FictionProject(BaseProject):
 class NonFictionProject(BaseProject):
     __tablename__ = "nonfiction_projects"
 
-    id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+    id = Column(
+        Integer, ForeignKey("base_projects.id", ondelete="CASCADE"), primary_key=True
+    )
     series = Column(String)
     volume = Column(Integer)
     license = Column(String)
@@ -66,7 +74,9 @@ class NonFictionProject(BaseProject):
 class ThesisProject(BaseProject):
     __tablename__ = "thesis_projects"
 
-    id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+    id = Column(
+        Integer, ForeignKey("base_projects.id", ondelete="CASCADE"), primary_key=True
+    )
     duration = Column(String)  # Indicar si es Articulo/Research o Tesis
 
     __mapper_args__ = {"polymorphic_identity": "thesis"}
@@ -76,6 +86,8 @@ class ThesisProject(BaseProject):
 class PoetryProject(BaseProject):
     __tablename__ = "poetry_projects"
 
-    id = Column(Integer, ForeignKey("base_projects.id"), primary_key=True)
+    id = Column(
+        Integer, ForeignKey("base_projects.id", ondelete="CASCADE"), primary_key=True
+    )
 
     __mapper_args__ = {"polymorphic_identity": "poetry"}

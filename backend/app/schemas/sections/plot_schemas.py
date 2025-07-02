@@ -17,7 +17,8 @@ class PlotCreate(PlotBase):
 
 
 class PlotUpdate(PlotBase):
-    pass
+    chapterReferencesIDs: Optional[List[int]] = []
+    characterReferencesIDs: Optional[List[int]] = []
 
 
 class PlotSchema(PlotBase):
@@ -38,8 +39,6 @@ class PlotStepCreate(PlotStepBase):
 
 
 class PlotStepUpdate(PlotStepBase):
-    chapterReferencesIDs: Optional[List[int]] = []
-    characterReferencesIDs: Optional[List[int]] = []
     pass
 
 

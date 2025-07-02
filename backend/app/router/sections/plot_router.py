@@ -14,7 +14,6 @@ from backend.app.domain.plot_utils import (
     delete_plot_steps_by_plot_id,
 )
 from backend.app.schemas.sections.plot_schemas import (
-    PlotSchema,
     PlotCreate,
     PlotUpdate,
     PlotStepSchema,

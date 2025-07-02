@@ -1,10 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import { ESections, PriorityType } from "@/types/sections.ts";
 import React, { useState } from "react";
 import { Book, ChevronDown, ChevronRight, FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import { selectChapter, selectScene } from "@/store";
 import { useSections } from "@/hooks/useSections.ts";
+import { updateCharacter } from "@/store/sections/charachters/slice.ts";
+import { useDispatch } from "react-redux";
+import { RequestUpdateCharacter } from "@/types/requests.ts";
+import { AppDispatch } from "@/store/config.tsx";
 
 interface SidebarProps {
   activeSection: ESections;
@@ -13,11 +17,20 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
   const { characters, manuscript } = useSections();
   const [expandedChapters, setExpandedChapters] = useState<string[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   const toggleChapter = (chapterId: string) => {
     setExpandedChapters((prev) =>
       prev.includes(chapterId) ? prev.filter((id) => id !== chapterId) : [...prev, chapterId],
     );
+  };
+
+  const changeImportance = (characterId: number, importance: PriorityType) => {
+    const requestupdateCharacter: RequestUpdateCharacter = {
+      id: characterId,
+      info: { importance: importance },
+    };
+    dispatch(updateCharacter(requestupdateCharacter));
   };
 
   switch (activeSection) {
@@ -28,18 +41,20 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
             <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">Characters</h3>
           </div>
           {[PriorityType.MAIN, PriorityType.SECONDARY, PriorityType.MINOR].map((role) => (
-            <div key={role} className="space-y-1">
+            <div id={PriorityType[role]} key={role} className="space-y-1">
               <h4 className="dark:text-gray-100 text-xs font-medium text-gray-600 uppercase tracking-wide">
-                {role}
+                {PriorityType[role]}
               </h4>
-              {characters
+              {characters.characters
                 .filter((char) => char.importance === role)
                 .map((character) => (
                   <Button
+                    draggable={true}
+                    onDrop={() => changeImportance(character.id, role)}
                     key={character.id}
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start h-7 px-2 text-xs"
+                    className="w-full justify-start h-7 px-2 text-xs cursor-move"
                   >
                     <div className="w-3 h-3 rounded-full mr-2" />
                     {character.name}

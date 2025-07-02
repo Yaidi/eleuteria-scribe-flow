@@ -14,6 +14,7 @@ export interface MainHeaderProps {
 
 const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection }) => {
   const [autoSave, setAutoSave] = useState(true);
+  const { words, wordGoal } = currentProject.sections;
   const { toast } = useToast();
 
   useEffect(() => {
@@ -29,8 +30,8 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection 
   }, [currentProject, autoSave]);
 
   const getProgressPercentage = () => {
-    if (!currentProject.wordGoal || !currentProject.words) return 0;
-    return (currentProject.words / currentProject.wordGoal) * 100;
+    if (!wordGoal || !words) return 0;
+    return (words / wordGoal) * 100;
   };
 
   const handleSave = () => {
@@ -52,11 +53,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection 
             <Badge variant="outline" className="text-xs dark:border-gray-50">
               {currentProject.type}
             </Badge>
-            {currentProject.wordGoal && (
+            {wordGoal && (
               <>
-                <span className="text-sm text-gray-500">
-                  {`${currentProject.words} / ${currentProject.wordGoal} words`}
-                </span>
+                <span className="text-sm text-gray-500">{`${words} / ${wordGoal} words`}</span>
                 <Progress value={getProgressPercentage()} className="w-32 h-2" />
               </>
             )}

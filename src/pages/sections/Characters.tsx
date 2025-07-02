@@ -8,7 +8,7 @@ import { addCharacterFetch } from "@/store/sections/charachters/slice.ts";
 import { AppDispatch, RootState } from "@/store/config.tsx";
 
 const Characters = () => {
-  const { characters } = useSections().characters;
+  const { characters, currentCharacter } = useSections().characters;
   const projectId = useSelector((state: RootState) => state.projectInfo.currentProject?.id);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -27,14 +27,12 @@ const Characters = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {characters.map((character) => (
-            <FormsCharacters key={character.id} character={character} />
-          ))}
           {characters.length === 0 && (
             <div className="text-center py-8 text-slate-500">
               No characters added yet. Click "Add Character" to get started.
             </div>
           )}
+          {currentCharacter && <FormsCharacters character={currentCharacter} />}
         </div>
       </CardContent>
     </Card>

@@ -61,7 +61,6 @@ const MainContent = () => {
               onClick={() => navigate("/")}
               className="flex items-center space-x-2"
             >
-              {" "}
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">

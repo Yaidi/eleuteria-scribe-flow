@@ -50,7 +50,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             <Label>Importance</Label>
             <Select
               name="importance"
-              value={character.importance.toString()}
+              value={character.importance?.toString()}
               onValueChange={(value: string) =>
                 update(character.id, {
                   importance: getImportance(value),
@@ -58,7 +58,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
               }
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue defaultValue="0" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="0">Main Character</SelectItem>

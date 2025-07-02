@@ -9,3 +9,5 @@ export const updateInfoCharacter = createAction<RequestUpdateCharacter>(
 );
 
 export const removeCharacter = createAction<number>("[Character] Remove Character");
+
+export const setCurrentCharacter = createAction<ICharacter>("[Character] Add Character");

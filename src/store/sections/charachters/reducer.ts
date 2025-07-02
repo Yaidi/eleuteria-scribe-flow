@@ -6,6 +6,7 @@ import {
   updateCharacter,
 } from "@/store/sections/charachters/slice.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
+import { setCurrentCharacter } from "@/store";
 
 export interface ICharactersState {
   characters: ICharacter[];
@@ -29,6 +30,13 @@ export const charactersReducer = createReducer(initialState, (builder) => {
       return {
         ...state,
         characters: [...state.characters, payload],
+        currentCharacter: payload,
+      };
+    })
+    .addCase(setCurrentCharacter, (state, { payload }) => {
+      return {
+        ...state,
+        currentCharacter: payload,
       };
     })
     .addCase(deleteCharacterFetch.fulfilled, (state, { payload }) => {

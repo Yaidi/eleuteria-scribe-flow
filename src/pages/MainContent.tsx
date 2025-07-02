@@ -8,7 +8,7 @@ import Plot from "@/pages/sections/Plot.tsx";
 import World from "@/pages/sections/World.tsx";
 import Manuscript from "@/pages/sections/Manuscript.tsx";
 import { ESections } from "@/types/sections.ts";
-import Sidebar from "@/pages/Sidebar.tsx";
+import Sidebar from "@/pages/content/Sidebar.tsx";
 import MainHeader from "@/components/MainHeader.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/config.tsx";

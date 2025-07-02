@@ -10,7 +10,7 @@ export interface IProjectReducer {
 }
 
 const initialState: IProjectReducer = {
-  currentSection: ESections.General,
+  currentSection: ESections.general,
   currentProject: undefined,
 };
 

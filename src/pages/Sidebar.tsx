@@ -21,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
   };
 
   switch (activeSection) {
-    case ESections.Characters:
+    case ESections.characters:
       return (
         <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r rounded-t-sm border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-center justify-between mb-3">
@@ -49,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
           ))}
         </div>
       );
-    case ESections.Manuscript:
+    case ESections.manuscript:
       return (
         <div className="space-y-2">
           <div className="flex items-center justify-between mb-3">

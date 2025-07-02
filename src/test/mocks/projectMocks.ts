@@ -7,7 +7,7 @@ import {
   IWorld,
   PriorityType,
 } from "@/types/sections.ts";
-import { IProject, ProjectData, ProjectSections, ProjectType } from "@/types/project.ts";
+import { IProject, ProjectSections, ProjectType } from "@/types/project.ts";
 
 // Mock data for ICharacter
 export const mockCharacters: ICharacter[] = [
@@ -152,10 +152,4 @@ export const mockProject: IProject = {
   projectName: "The Dark Streets",
   type: ProjectType.NOVEL,
   projectListID: 0,
-};
-
-// Mock data for ProjectData
-export const mockProjectData: ProjectData = {
-  ...mockProject,
-  ...mockProjectSections,
 };

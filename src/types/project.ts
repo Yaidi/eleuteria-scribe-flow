@@ -12,7 +12,9 @@ export interface ProjectSections {
   };
 }
 
-export interface ProjectData extends IProject, Partial<ProjectSections> {}
+export interface ProjectData extends IProject {
+  sections: ProjectSections;
+}
 
 export interface IProject {
   id: number;

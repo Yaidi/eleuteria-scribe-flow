@@ -25,7 +25,7 @@ const Welcome = () => {
   useEffect(() => {
     void dispatch(projectsFetch());
     getTemplates().then((res) => setTemplates(res.templates));
-  }, []);
+  }, [dispatch]);
 
   const handleCreateProject = async (type: ProjectType) => {
     try {

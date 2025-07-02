@@ -16,7 +16,6 @@ class CharacterBase(BaseModel):
     notes: Optional[str] = None
     details: Optional[str] = None
     baseWritingProjectID: int
-    plotID: Optional[int] = None
 
 
 class CharacterCreate(BaseModel):

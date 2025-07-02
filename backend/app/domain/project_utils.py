@@ -1,3 +1,5 @@
+from typing import List
+
 from backend.app.data.entities.project_entities import (
     FictionProject,
     NonFictionProject,
@@ -14,6 +16,7 @@ from backend.app.schemas.project_schemas import (
     BaseProjectSchema,
     MinimalBaseProjectSchema,
 )
+from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 from backend.app.schemas.sections.world_schemas import (
     WorldWithElementsSchema,
     WorldElementDetailedSchema,
@@ -60,7 +63,11 @@ def update_project(data: UpdateProjectRequest, project_to_update: BaseProject):
 
 
 def project_schema_factory(
-    project, world=None, world_elements=None, characters=None
+    project,
+    world=None,
+    world_elements=None,
+    characters=None,
+    plots_with_steps: List[PlotSchemaWithSteps] = None,
 ) -> BaseProjectSchema:
     # Construir `general` desde los atributos comunes
     general = General(
@@ -112,6 +119,7 @@ def project_schema_factory(
         general=general,
         world=world_schema,
         characters=characters_schema,
+        plots=plots_with_steps,
     )
 
     project_type = project.type.capitalize()

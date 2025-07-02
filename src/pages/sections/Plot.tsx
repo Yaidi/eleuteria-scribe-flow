@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { IPlot } from "@/types/sections.ts";
+import { IPlot, PriorityType } from "@/types/sections.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { addPlot, removePlot, updatePlot } from "@/store";
 import { useSections } from "@/hooks/useSections.ts";
+import { Select, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
 
 const Plot = () => {
   const { plots } = useSections().plots;
@@ -18,8 +19,13 @@ const Plot = () => {
       id: Date.now().toString(),
       title: "",
       description: "",
-      manuscriptReference: "",
+      plotStepsResume: "",
       characters: [],
+      baseWritingProjectID: 0,
+      plotSteps: [],
+      result: "",
+      chapterReferences: [],
+      importance: PriorityType.MAIN,
     };
     dispatch(addPlot(newPlot));
   };
@@ -81,12 +87,12 @@ const Plot = () => {
                 <div>
                   <Label>Manuscript Reference</Label>
                   <Input
-                    name="manuscriptReference"
-                    value={plot.manuscriptReference}
+                    name="chapterReference"
+                    value={plot.chapterReferences.join(", ")}
                     onChange={(e) =>
                       update({
                         id: plot.id,
-                        manuscriptReference: e.target.value,
+                        plotStepsResume: e.target.value,
                       })
                     }
                     placeholder="Chapter/page reference where this plot occurs"
@@ -94,20 +100,14 @@ const Plot = () => {
                 </div>
                 <div>
                   <Label>Characters Involved</Label>
-                  <Textarea
-                    name="characters"
-                    value={plot.characters.join(", ")}
-                    onChange={(e) =>
-                      update({
-                        id: plot.id,
-                        characters: e.target.value
-                          .split(",")
-                          .map((character) => character.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                    placeholder="List characters involved in this plot (comma-separated)"
-                  />
+                  <Select name="characters" value="0" onValueChange={() => {}} disabled={true}>
+                    <SelectTrigger></SelectTrigger>
+                    {plot.characters.map((character) => (
+                      <SelectItem key={`${character.name}-${plot.title}`} value="0">
+                        {character.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
               </div>
             </div>

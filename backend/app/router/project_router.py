@@ -7,7 +7,9 @@ from backend.app.data.respositories.project_repository import ProjectRepository
 from backend.app.data.respositories.sections.character_repository import (
     CharacterRepository,
 )
+from backend.app.data.respositories.sections.plot_repository import PlotRepository
 from backend.app.data.respositories.sections.world_repository import WorldRepository
+from backend.app.domain.plot_utils import plot_list_with_steps_factory
 from backend.app.domain.project_utils import (
     create_project_object_from_request,
     project_schema_factory,
@@ -62,9 +64,13 @@ async def get_project(id: int, session: AsyncSession = Depends(get_session)):
     project_repository = ProjectRepository(session)
     character_repository = CharacterRepository(session)
     world_repository = WorldRepository(session)
+    plot_repository = PlotRepository(session)
 
     project = await project_repository.get_project(id)
     character_list = await character_repository.get_list_by_project_id(id)
+    plots_with_steps = await plot_list_with_steps_factory(
+        plot_repository, character_repository, id
+    )
 
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -73,14 +79,23 @@ async def get_project(id: int, session: AsyncSession = Depends(get_session)):
 
     if world is None:
         new_world = await world_repository.create_world(id)
-        return project_schema_factory(project, new_world, characters=character_list)
+        return project_schema_factory(
+            project,
+            new_world,
+            characters=character_list,
+            plots_with_steps=plots_with_steps,
+        )
 
     world_elements = []
     if world:
         world_elements = await world_repository.get_world_elements(world_id=world.id)
 
     return project_schema_factory(
-        project, world, world_elements, characters=character_list
+        project,
+        world,
+        world_elements,
+        characters=character_list,
+        plots_with_steps=plots_with_steps,
     )
 
 

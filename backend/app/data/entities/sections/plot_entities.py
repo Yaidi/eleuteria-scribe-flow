@@ -1,17 +1,20 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 from backend.app.data.entities.project_entities import Base
+from backend.app.data.helpers.json_list_encoder_helper import JSONEncodedList
 
 
 # ───── Plot ─────
 class Plot(Base):
     __tablename__ = "plots"
     id = Column(Integer, primary_key=True)
-    plot = Column(String)
+    title = Column(String)
     description = Column(Text)
     plotStepsResume = Column(Text)
     result = Column(Text)
     importance = Column(Integer)
+    chapterReferencesIDs = Column(JSONEncodedList)
+    characterReferencesIDs = Column(JSONEncodedList)
     baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
 
 

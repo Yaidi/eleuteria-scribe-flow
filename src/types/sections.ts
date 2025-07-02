@@ -15,6 +15,7 @@ export interface ICharacter {
   baseWritingProjectID: number;
   plotID: number;
 }
+
 export enum PriorityType {
   MAIN,
   SECONDARY,
@@ -23,10 +24,24 @@ export enum PriorityType {
 
 export interface IPlot {
   id: string;
+  baseWritingProjectID: number;
   title: string;
   description: string;
-  manuscriptReference: string;
-  characters: string[];
+  plotStepsResume: string;
+  plotSteps: IPlotSteps[];
+  result: string;
+  chapterReferences: [];
+  importance: PriorityType;
+  characters: ICharacter[];
+}
+
+export interface IPlotSteps {
+  id: string;
+  name: string;
+  nextStepID: number;
+  previousStepID: number;
+  goal: string;
+  plotID: number;
 }
 
 export interface IWorld {

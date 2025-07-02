@@ -17,7 +17,7 @@ class CharacterRepository:
         return result.scalars().all()
 
     async def create_character(self, project_id: int) -> Character:
-        character = Character(baseWritingProjectID=project_id, plotID=None)
+        character = Character(baseWritingProjectID=project_id, importance=0)
         self.session.add(character)
         await self.session.commit()
         await self.session.refresh(character)

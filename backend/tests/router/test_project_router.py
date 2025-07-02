@@ -124,10 +124,12 @@ class TestGetProject:
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.CharacterRepository")
     @patch("backend.app.router.project_router.WorldRepository")
+    @patch("backend.app.router.project_router.plot_list_with_steps_factory")
     @patch("backend.app.router.project_router.project_schema_factory")
     def test_get_project_success_with_world(
         self,
         mock_schema_factory,
+        mock_plot_factory,
         mock_world_repo_class,
         mock_char_repo_class,
         mock_proj_repo_class,
@@ -148,12 +150,14 @@ class TestGetProject:
         mock_world.id = 1
         mock_characters = []
         mock_world_elements = []
+        mock_plots_with_steps = []
 
         # Configurar correctamente los AsyncMocks
         mock_proj_repo.get_project = AsyncMock(return_value=mock_project)
         mock_char_repo.get_list_by_project_id = AsyncMock(return_value=mock_characters)
         mock_world_repo.get_world_by_project_id = AsyncMock(return_value=mock_world)
         mock_world_repo.get_world_elements = AsyncMock(return_value=mock_world_elements)
+        mock_plot_factory.return_value = mock_plots_with_steps
 
         # Mock que cumple con BaseProjectSchema
         valid_project_response = {
@@ -186,6 +190,9 @@ class TestGetProject:
         mock_char_repo.get_list_by_project_id.assert_called_once_with(1)
         mock_world_repo.get_world_by_project_id.assert_called_once_with(1)
         mock_world_repo.get_world_elements.assert_called_once_with(world_id=1)
+
+        # Verificar que se llamó sin verificar parámetros específicos
+        mock_schema_factory.assert_called_once()
 
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.CharacterRepository")
@@ -224,10 +231,14 @@ class TestGetProject:
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.CharacterRepository")
     @patch("backend.app.router.project_router.WorldRepository")
+    @patch("backend.app.router.project_router.PlotRepository")
+    @patch("backend.app.router.project_router.plot_list_with_steps_factory")
     @patch("backend.app.router.project_router.project_schema_factory")
     def test_get_project_creates_world_if_none(
         self,
         mock_schema_factory,
+        mock_plot_factory,
+        mock_plot_repo_class,
         mock_world_repo_class,
         mock_char_repo_class,
         mock_proj_repo_class,
@@ -238,20 +249,24 @@ class TestGetProject:
         mock_proj_repo = AsyncMock()
         mock_char_repo = AsyncMock()
         mock_world_repo = AsyncMock()
+        mock_plot_repo = AsyncMock()
 
         mock_proj_repo_class.return_value = mock_proj_repo
         mock_char_repo_class.return_value = mock_char_repo
         mock_world_repo_class.return_value = mock_world_repo
+        mock_plot_repo_class.return_value = mock_plot_repo
 
         mock_project = MagicMock()
         mock_new_world = MagicMock()
         mock_characters = []
+        mock_plots_with_steps = []
 
         # Configurar correctamente los AsyncMocks
         mock_proj_repo.get_project = AsyncMock(return_value=mock_project)
         mock_char_repo.get_list_by_project_id = AsyncMock(return_value=mock_characters)
         mock_world_repo.get_world_by_project_id = AsyncMock(return_value=None)
         mock_world_repo.create_world = AsyncMock(return_value=mock_new_world)
+        mock_plot_factory.return_value = mock_plots_with_steps
 
         # Mock que cumple con BaseProjectSchema
         valid_project_response = {
@@ -265,6 +280,7 @@ class TestGetProject:
                 "general": None,
                 "world": None,
                 "characters": [],
+                "plots": [],
             },
         }
         mock_schema_factory.return_value = valid_project_response
@@ -281,7 +297,10 @@ class TestGetProject:
         assert response_data["id"] == 1
         mock_world_repo.create_world.assert_called_once_with(1)
         mock_schema_factory.assert_called_once_with(
-            mock_project, mock_new_world, characters=mock_characters
+            mock_project,
+            mock_new_world,
+            characters=mock_characters,
+            plots_with_steps=mock_plots_with_steps,
         )
 
 

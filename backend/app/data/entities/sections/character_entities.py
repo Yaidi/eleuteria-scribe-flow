@@ -22,4 +22,3 @@ class Character(Base):
     baseWritingProjectID = Column(
         Integer, ForeignKey("base_projects.id", ondelete="CASCADE")
     )
-    plotID = Column(Integer, ForeignKey("plots.id", ondelete="SET NULL"), nullable=True)

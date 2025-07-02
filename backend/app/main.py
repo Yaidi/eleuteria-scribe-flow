@@ -14,6 +14,7 @@ from .data.entities.sections.world_entities import World, WorldElement
 from backend.app.router.sections.character_router import character_router
 from backend.app.router.sections.world_router import world_router
 from .router.project_router import projects_router
+from .router.sections.plot_router import plot_router
 
 
 @event.listens_for(engine.sync_engine, "connect")
@@ -57,6 +58,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(projects_router)
 app.include_router(world_router)
 app.include_router(character_router)
+app.include_router(plot_router)
 
 app.add_middleware(
     CORSMiddleware,

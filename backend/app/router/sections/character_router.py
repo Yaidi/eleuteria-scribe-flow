@@ -33,7 +33,7 @@ async def get_character(
     character_id: int, session: AsyncSession = Depends(get_session)
 ):
     repository = CharacterRepository(session)
-    character = repository.get_character(character_id)
+    character = await repository.get_character(character_id)
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
     return character

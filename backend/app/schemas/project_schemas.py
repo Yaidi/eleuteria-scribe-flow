@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 
 from backend.app.schemas.sections.character_schemas import CharacterSchema
+from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 from backend.app.schemas.sections.world_schemas import WorldWithElementsSchema
 
 
@@ -25,6 +26,7 @@ class Sections(BaseModel):
     general: Optional[General]
     world: Optional[WorldWithElementsSchema] = None
     characters: Optional[List[CharacterSchema]] = None
+    plots: Optional[List[PlotSchemaWithSteps]] = None
 
     model_config = {
         "exclude_none": True  # 👈 Esto hace que `None` no se incluya en el JSON

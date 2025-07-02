@@ -123,11 +123,8 @@ class TestGetCharacter:
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
 
-        # Crear un método mock que retorne el character mock
-        def mock_get_character(character_id):
-            return mock_character
-
-        mock_repo.get_character = mock_get_character
+        # Usar AsyncMock en lugar de función regular
+        mock_repo.get_character = AsyncMock(return_value=mock_character)
 
         with patch(
             "backend.app.router.sections.character_router.get_session",
@@ -141,6 +138,7 @@ class TestGetCharacter:
         response_data = response.json()
         assert response_data["id"] == 1
         assert response_data["name"] == "Test Character"
+        mock_repo.get_character.assert_called_once_with(1)
 
     @patch("backend.app.router.sections.character_router.CharacterRepository")
     def test_get_character_not_found(self, mock_repo_class, client, mock_session):
@@ -148,11 +146,8 @@ class TestGetCharacter:
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
 
-        # Crear un método mock que retorne None
-        def mock_get_character(character_id):
-            return None
-
-        mock_repo.get_character = mock_get_character
+        # Usar AsyncMock en lugar de función regular
+        mock_repo.get_character = AsyncMock(return_value=None)
 
         with patch(
             "backend.app.router.sections.character_router.get_session",
@@ -164,6 +159,7 @@ class TestGetCharacter:
         # Assert
         assert response.status_code == 404
         assert response.json()["detail"] == "Character not found"
+        mock_repo.get_character.assert_called_once_with(999)
 
 
 class TestGetCharactersFromProject:

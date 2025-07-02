@@ -16,9 +16,9 @@ export interface ICharacter {
   plotID: number;
 }
 export enum PriorityType {
-  MAIN = "Main",
-  SECONDARY = "Secondary",
-  MINOR = "Minor",
+  MAIN,
+  SECONDARY,
+  MINOR,
 }
 
 export interface IPlot {

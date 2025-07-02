@@ -1,15 +1,48 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { removeCharacter, updateInfoCharacter } from "@/store/sections";
 import { ICharacter } from "@/types/sections";
+import {
+  addCharacterFetch,
+  deleteCharacterFetch,
+  updateCharacter,
+} from "@/store/sections/charachters/slice.ts";
+import { getProjectFetch } from "@/store/projects/slice.ts";
 
-const initialState: ICharacter[] = [];
+export interface ICharactersState {
+  characters: ICharacter[];
+  currentCharacter: ICharacter | null;
+}
+
+const initialState: ICharactersState = {
+  characters: [],
+  currentCharacter: null,
+};
 
 export const charactersReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(removeCharacter, (state, { payload }) => {
-      return state.filter((character) => character.id !== payload);
+    .addCase(getProjectFetch.fulfilled, (_state, { payload }) => {
+      return {
+        ..._state,
+        characters: payload.sections.characters,
+      };
     })
-    .addCase(updateInfoCharacter, (state, { payload }) => {
-      return state.map((c) => (c.id === payload.id ? { ...c, ...payload } : c));
+    .addCase(addCharacterFetch.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        characters: [...state.characters, payload],
+      };
+    })
+    .addCase(deleteCharacterFetch.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        characters: state.characters.filter((character) => character.id !== payload),
+      };
+    })
+    .addCase(updateCharacter.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        characters: state.characters.map((character) =>
+          character.id === payload.id ? { ...character, ...payload } : character,
+        ),
+      };
     });
 });

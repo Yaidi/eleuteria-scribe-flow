@@ -12,9 +12,9 @@ import { Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
-import { removeCharacter, updateInfoCharacter } from "@/store";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/config.tsx";
+import { deleteCharacterFetch, updateCharacter } from "@/store/sections/charachters/slice.ts";
 
 interface FormsCharactersProps {
   character: ICharacter;
@@ -22,12 +22,15 @@ interface FormsCharactersProps {
 
 const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const update = (info: Partial<ICharacter>) => {
-    dispatch(updateInfoCharacter(info));
+  const update = (id: number, info: Partial<ICharacter>) => {
+    dispatch(updateCharacter({ id, info }));
+  };
+  const getImportance = (role: string): PriorityType => {
+    return parseInt(role) as PriorityType;
   };
 
   const remove = (id: number) => {
-    dispatch(removeCharacter(id));
+    dispatch(deleteCharacterFetch(id));
   };
 
   return (
@@ -39,7 +42,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             <Input
               name="name"
               value={character.name}
-              onChange={(e) => update({ id: character.id, name: e.target.value })}
+              onChange={(e) => update(character.id, { name: e.target.value })}
               placeholder="Character name"
             />
           </div>
@@ -47,11 +50,10 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             <Label>Importance</Label>
             <Select
               name="importance"
-              value={character.importance}
-              onValueChange={(value: PriorityType) =>
-                update({
-                  id: character.id,
-                  importance: value,
+              value={character.importance.toString()}
+              onValueChange={(value: string) =>
+                update(character.id, {
+                  importance: getImportance(value),
                 })
               }
             >
@@ -59,9 +61,9 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="main">Main Character</SelectItem>
-                <SelectItem value="secondary">Secondary Character</SelectItem>
-                <SelectItem value="minor">Minor Character</SelectItem>
+                <SelectItem value="0">Main Character</SelectItem>
+                <SelectItem value="1">Secondary Character</SelectItem>
+                <SelectItem value="2">Minor Character</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -76,7 +78,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
           <Textarea
             name="characteristics"
             value={character.characteristics}
-            onChange={(e) => update({ id: character.id, characteristics: e.target.value })}
+            onChange={(e) => update(character.id, { characteristics: e.target.value })}
             placeholder="Physical appearance, personality traits..."
           />
         </div>

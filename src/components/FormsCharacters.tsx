@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { ICharacter, PriorityType } from "@/types/sections.ts";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/config.tsx";
 import { deleteCharacterFetch, updateCharacter } from "@/store/sections/charachters/slice.ts";
@@ -32,10 +32,6 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   const remove = (id: number) => {
     dispatch(deleteCharacterFetch(id));
   };
-
-  useEffect(() => {
-    console.log(character.importance.valueOf());
-  }, []);
 
   return (
     <div key={character.id} className="border rounded-lg p-4">

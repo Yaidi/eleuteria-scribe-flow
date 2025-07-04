@@ -89,7 +89,7 @@ async def update_plot(
     return await plot_with_steps_factory(repository, character_repository, plot_id)
 
 
-@plot_router.delete("/{plot_id}", status_code=204)
+@plot_router.delete("/{plot_id}", status_code=200)
 async def delete_plot(plot_id: int, session: AsyncSession = Depends(get_session)):
     repository = PlotRepository(session)
     plot = await repository.get_plot(plot_id)
@@ -98,6 +98,7 @@ async def delete_plot(plot_id: int, session: AsyncSession = Depends(get_session)
 
     await delete_plot_steps_by_plot_id(repository, plot.id)
     await repository.delete_plot(plot)
+    return {"id": plot_id}
 
 
 @plot_router.post("/step/", response_model=PlotStepSchema)
@@ -139,7 +140,7 @@ async def update_plot_step(
     return step
 
 
-@plot_router.delete("/step/{step_id}", status_code=204)
+@plot_router.delete("/step/{step_id}", status_code=200)
 async def delete_plot_step(step_id: int, session: AsyncSession = Depends(get_session)):
     repository = PlotRepository(session)
     step = await repository.get_plot_step(step_id)
@@ -147,3 +148,5 @@ async def delete_plot_step(step_id: int, session: AsyncSession = Depends(get_ses
         raise HTTPException(status_code=404, detail="Step not found")
 
     await repository.delete_plot_step(step)
+
+    return {"id": step_id}

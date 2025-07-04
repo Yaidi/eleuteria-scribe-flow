@@ -23,7 +23,7 @@ async def create_character(
     data: CharacterCreate, session: AsyncSession = Depends(get_session)
 ):
     repository = CharacterRepository(session)
-    character = await repository.create_character(data.baseWritingProjectID)
+    character = await repository.create_character(data.projectID)
     return character
 
 

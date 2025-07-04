@@ -23,7 +23,12 @@ world_router = APIRouter(prefix="/world", tags=["World"])
 @world_router.post("/", response_model=WorldSchema)
 async def create_world(data: WorldCreate, session: AsyncSession = Depends(get_session)):
     repository = WorldRepository(session)
-    new_world = await repository.create_world(data.baseWritingProjectID)
+    existent_world = await repository.get_world_by_project_id(data.projectID)
+    if existent_world:
+        raise HTTPException(
+            status_code=409, detail="World already exists for this project"
+        )
+    new_world = await repository.create_world(data.projectID)
     return new_world
 
 

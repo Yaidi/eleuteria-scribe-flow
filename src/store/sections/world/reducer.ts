@@ -10,7 +10,7 @@ export interface IWorldReducer {
 const initialState: IWorldReducer = {
   world: {
     id: 0,
-    baseWritingProjectID: 1,
+    projectID: 1,
     worldElements: [],
   },
   currentWorldElement: null,

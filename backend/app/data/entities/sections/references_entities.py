@@ -13,7 +13,7 @@ class ReferenceBase(Base):
     year = Column(Integer)
     topic = Column(Text)
     note = Column(Text)
-    baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
+    projectID = Column(Integer, ForeignKey("base_projects.id"))
     type = Column(String)
 
     __mapper_args__ = {"polymorphic_identity": "reference_base", "polymorphic_on": type}

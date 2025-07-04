@@ -28,10 +28,10 @@ plot_router = APIRouter(prefix="/plot", tags=["Plot"])
 @plot_router.post("/", response_model=PlotSchemaWithSteps)
 async def create_plot(data: PlotCreate, session: AsyncSession = Depends(get_session)):
     repository = PlotRepository(session)
-    new_plot = await repository.create_plot(data.baseWritingProjectID)
+    new_plot = await repository.create_plot(data.projectID)
     return PlotSchemaWithSteps(
         id=new_plot.id,
-        baseWritingProjectID=new_plot.baseWritingProjectID,
+        projectID=new_plot.projectID,
         title=new_plot.title,
         description=new_plot.description,
         plotStepsResume=new_plot.plotStepsResume,

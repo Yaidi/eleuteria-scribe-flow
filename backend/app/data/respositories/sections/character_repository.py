@@ -12,12 +12,12 @@ class CharacterRepository:
 
     async def get_list_by_project_id(self, project_id: int) -> Sequence[Character]:
         result = await self.session.execute(
-            select(Character).where(Character.baseWritingProjectID == project_id)
+            select(Character).where(Character.projectID == project_id)
         )
         return result.scalars().all()
 
     async def create_character(self, project_id: int) -> Character:
-        character = Character(baseWritingProjectID=project_id, importance=0)
+        character = Character(projectID=project_id, importance=0)
         self.session.add(character)
         await self.session.commit()
         await self.session.refresh(character)

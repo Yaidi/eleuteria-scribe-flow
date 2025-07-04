@@ -15,7 +15,7 @@ class Plot(Base):
     importance = Column(Integer)
     chapterReferencesIDs = Column(JSONEncodedList)
     characterReferencesIDs = Column(JSONEncodedList)
-    baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
+    projectID = Column(Integer, ForeignKey("base_projects.id"))
 
 
 # ───── PlotStep ─────

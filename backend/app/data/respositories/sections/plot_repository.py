@@ -13,7 +13,7 @@ class PlotRepository:
 
     async def get_plots_by_project_id(self, project_id: int) -> Sequence[Plot]:
         plot_result = await self.session.execute(
-            select(Plot).where(Plot.baseWritingProjectID == project_id)
+            select(Plot).where(Plot.projectID == project_id)
         )
         return plot_result.scalars().all()
 
@@ -34,7 +34,7 @@ class PlotRepository:
         return plot_steps_result.scalars().all()
 
     async def create_plot(self, project_id: int) -> Plot:
-        plot = Plot(baseWritingProjectID=project_id, importance=0)
+        plot = Plot(projectID=project_id, importance=0)
         self.session.add(plot)
         await self.session.commit()
         await self.session.refresh(plot)

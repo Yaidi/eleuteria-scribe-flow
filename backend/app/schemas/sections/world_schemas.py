@@ -3,7 +3,7 @@ from typing import Optional, List
 
 
 class WorldCreate(BaseModel):
-    baseWritingProjectID: int
+    projectID: int
 
 
 class WorldSchema(WorldCreate):

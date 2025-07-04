@@ -7,9 +7,7 @@ from backend.app.data.entities.project_entities import Base
 class World(Base):
     __tablename__ = "worlds"
     id = Column(Integer, primary_key=True)
-    baseWritingProjectID = Column(
-        Integer, ForeignKey("base_projects.id", ondelete="CASCADE")
-    )
+    projectID = Column(Integer, ForeignKey("base_projects.id", ondelete="CASCADE"))
 
 
 # ───── WorldElement ─────

@@ -23,7 +23,7 @@ async def create_character(
     data: CharacterCreate, session: AsyncSession = Depends(get_session)
 ):
     repository = CharacterRepository(session)
-    character = await repository.create_character(data.baseWritingProjectID)
+    character = await repository.create_character(data.projectID)
     return character
 
 
@@ -51,7 +51,7 @@ async def get_characters_from_project(
 
 
 # Eliminar personaje
-@character_router.delete("/{character_id}", status_code=204)
+@character_router.delete("/{character_id}", status_code=200)
 async def delete_character(
     character_id: int, session: AsyncSession = Depends(get_session)
 ):
@@ -60,7 +60,7 @@ async def delete_character(
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
     await repository.delete_character(character)
-    return {"message": "Character deleted successfully"}
+    return {"id": character_id}
 
 
 # Actualizar parcial personaje

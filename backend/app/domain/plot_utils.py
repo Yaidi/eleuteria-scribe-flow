@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 from backend.app.data.respositories.sections.character_repository import (
     CharacterRepository,
 )
@@ -26,6 +28,11 @@ async def plot_with_steps_factory(
     character_list = []
     for char_id in plot.characterReferencesIDs:
         character = await character_repository.get_character(char_id)
+        if not character:
+            raise HTTPException(
+                status_code=422,
+                detail="Some of the characters referenced in this plot do not exist",
+            )
         character_list.append(
             CharacterSchema(
                 id=character.id,
@@ -37,7 +44,7 @@ async def plot_with_steps_factory(
                 conflict=character.conflict,
                 epiphany=character.epiphany,
                 resumePhrase=character.resumePhrase,
-                baseWritingProjectID=character.baseWritingProjectID,
+                projectID=character.projectID,
             )
         )
 
@@ -56,7 +63,7 @@ async def plot_with_steps_factory(
 
     plot_with_steps_and_chars = PlotSchemaWithSteps(
         id=plot.id,
-        baseWritingProjectID=plot.baseWritingProjectID,
+        projectID=plot.projectID,
         title=plot.title,
         description=plot.description,
         plotStepsResume=plot.plotStepsResume,

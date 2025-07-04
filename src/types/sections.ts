@@ -12,7 +12,7 @@ export interface ICharacter {
   resume: string;
   notes: string;
   details: string;
-  baseWritingProjectID: number;
+  projectID: number;
   plotID: number;
 }
 
@@ -24,7 +24,7 @@ export enum PriorityType {
 
 export interface IPlot {
   id: string;
-  baseWritingProjectID: number;
+  projectID: number;
   title: string;
   description: string;
   plotStepsResume: string;
@@ -46,7 +46,7 @@ export interface IPlotSteps {
 
 export interface IWorld {
   id: number;
-  baseWritingProjectID: number;
+  projectID: number;
   worldElements: IWorldElement[];
 }
 

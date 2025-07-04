@@ -12,7 +12,7 @@ class WorldRepository:
 
     async def get_world_by_project_id(self, project_id: int) -> World:
         world_result = await self.session.execute(
-            select(World).where(World.baseWritingProjectID == project_id)
+            select(World).where(World.projectID == project_id)
         )
         return world_result.scalar_one_or_none()
 
@@ -43,7 +43,7 @@ class WorldRepository:
         return result.scalars().all()
 
     async def create_world(self, project_id: int) -> World:
-        world = World(baseWritingProjectID=project_id)
+        world = World(projectID=project_id)
         self.session.add(world)
         await self.session.commit()
         await self.session.refresh(world)

@@ -25,7 +25,7 @@ export const mockCharacters: ICharacter[] = [
     resume: "",
     notes: "",
     details: "",
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotID: 0,
   },
   {
@@ -42,7 +42,7 @@ export const mockCharacters: ICharacter[] = [
     resume: "",
     notes: "",
     details: "",
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotID: 0,
   },
   {
@@ -59,7 +59,7 @@ export const mockCharacters: ICharacter[] = [
     resume: "",
     notes: "",
     details: "",
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotID: 0,
   },
 ];
@@ -72,7 +72,7 @@ export const mockPlots: IPlot[] = [
     description: "A series of unexplained disappearances in the city.",
     plotStepsResume: "Chapters 1-5",
     characters: mockCharacters,
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotSteps: [],
     result: "",
     chapterReferences: [],
@@ -84,7 +84,7 @@ export const mockPlots: IPlot[] = [
     description: "John's personal journey to overcome his past trauma.",
     plotStepsResume: "Chapters 6-9",
     characters: mockCharacters,
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotSteps: [],
     result: "",
     chapterReferences: [],
@@ -96,7 +96,7 @@ export const mockPlots: IPlot[] = [
     description: "The revelation that Robert is behind the disappearances.",
     plotStepsResume: "Chapter 10",
     characters: mockCharacters,
-    baseWritingProjectID: 0,
+    projectID: 0,
     plotSteps: [],
     result: "",
     chapterReferences: [],
@@ -107,7 +107,7 @@ export const mockPlots: IPlot[] = [
 // Mock data for IWorld
 export const mockWorld: IWorld = {
   id: 0,
-  baseWritingProjectID: 0,
+  projectID: 0,
   worldElements: [],
 };
 

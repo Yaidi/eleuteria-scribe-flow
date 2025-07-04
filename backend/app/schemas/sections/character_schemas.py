@@ -15,11 +15,11 @@ class CharacterBase(BaseModel):
     resume: Optional[str] = None
     notes: Optional[str] = None
     details: Optional[str] = None
-    baseWritingProjectID: int
+    projectID: int
 
 
 class CharacterCreate(BaseModel):
-    baseWritingProjectID: int
+    projectID: int
 
 
 class CharacterUpdate(BaseModel):

@@ -9,4 +9,4 @@ class Sources(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     data = Column(Text)
-    baseWritingProjectID = Column(Integer, ForeignKey("base_projects.id"))
+    projectID = Column(Integer, ForeignKey("base_projects.id"))

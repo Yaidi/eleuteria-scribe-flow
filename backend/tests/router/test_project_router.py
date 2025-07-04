@@ -197,8 +197,10 @@ class TestGetProject:
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.CharacterRepository")
     @patch("backend.app.router.project_router.WorldRepository")
+    @patch("backend.app.router.project_router.plot_list_with_steps_factory")
     def test_get_project_not_found(
         self,
+        mock_plot_factory,
         mock_world_repo_class,
         mock_char_repo_class,
         mock_proj_repo_class,
@@ -217,6 +219,7 @@ class TestGetProject:
         # Configurar correctamente todos los AsyncMocks
         mock_proj_repo.get_project = AsyncMock(return_value=None)
         mock_char_repo.get_list_by_project_id = AsyncMock(return_value=[])
+        mock_plot_factory.return_value = []
 
         with patch(
             "backend.app.router.project_router.get_session", return_value=mock_session

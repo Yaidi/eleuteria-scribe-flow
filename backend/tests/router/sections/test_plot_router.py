@@ -25,7 +25,7 @@ def client():
 def mock_plot():
     plot = MagicMock()
     plot.id = 1
-    plot.baseWritingProjectID = 1
+    plot.projectID = 1
     plot.title = "Test Plot"
     plot.description = "Test Description"
     plot.plotStepsResume = "Test Resume"
@@ -57,7 +57,7 @@ class TestCreatePlot:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_plot = AsyncMock(return_value=mock_plot)
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.plot_router.get_session",
@@ -70,7 +70,7 @@ class TestCreatePlot:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["baseWritingProjectID"] == 1
+        assert response_data["projectID"] == 1
         assert response_data["title"] == "Test Plot"
         mock_repo.create_plot.assert_called_once_with(1)
 
@@ -81,7 +81,7 @@ class TestCreatePlot:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_plot.side_effect = Exception("Database error")
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.plot_router.get_session",
@@ -118,7 +118,7 @@ class TestGetPlot:
             "result": "Test Result",
             "importance": 5,
             "chapterReferencesIDs": [],
-            "baseWritingProjectID": 1,
+            "projectID": 1,
             "plotSteps": [
                 {
                     "id": 1,
@@ -204,7 +204,7 @@ class TestGetPlotsFromProject:
 
         mock_plot_with_steps = {
             "id": 1,
-            "baseWritingProjectID": 1,
+            "projectID": 1,
             "title": "Test Plot",
             "description": "Test Description",
             "plotStepsResume": "Test Resume",
@@ -290,7 +290,7 @@ class TestUpdatePlot:
             "result": "Updated Result",
             "importance": 8,
             "chapterReferencesIDs": [],
-            "baseWritingProjectID": 1,
+            "projectID": 1,
             "plotSteps": [],
         }
         mock_factory.return_value = mock_plot_with_steps
@@ -742,7 +742,7 @@ class TestPlotStepDatabaseErrors:
 class TestDataValidation:
     def test_create_plot_missing_required_field(self, client, mock_session):
         # Arrange
-        request_data = {}  # Missing baseWritingProjectID
+        request_data = {}  # Missing projectID
 
         with patch(
             "backend.app.router.sections.plot_router.get_session",

@@ -30,7 +30,7 @@ export const addCharacterFetch = createAsyncThunk<ICharacter, number | undefined
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ baseWritingProjectID: projectId }),
+      body: JSON.stringify({ projectID: projectId }),
     });
     if (!response.ok) {
       throw new Error("Error POST CHARACTER");

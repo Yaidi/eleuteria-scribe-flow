@@ -21,7 +21,7 @@ const Plot = () => {
       description: "",
       plotStepsResume: "",
       characters: [],
-      baseWritingProjectID: 0,
+      projectID: 0,
       plotSteps: [],
       result: "",
       chapterReferences: [],

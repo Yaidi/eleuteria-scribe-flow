@@ -23,7 +23,12 @@ world_router = APIRouter(prefix="/world", tags=["World"])
 @world_router.post("/", response_model=WorldSchema)
 async def create_world(data: WorldCreate, session: AsyncSession = Depends(get_session)):
     repository = WorldRepository(session)
-    new_world = await repository.create_world(data.baseWritingProjectID)
+    existent_world = await repository.get_world_by_project_id(data.projectID)
+    if existent_world:
+        raise HTTPException(
+            status_code=409, detail="World already exists for this project"
+        )
+    new_world = await repository.create_world(data.projectID)
     return new_world
 
 
@@ -93,13 +98,14 @@ async def get_world_by_project_id(
     return complete_world
 
 
-@world_router.delete("/{world_id}", status_code=204)
+@world_router.delete("/{world_id}", status_code=200)
 async def delete_world(world_id: int, session: AsyncSession = Depends(get_session)):
     repository = WorldRepository(session)
     world = await repository.get_world(world_id)
     if not world:
         raise HTTPException(status_code=404, detail="World not found")
     await repository.delete_world(world)
+    return {"id": world_id}
 
 
 @world_router.put("/{world_id}", response_model=WorldSchema)
@@ -166,7 +172,7 @@ async def get_nested_world_elements(
     return elements
 
 
-@world_router.delete("/element/{element_id}", status_code=204)
+@world_router.delete("/element/{element_id}", status_code=200)
 async def delete_world_element(
     element_id: int, session: AsyncSession = Depends(get_session)
 ):
@@ -177,6 +183,7 @@ async def delete_world_element(
         raise HTTPException(status_code=404, detail="Element not found")
 
     await repository.delete_world_element(element)
+    return {"id": element_id}
 
 
 @world_router.put("/element/{element_id}", response_model=WorldElementSchema)

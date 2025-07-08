@@ -49,6 +49,7 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Fast API
 
 ## Naming conventions for PRs
 
@@ -86,10 +87,7 @@ cd backend && python3 -m venv .venv && source .venv/bin/activate && pip3 install
 
 3 - Backend will be running on: http://localhost:8000
 
-## Can I connect a custom domain to my Lovable project?
+## Backend API Documentation
+APIs: http://localhost:8000/redoc
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+run tests with test coverage: ```npm run test-backend```

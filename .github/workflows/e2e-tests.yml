@@ -1,35 +1,29 @@
-name: E2E Tests
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
 
 jobs:
-  e2e:
+  test:
     runs-on: ubuntu-latest
 
-    env:
-      NODE_ENV: test
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24.3.0
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Build app (si aplica)
+        run: npm run build
 
-      - name: Run E2E tests
-        run: |
-          xvfb-run --auto-servernum npm run test:e2e
-          - name: Upload test results
-
+      - name: Run tests with xvfb
+        run: xvfb-run --auto-servernum npm run test
+        env:
+          CI: true

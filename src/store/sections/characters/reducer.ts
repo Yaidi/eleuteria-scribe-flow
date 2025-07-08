@@ -1,12 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { ICharacter } from "@/types/sections";
+import { getProjectFetch } from "@/store/projects/slice.ts";
 import {
   addCharacterFetch,
   deleteCharacterFetch,
   updateCharacter,
-} from "@/store/sections/charachters/slice.ts";
-import { getProjectFetch } from "@/store/projects/slice.ts";
-import { setCurrentCharacter } from "@/store";
+} from "@/store/sections/characters/slice.ts";
+import { setCurrentCharacter } from "@/store/sections/characters/actions.ts";
 
 export interface ICharactersState {
   characters: ICharacter[];
@@ -43,6 +43,7 @@ export const charactersReducer = createReducer(initialState, (builder) => {
       return {
         ...state,
         characters: state.characters.filter((character) => character.id !== payload),
+        currentCharacter: null,
       };
     })
     .addCase(updateCharacter.fulfilled, (state, { payload }) => {
@@ -51,6 +52,7 @@ export const charactersReducer = createReducer(initialState, (builder) => {
         characters: state.characters.map((character) =>
           character.id === payload.id ? { ...character, ...payload } : character,
         ),
+        currentCharacter: { ...state.currentCharacter, ...payload },
       };
     });
 });

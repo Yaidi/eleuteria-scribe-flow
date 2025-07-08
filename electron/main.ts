@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import "@/store/electron/main";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import "dotenv/config";
 
 // The built directory structure
 //
@@ -51,7 +52,9 @@ function createWindow() {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+  const isCI = process.env.CI === "true";
+
+  if (process.platform !== "darwin" || isCI) {
     app.quit();
     win = null;
   }

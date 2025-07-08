@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { ProjectData } from "@/types/project.ts";
-import { projectsFetch } from "@/store/projects/slice.ts";
-import { addProject, removeProject, updateProject } from "@/store";
+import { addProjectFetch, projectsFetch } from "@/store/projects/slice.ts";
+import { removeProject, updateProject } from "@/store";
 
 export interface IProjectsReducer {
   projects: ProjectData[];
@@ -19,7 +19,7 @@ export const ProjectsReducer = createReducer(initialState, (builder) => {
         ...payload,
       };
     })
-    .addCase(addProject, (state, { payload }) => {
+    .addCase(addProjectFetch.fulfilled, (state, { payload }) => {
       return {
         ...state,
         projects: [...state.projects, payload],

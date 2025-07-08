@@ -14,7 +14,7 @@ import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/config.tsx";
-import { deleteCharacterFetch, updateCharacter } from "@/store/sections/charachters/slice.ts";
+import { deleteCharacterFetch, updateCharacter } from "@/store";
 
 interface FormsCharactersProps {
   character: ICharacter;
@@ -58,7 +58,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
               }
             >
               <SelectTrigger>
-                <SelectValue defaultValue="0" />
+                <SelectValue defaultValue={character.importance?.toString()} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="0">Main Character</SelectItem>

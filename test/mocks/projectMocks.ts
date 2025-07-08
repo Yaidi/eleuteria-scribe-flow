@@ -6,7 +6,7 @@ import {
   IPlot,
   IWorld,
   PriorityType,
-} from "@/types/sections.ts";
+} from "@/types/sections";
 import { IProject, ProjectSections, ProjectType } from "@/types/project.ts";
 
 // Mock data for ICharacter

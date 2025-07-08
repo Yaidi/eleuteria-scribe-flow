@@ -37,7 +37,7 @@ def create_mock_character_dict():
         "resume": "Full character background",
         "notes": "Character notes",
         "details": "Additional details",
-        "baseWritingProjectID": 1,
+        "projectID": 1,
         "plotID": None,
     }
 
@@ -61,7 +61,7 @@ def mock_character():
     character.resume = "Full character background"
     character.notes = "Character notes"
     character.details = "Additional details"
-    character.baseWritingProjectID = 1
+    character.projectID = 1
     character.plotID = None
 
     return character
@@ -77,7 +77,7 @@ class TestCreateCharacter:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_character = AsyncMock(return_value=mock_character)
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.character_router.get_session",
@@ -91,7 +91,7 @@ class TestCreateCharacter:
         response_data = response.json()
         assert response_data["id"] == 1
         assert response_data["name"] == "Test Character"
-        assert response_data["baseWritingProjectID"] == 1
+        assert response_data["projectID"] == 1
         mock_repo.create_character.assert_called_once_with(1)
 
     @patch("backend.app.router.sections.character_router.CharacterRepository")
@@ -103,7 +103,7 @@ class TestCreateCharacter:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_character.side_effect = Exception("Database error")
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.character_router.get_session",
@@ -186,7 +186,7 @@ class TestGetCharactersFromProject:
         mock_character_2.resume = "Mentor background"
         mock_character_2.notes = "Mentor notes"
         mock_character_2.details = "Mentor details"
-        mock_character_2.baseWritingProjectID = 1
+        mock_character_2.projectID = 1
         mock_character_2.plotID = None
 
         characters_list = [mock_character, mock_character_2]
@@ -509,7 +509,7 @@ class TestSchemaValidation:
         # Arrange
         invalid_request_data = {
             "invalid_field": "invalid_value"
-            # Missing required baseWritingProjectID
+            # Missing required projectID
         }
 
         # Act
@@ -544,4 +544,4 @@ class TestSchemaValidation:
         # Verificar que se devolvió el character con todos los campos requeridos
         assert response_data["id"] == 1
         assert "name" in response_data
-        assert "baseWritingProjectID" in response_data
+        assert "projectID" in response_data

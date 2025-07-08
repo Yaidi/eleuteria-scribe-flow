@@ -125,14 +125,14 @@ async def get_project_templates():
     return {"templates": templates}
 
 
-@projects_router.delete("/deleteProject/{project_id}", status_code=204)
+@projects_router.delete("/deleteProject/{project_id}", status_code=200)
 async def delete_project(project_id: int, session: AsyncSession = Depends(get_session)):
     repository = ProjectRepository(session)
     project = await repository.get_project(project_id)
     if not project:
-        raise HTTPException(status_code=404, detail="Proyecto no encontrado")
+        raise HTTPException(status_code=404, detail="Project not found")
     await repository.delete_project(project)
-    return
+    return {"id": project_id}
 
 
 @projects_router.patch("/projects/{project_id}/word-stats")

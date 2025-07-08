@@ -13,7 +13,7 @@ class PlotBase(BaseModel):
 
 
 class PlotCreate(PlotBase):
-    baseWritingProjectID: int
+    projectID: int
 
 
 class PlotUpdate(PlotBase):
@@ -23,7 +23,7 @@ class PlotUpdate(PlotBase):
 
 class PlotSchema(PlotBase):
     id: int
-    baseWritingProjectID: int
+    projectID: int
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -50,7 +50,7 @@ class PlotStepSchema(PlotStepBase):
 
 class PlotSchemaWithSteps(PlotBase):
     id: int
-    baseWritingProjectID: int
+    projectID: int
     plotSteps: Optional[List[PlotStepSchema]] = []
     characters: Optional[List[CharacterSchema]] = []
     model_config = ConfigDict(from_attributes=True)

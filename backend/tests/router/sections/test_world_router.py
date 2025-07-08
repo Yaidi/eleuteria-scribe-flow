@@ -26,7 +26,7 @@ def mock_world():
     """Mock world object with all required fields"""
     world = MagicMock()
     world.id = 1
-    world.baseWritingProjectID = 1
+    world.projectID = 1
     return world
 
 
@@ -53,8 +53,9 @@ class TestCreateWorld:
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world = AsyncMock(return_value=mock_world)
+        mock_repo.get_world_by_project_id = AsyncMock(return_value=None)
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -64,20 +65,25 @@ class TestCreateWorld:
             response = client.post("/world/", json=request_data)
 
         # Assert
-        assert response.status_code == 200
+        assert response.status_code == 200  # Verificar que sea un éxito
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["baseWritingProjectID"] == 1
+        assert response_data["projectID"] == 1
         mock_repo.create_world.assert_called_once_with(1)
+        mock_repo.get_world_by_project_id.assert_called_once_with(1)  # Validar llamada
 
     @patch("backend.app.router.sections.world_router.WorldRepository")
     def test_create_world_database_error(self, mock_repo_class, client, mock_session):
         # Arrange
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
+        # Simular error al intentar crear el mundo
+        mock_repo.get_world_by_project_id = AsyncMock(
+            return_value=None
+        )  # Asegurarse de que no existe
         mock_repo.create_world.side_effect = Exception("Database error")
 
-        request_data = {"baseWritingProjectID": 1}
+        request_data = {"projectID": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -262,7 +268,7 @@ class TestUpdateWorld:
         mock_repo.get_world = AsyncMock(return_value=mock_world)
         mock_repo.update_world = AsyncMock()
 
-        request_data = {"baseWritingProjectID": 2}
+        request_data = {"projectID": 2}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -276,7 +282,7 @@ class TestUpdateWorld:
         response_data = response.json()
         assert response_data["id"] == 1
         # Check that the world attributes were updated
-        assert mock_world.baseWritingProjectID == 2
+        assert mock_world.projectID == 2
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.update_world.assert_called_once_with(mock_world)
 
@@ -287,7 +293,7 @@ class TestUpdateWorld:
         mock_repo_class.return_value = mock_repo
         mock_repo.get_world = AsyncMock(return_value=None)
 
-        request_data = {"baseWritingProjectID": 2}
+        request_data = {"projectID": 2}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -768,7 +774,7 @@ class TestDatabaseErrors:
         mock_repo.get_world = AsyncMock(return_value=mock_world)
         mock_repo.update_world.side_effect = Exception("Database error")
 
-        request_data = {"baseWritingProjectID": 2}
+        request_data = {"projectID": 2}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -851,7 +857,7 @@ class TestSchemaValidation:
         # Arrange
         invalid_request_data = {
             "invalid_field": "invalid_value"
-            # Missing required baseWritingProjectID
+            # Missing required projectID
         }
 
         # Act

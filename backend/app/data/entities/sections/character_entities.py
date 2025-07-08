@@ -19,6 +19,4 @@ class Character(Base):
     resume = Column(Text)
     notes = Column(Text)
     details = Column(Text)
-    baseWritingProjectID = Column(
-        Integer, ForeignKey("base_projects.id", ondelete="CASCADE")
-    )
+    projectID = Column(Integer, ForeignKey("base_projects.id", ondelete="CASCADE"))

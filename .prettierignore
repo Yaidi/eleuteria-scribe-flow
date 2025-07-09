@@ -4,3 +4,5 @@ build
 coverage
 *.lock
 .vite
+backend
+release

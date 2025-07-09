@@ -29,6 +29,17 @@ jobs:
           CI: true
         continue-on-error: true
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install venv
+        run: |
+          python -m venv backend/.venv
+          source backend/.venv/bin/activate
+          pip install -r backend/requirements.txt
+
       - name: Run backend tests with xvfb
         run: xvfb-run --auto-servernum npm run test-backend
         env:

@@ -14,7 +14,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import event, Engine
+from sqlalchemy import event
 
 
 @event.listens_for(engine.sync_engine, "connect")

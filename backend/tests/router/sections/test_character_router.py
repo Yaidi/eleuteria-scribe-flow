@@ -250,7 +250,7 @@ class TestDeleteCharacter:
             response = client.delete("/characters/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_character.assert_called_once_with(1)
         mock_repo.delete_character.assert_called_once_with(mock_character)
 

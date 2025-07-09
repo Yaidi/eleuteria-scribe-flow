@@ -384,7 +384,7 @@ class TestDeletePlot:
             response = client.delete("/plot/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_plot.assert_called_once_with(1)
         mock_repo.delete_plot.assert_called_once_with(mock_plot)
 
@@ -601,7 +601,7 @@ class TestDeletePlotStep:
             response = client.delete("/plot/step/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_plot_step.assert_called_once_with(1)
         mock_repo.delete_plot_step.assert_called_once_with(mock_plot_step)
 

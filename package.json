@@ -29,9 +29,6 @@
     ],
     "src/**/*.{ts,tsx}": [
       "eslint ."
-    ],
-    "**/*.py": [
-      "black --quiet"
     ]
   },
   "dependencies": {

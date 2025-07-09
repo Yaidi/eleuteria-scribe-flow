@@ -1,2 +1,17 @@
-npx lint-staged
+echo "🔍 Ejecutando lint-staged para frontend..."
+npx lint-staged || exit 1
+
+echo "🔍 Ejecutando tsc para frontend..."
 npx tsc --noEmit -p tsconfig.json
+
+echo "🐍 Ejecutando pre-commit para backend (Python)..."
+# Usa `command -v pre-commit` para encontrarlo automáticamente en el sistema o en un entorno virtual
+PRECOMMIT=$(command -v pre-commit)
+
+if [ -z "$PRECOMMIT" ]; then
+  echo "❌ No se encontró 'pre-commit' en el entorno. ¿Está instalado?"
+  echo "Instálalo con: pip install pre-commit"
+  exit 1
+fi
+
+$PRECOMMIT run --from-ref origin/main --to-ref HEAD --color always || exit 1

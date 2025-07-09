@@ -1,10 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RequestUpdateCharacter } from "@/types/requests.ts";
-import { addCharacter, removeCharacter, updateInfoCharacter } from "@/store";
 import { ICharacter } from "@/types/sections.ts";
 
 export const updateCharacter = createAsyncThunk<ICharacter, RequestUpdateCharacter>(
-  updateInfoCharacter.type,
+  "[Character] Update Character",
   async ({ id, info }) => {
     const response = await fetch(`/api/characters/${id}`, {
       method: "PATCH",
@@ -23,7 +22,7 @@ export const updateCharacter = createAsyncThunk<ICharacter, RequestUpdateCharact
 );
 
 export const addCharacterFetch = createAsyncThunk<ICharacter, number | undefined>(
-  addCharacter.type,
+  "[Character] Add Character",
   async (projectId) => {
     const response = await fetch(`/api/characters`, {
       method: "POST",
@@ -40,7 +39,7 @@ export const addCharacterFetch = createAsyncThunk<ICharacter, number | undefined
 );
 
 export const deleteCharacterFetch = createAsyncThunk<number, number>(
-  removeCharacter.type,
+  "[Character] Remove Character",
   async (id) => {
     const response = await fetch(`/api/characters/${id}`, {
       method: "DELETE",

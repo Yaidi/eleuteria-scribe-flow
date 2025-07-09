@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 24.3.0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app (si aplica)
+        run: npm run build
+
+      - name: Run tests with xvfb
+        run: xvfb-run --auto-servernum npm run test
+        env:
+          CI: true

@@ -20,10 +20,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
+    "baseUrl": ".",
     "strictPropertyInitialization": true
   },
-  "include": ["src", "electron"],
+  "include": ["src", "electron", "test"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import FormsCharacters from "@/components/FormsCharacters.tsx";
 import { useSections } from "@/hooks/useSections.ts";
-import { addCharacterFetch } from "@/store/sections/charachters/slice.ts";
 import { AppDispatch, RootState } from "@/store/config.tsx";
+import { addCharacterFetch } from "@/store";
 
 const Characters = () => {
   const { characters, currentCharacter } = useSections().characters;

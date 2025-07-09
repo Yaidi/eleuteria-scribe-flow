@@ -4,30 +4,20 @@
 
 **URL**: https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
 Follow these steps:
+we use fnm (as system control version manager for Node.js) https://github.com/Schniz/fnm
+
+Install
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 1: Install fnm (Fast Node Manager) to manage Node.js versions.
+brew install fnm
+# Step 2: install and use the node js version with this
+fnm use
 
 # Step 3: Install the necessary dependencies.
 npm i
@@ -62,8 +52,9 @@ This project is built with:
 - Fast API
 
 ## Naming conventions for PRs
+
 | Type       | When to use?                                                 |
-|------------|--------------------------------------------------------------|
+| ---------- | ------------------------------------------------------------ |
 | `feat`     | New functionality                                            |
 | `fix`      | Bug fixes                                                    |
 | `refactor` | Change internal structure without change functionality       |
@@ -75,6 +66,7 @@ This project is built with:
 | `build`    | Build changes, dependencies, CI/CD                           |
 
 ## Current Models And Relations Diagram
+
 ![Models And Relations](eleuteria_data_models.drawio.png)
 
 ## How can I deploy this project?
@@ -82,14 +74,16 @@ This project is built with:
 Simply open [Lovable](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and click on Share -> Publish.
 
 ## Backend setup:
+
 To setup and run backend you need to follow these steps:
 
-1 - run on terminal: 
+1 - run on terminal:
+
 ```
 cd backend && python3 -m venv .venv && source .venv/bin/activate && pip3 install -r requirements.txt
 ```
 
-2 - you can run: ```npm run dev-backend```
+2 - you can run: `npm run dev-backend`
 
 3 - Backend will be running on: http://localhost:8000
 

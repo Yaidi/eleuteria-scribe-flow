@@ -13,8 +13,8 @@ dist-ssr
 *.local
 release
 dist-electron
-backend/build/*
-backend/dist/*
+backend/build/
+backend/dist/
 
 # Editor directories and files
 .vscode/*

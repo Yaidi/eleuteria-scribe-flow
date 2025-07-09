@@ -13,7 +13,7 @@ export default tseslint.config(
   ts.configs.recommended,
   tseslint.configs.recommended,
   {
-    ignores: ["dist", "dist-electron", "backend", "htmlcov"],
+    ignores: ["dist", "dist-electron", "backend", "htmlcov", "release"],
   },
   {
     plugins: {

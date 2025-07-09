@@ -14,4 +14,4 @@ if [ -z "$PRECOMMIT" ]; then
   exit 1
 fi
 
-$PRECOMMIT run --from-ref origin/main --to-ref HEAD --color always || exit 1
+$PRECOMMIT run --config backend/.pre-commit-config.yaml --from-ref origin/main --to-ref HEAD --color always || exit 1

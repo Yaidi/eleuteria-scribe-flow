@@ -56,7 +56,7 @@ async function main() {
     // Crear venv e instalar deps
     await runCommand(pythonPath, ["-m", "venv", venvPath]);
     await runCommand(pipPath, ["install", "--upgrade", "pip"]);
-    await runCommand(pipPath, ["install", "-r", "backend/requirements.txt"]);
+    await runCommand(pipPath, ["install", "-r", "backend/requirements-dev.txt"]);
 
     // Arrancar backend
     const backend = spawn(

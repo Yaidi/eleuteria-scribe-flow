@@ -1,6 +1,6 @@
-export const isElectron = () => typeof window !== "undefined" && "electron" in window;
+const isElectron = () => typeof window !== "undefined" && "electron" in window;
 
-const electron = isElectron() ? window.electron : null;
+export const electron = isElectron() ? window.electron : null;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error

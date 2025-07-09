@@ -1,13 +1,17 @@
 {
   "name": "eleuteria",
   "private": true,
-  "version": "0.0.0",
+  "author": {
+    "name": "Yaidi",
+    "email": ""
+  },
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "start": "node start.js",
-    "build": "tsc && vite build && electron-builder",
+    "build": "tsc && vite build && electron-builder --config electron-builder.json5",
     "build:dev": "vite build --mode development",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",

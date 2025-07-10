@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { spawn, execSync } from "node:child_process";
+import { setTimeout } from "node:timers/promises";
 import os from "node:os";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -38,33 +39,42 @@ function killPort(port) {
 
 async function main() {
   try {
-    const venvPath = path.join(__dirname, "backend", ".venv");
-    const uvicornPath =
-      os.platform() === "win32"
-        ? path.join(venvPath, "Scripts", "uvicorn.exe")
-        : path.join(venvPath, "bin", "uvicorn");
-
-    const pythonPath = os.platform() === "win32" ? "python" : "python3";
-    const pipPath =
-      os.platform() === "win32"
-        ? path.join(venvPath, "Scripts", "pip.exe")
-        : path.join(venvPath, "bin", "pip");
+    const backendPath = path.join(__dirname, "backend");
 
     // Mata cualquier proceso en el puerto 8000
     killPort(8000);
 
-    // Crear venv e instalar deps
-    await runCommand(pythonPath, ["-m", "venv", venvPath]);
-    await runCommand(pipPath, ["install", "--upgrade", "pip"]);
-    await runCommand(pipPath, ["install", "-r", "backend/requirements-dev.txt"]);
+    // Configurar Poetry para crear el entorno virtual en el proyecto
+    await runCommand("poetry", ["config", "virtualenvs.in-project", "true"], {
+      cwd: backendPath,
+    });
 
-    // Arrancar backend
+    // Instalar dependencias con Poetry
+    // eslint-disable-next-line no-undef
+    console.log("Installing backend dependencies with Poetry...");
+    await runCommand("poetry", ["install"], {
+      cwd: backendPath,
+    });
+
+    // Arrancar backend usando Poetry desde el directorio raíz del proyecto
+    // eslint-disable-next-line no-undef
+    console.log("Starting backend with Poetry...");
     const backend = spawn(
-      uvicornPath,
-      ["backend.app.main:app", "--reload", "--host", "localhost", "--port", "8000"],
+      "poetry",
+      [
+        "run",
+        "uvicorn",
+        "backend.app.main:app",
+        "--reload",
+        "--host",
+        "localhost",
+        "--port",
+        "8000",
+      ],
       {
         shell: true,
         stdio: "inherit",
+        cwd: __dirname, // Ejecutar desde el directorio raíz, no desde backend/
       },
     );
 
@@ -73,7 +83,12 @@ async function main() {
       console.log(`Backend exited with code ${code}`);
     });
 
+    // Esperar un poco para que el backend inicie
+    await setTimeout(3000);
+
     // Arrancar frontend
+    // eslint-disable-next-line no-undef
+    console.log("Starting frontend...");
     await runCommand("npm", ["run", "dev"]);
   } catch (err) {
     // eslint-disable-next-line no-undef

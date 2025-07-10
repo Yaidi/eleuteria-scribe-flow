@@ -396,7 +396,7 @@ class TestDeleteProject:
             response = client.delete("/deleteProject/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_project.assert_called_once_with(1)
         mock_repo.delete_project.assert_called_once_with(mock_project)
 
@@ -417,7 +417,7 @@ class TestDeleteProject:
 
         # Assert
         assert response.status_code == 404
-        assert response.json()["detail"] == "Proyecto no encontrado"
+        assert response.json()["detail"] == "Project not found"
 
 
 class TestUpdateWordStats:

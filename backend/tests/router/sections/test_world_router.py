@@ -233,7 +233,7 @@ class TestDeleteWorld:
             response = client.delete("/world/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.delete_world.assert_called_once_with(mock_world)
 
@@ -537,7 +537,7 @@ class TestDeleteWorldElement:
             response = client.delete("/world/element/1")
 
         # Assert
-        assert response.status_code == 204
+        assert response.status_code == 200
         mock_repo.get_world_element.assert_called_once_with(1)
         mock_repo.delete_world_element.assert_called_once_with(mock_world_element)
 

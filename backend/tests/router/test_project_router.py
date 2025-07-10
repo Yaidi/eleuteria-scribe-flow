@@ -374,9 +374,7 @@ class TestGetProjectTemplates:
         data = response.json()
         assert "templates" in data
         assert data["templates"] == mock_templates
-        mock_load_static.assert_called_once_with(
-            "backend/app/statics/project_templates.json"
-        )
+        mock_load_static.assert_called_once_with("app/statics/project_templates.json")
 
 
 class TestDeleteProject:

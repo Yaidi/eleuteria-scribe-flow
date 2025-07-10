@@ -2,11 +2,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ProjectData } from "@/types/project.ts";
 import { RequestAddProject } from "@/types/requests.ts";
 import { setCurrentId } from "@/store/electron/actions.ts";
+import { host } from "@/https/fetch.ts";
 
 export const projectsFetch = createAsyncThunk<ProjectData[]>(
   "[Projects] Get Projects",
   async () => {
-    const response = await fetch("/api/getProjectList?id=1");
+    const response = await fetch(`${host}/getProjectList?id=1`);
     if (!response.ok) {
       throw new Error("Error fetching projects");
     }
@@ -17,7 +18,7 @@ export const projectsFetch = createAsyncThunk<ProjectData[]>(
 export const getProjectFetch = createAsyncThunk<ProjectData, number>(
   "[Project] Get Project",
   async (id: number) => {
-    const response = await fetch(`/api/getProject?id=${id}`);
+    const response = await fetch(`${host}/getProject?id=${id}`);
     if (!response.ok) {
       throw new Error("Error fetching projects");
     }
@@ -28,7 +29,7 @@ export const getProjectFetch = createAsyncThunk<ProjectData, number>(
 export const addProjectFetch = createAsyncThunk<ProjectData, RequestAddProject>(
   "[Projects] Add Project",
   async (body: RequestAddProject) => {
-    const response = await fetch(`/api/addProject`, {
+    const response = await fetch(`${host}/addProject`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -4,6 +4,10 @@ import electron from "vite-plugin-electron";
 import path from "path";
 
 export default defineConfig({
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+  },
   server: {
     proxy: {
       "/api": {
@@ -19,6 +23,9 @@ export default defineConfig({
       {
         entry: "electron/main.ts",
         vite: {
+          build: {
+            outDir: "dist-electron",
+          },
           resolve: {
             alias: {
               "@": path.resolve(__dirname, "src"),
@@ -29,6 +36,19 @@ export default defineConfig({
       {
         entry: path.join(__dirname, "electron/preload.ts"),
         vite: {
+          build: {
+            outDir: "dist-electron",
+            lib: {
+              entry: path.join(__dirname, "electron/preload.ts"),
+              formats: ["cjs"],
+              fileName: () => `preload.cjs`,
+            },
+            rollupOptions: {
+              output: {
+                entryFileNames: `preload.cjs`,
+              },
+            },
+          },
           resolve: {
             alias: {
               "@": path.resolve(__dirname, "src"),

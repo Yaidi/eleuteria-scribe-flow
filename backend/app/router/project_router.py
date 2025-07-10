@@ -120,7 +120,7 @@ async def update_project(
 
 @projects_router.get("/project/templates")
 async def get_project_templates():
-    templates = load_static_content("backend/app/statics/project_templates.json")
+    templates = load_static_content()
 
     return {"templates": templates}
 

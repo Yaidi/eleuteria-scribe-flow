@@ -3,7 +3,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "YourAppID",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "Eleuteria",
   "directories": {
     "output": "release/${version}"
   },
@@ -39,5 +39,16 @@
       "AppImage"
     ],
     "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+  },
+  extraFiles: [
+    { from: "dist-electron", to: "resources" },
+    {
+      from: "backend/dist/eleuteria-backend",
+      to: "resources/eleuteria-backend",
+    },
+    {
+      from: "dist",
+      to: "resources/dist"
+    }
+  ]
 }

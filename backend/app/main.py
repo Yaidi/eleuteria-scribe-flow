@@ -1,20 +1,20 @@
+from backend.app.router.sections.plot_router import plot_router
+from backend.app.data.entities.project_entities import Base
+from backend.app.data.db.db import engine
+from backend.app.data.entities.sections.character_entities import Character
+from backend.app.data.entities.sections.plot_entities import Plot, PlotStep
+from backend.app.data.entities.sections.references_entities import ReferenceBase
+from backend.app.data.entities.sections.source_entities import Sources
+from backend.app.data.entities.sections.world_entities import World, WorldElement
+from backend.app.router.sections.character_router import character_router
+from backend.app.router.sections.world_router import world_router
+from backend.app.router.project_router import projects_router
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import event, Engine
-
-from .data.entities.project_entities import Base
-from .data.db.db import engine
-from .data.entities.sections.character_entities import Character
-from .data.entities.sections.plot_entities import Plot, PlotStep
-from .data.entities.sections.references_entities import ReferenceBase
-from .data.entities.sections.source_entities import Sources
-from .data.entities.sections.world_entities import World, WorldElement
-from backend.app.router.sections.character_router import character_router
-from backend.app.router.sections.world_router import world_router
-from .router.project_router import projects_router
-from .router.sections.plot_router import plot_router
+from sqlalchemy import event
 
 
 @event.listens_for(engine.sync_engine, "connect")

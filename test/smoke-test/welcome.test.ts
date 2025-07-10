@@ -16,7 +16,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await app.close();
+  if (app) {
+    await app.close();
+  }
 });
 
 test("la app se abre y muestra la ventana principal", async () => {

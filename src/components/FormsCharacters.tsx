@@ -34,12 +34,13 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   };
 
   return (
-    <div key={character.id} className="border rounded-lg p-4">
+    <div data-testid="character-form" key={character.id} className="border rounded-lg p-4">
       <div className="flex justify-between items-start mb-4">
         <div className="grid grid-cols-2 gap-4 flex-1">
           <div>
             <Label>Name</Label>
             <Input
+              data-testid="input-character-name"
               name="name"
               value={character.name}
               onChange={(e) => update(character.id, { name: e.target.value })}

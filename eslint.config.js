@@ -27,7 +27,12 @@ export default tseslint.config(
     languageOptions: {
       parser: typescriptParser,
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
+        ...globals.es2021,
+      },
       parserOptions: {
         project: "./tsconfig.json",
         tsconfigRootDir: path.resolve(),

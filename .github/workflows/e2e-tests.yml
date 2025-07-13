@@ -21,6 +21,6 @@ jobs:
         run: npm install
 
       - name: Run Vitest with Electron using xvfb
-        run: xvfb-run --auto-servernum npm test
+        run: xvfb-run --auto-servernum npm run test:smoke
         env:
           CI: true

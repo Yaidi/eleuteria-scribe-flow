@@ -23,7 +23,7 @@ afterAll(async () => {
 describe("Welcome Screen Tests", () => {
   test("should show loading", async () => {
     const title = await splash.title();
-    expect(title).toMatch(/Yaidi.../i);
+    expect(title).toMatch(/Cargando.../i);
     const heading = await splash.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
     expect(heading).toBeTruthy();
   });

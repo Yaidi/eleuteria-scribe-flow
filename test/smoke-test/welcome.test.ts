@@ -55,6 +55,6 @@ describe("Welcome Screen Tests", () => {
     await page.getByTestId("character-form").isVisible();
     await page.getByPlaceholder("Character name").fill("Yaidi");
     const inputName = await page.getByPlaceholder("Character name").inputValue();
-    expect(inputName).toBe("Osmar");
+    expect(inputName).toBe("Yaidi");
   });
 });

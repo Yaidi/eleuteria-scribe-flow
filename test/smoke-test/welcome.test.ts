@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await app.close();
-});
+}, 30000);
 
 describe("Welcome Screen Tests", () => {
   test("should show loading", async () => {

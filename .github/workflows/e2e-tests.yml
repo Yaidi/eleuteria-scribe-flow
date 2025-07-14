@@ -12,6 +12,7 @@ jobs:
 
     env:
       DISPLAY: ":99"
+      CI: true
 
     steps:
       - name: Checkout repository

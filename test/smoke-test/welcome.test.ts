@@ -1,4 +1,4 @@
-import { test, expect, afterAll, beforeAll } from "vitest";
+import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { _electron as electron, ElectronApplication, Page } from "playwright";
 
 let app: ElectronApplication;
@@ -9,19 +9,51 @@ beforeAll(async () => {
     args: ["."],
     env: {
       ...process.env,
-      ELECTRON_DISABLE_SECURITY_WARNINGS: "true",
+      SMOKE_TEST: "true",
     },
   });
   page = await app.firstWindow();
 });
 
 afterAll(async () => {
-  if (app) {
-    await app.close();
-  }
+  await app.close();
 });
 
-test("la app se abre y muestra la ventana principal", async () => {
-  const title = await page.title();
-  expect(title).toMatch(/Eleuteria - Writing Studio/i);
+describe("Welcome Screen Tests", () => {
+  test("should show loading", async () => {
+    const title = await page.title();
+    expect(title).toMatch(/Cargando.../i);
+    const heading = await page.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
+    expect(heading).toBeTruthy();
+  });
+
+  test("should welcome page", async () => {
+    page = await app.waitForEvent("window");
+    const welcomeTitle = await page.title();
+    expect(welcomeTitle).toMatch(/Eleuteria - Writing Studio/i);
+    const heading = await page.getByRole("heading", { name: /Eleuteria/i }).isVisible();
+    expect(heading).toBeTruthy();
+    await page.getByRole("button", { name: /Novel/i }).click();
+    const selectedTemplate = await page
+      .getByRole("heading", { name: /Novel Template/i })
+      .isVisible();
+    expect(selectedTemplate).toBeTruthy();
+    await page.getByRole("button", { name: /Choose This Template/i }).click();
+  });
+
+  test("should display main content", async () => {
+    await page.waitForSelector("h2");
+    const buttonGeneral = await page.getByRole("button", { name: /General/i }).isVisible();
+    expect(buttonGeneral).toBeTruthy();
+  });
+
+  test("should display characters content", async () => {
+    await page.getByRole("button", { name: /Characters/i }).click();
+    await page.getByTestId("character-section-title").isVisible();
+    await page.getByRole("button", { name: /Add Character/i }).click();
+    await page.getByTestId("character-form").isVisible();
+    await page.getByPlaceholder("Character name").fill("Yaidi");
+    const inputName = await page.getByPlaceholder("Character name").inputValue();
+    expect(inputName).toBe("Yaidi");
+  });
 });

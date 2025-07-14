@@ -46,7 +46,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
       return (
         <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r rounded-t-sm border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">Characters</h3>
+            <h3
+              data-testid="character-section-title"
+              className="dark:text-gray-50 font-semibold text-sm text-gray-700"
+            >
+              Characters
+            </h3>
           </div>
           {[PriorityType.MAIN, PriorityType.SECONDARY, PriorityType.MINOR].map((role) => (
             <div

@@ -14,16 +14,20 @@ function runCommand(command, args, options = {}) {
   });
 }
 
-function killPort(port) {
+export function killPort(port) {
   try {
     if (os.platform() === "darwin" || os.platform() === "linux") {
-      const result = execSync(`lsof -ti tcp:${port}`).toString();
+      const result = execSync(`lsof -ti tcp:${port}`, {
+        stdio: ["pipe", "pipe", "ignore"],
+      }).toString();
       const pids = result.split("\n").filter(Boolean);
       pids.forEach((pid) => {
         execSync(`kill -9 ${pid}`);
       });
     } else if (os.platform() === "win32") {
-      const result = execSync(`netstat -ano | findstr :${port}`).toString();
+      const result = execSync(`netstat -ano | findstr :${port}`, {
+        stdio: ["pipe", "pipe", "ignore"],
+      }).toString();
       const lines = result.split("\n").filter(Boolean);
       const pids = new Set(lines.map((line) => line.trim().split(/\s+/).pop()));
       pids.forEach((pid) => {
@@ -31,8 +35,13 @@ function killPort(port) {
       });
     }
   } catch (err) {
-    // eslint-disable-next-line no-undef
-    console.error(`Error killing port ${port}:`, err.message);
+    if (err.message.includes("Command failed") || err.message.includes("no such process")) {
+      // eslint-disable-next-line no-undef
+      console.log(`ℹ️ No hay procesos en el puerto ${port}`);
+    } else {
+      // eslint-disable-next-line no-undef
+      console.error(`Error killing port ${port}:`, err.message);
+    }
   }
 }
 

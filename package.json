@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "vite",
     "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
-    "start": "node start.js",
     "build": "tsc && vite build && electron-builder --config electron-builder.json5",
     "build:dev": "vite build --mode development",
     "lint": "eslint src --ext .ts,.tsx",
@@ -19,8 +18,8 @@
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "format-backend": "black backend/ --line-length 88",
     "prepare": "husky",
-    "test": "vitest",
-    "test:e2e": "vitest --watch",
+    "test:unit": "vitest run --silent false test/unit-test -c vitest.config.ts",
+    "test:smoke": "vitest run --silent false test/smoke-test -c vitest.smoke.config.ts",
     "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
     "test-coverage-backend": "backend/.venv/bin/coverage report",
     "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",

@@ -31,7 +31,7 @@ describe("Welcome Screen Tests", () => {
   test("should welcome page", async () => {
     page = await app.waitForEvent("window");
     const welcomeTitle = await page.title();
-    expect(welcomeTitle).toMatch(/Yaidi/i);
+    expect(welcomeTitle).toMatch(/Eleuteria - Writing Studio/i);
     const heading = await page.getByRole("heading", { name: /Eleuteria/i }).isVisible();
     expect(heading).toBeTruthy();
     await page.getByRole("button", { name: /Novel/i }).click();
@@ -55,6 +55,6 @@ describe("Welcome Screen Tests", () => {
     await page.getByTestId("character-form").isVisible();
     await page.getByPlaceholder("Character name").fill("Yaidi");
     const inputName = await page.getByPlaceholder("Character name").inputValue();
-    expect(inputName).toBe("Yaidi");
+    expect(inputName).toBe("Osmar");
   });
 });

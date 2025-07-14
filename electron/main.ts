@@ -138,7 +138,6 @@ app.on("activate", () => {
 
 app.whenReady().then(async () => {
   await killPort(8000);
-  startBackend();
   splash = new BrowserWindow({
     width: 300,
     height: 200,
@@ -148,9 +147,9 @@ app.whenReady().then(async () => {
     transparent: false,
     show: false,
   });
-
   await splash.loadFile(path.join(process.env.VITE_PUBLIC ?? "", "loading.html"));
   splash.once("ready-to-show", () => splash?.show());
+  startBackend();
 
   try {
     await waitForBackend();

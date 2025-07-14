@@ -3,6 +3,7 @@ import { _electron as electron, ElectronApplication, Page } from "playwright";
 
 let app: ElectronApplication;
 let page: Page;
+let splash: Page;
 
 beforeAll(async () => {
   app = await electron.launch({
@@ -12,7 +13,7 @@ beforeAll(async () => {
       SMOKE_TEST: "true",
     },
   });
-  page = await app.firstWindow();
+  splash = await app.firstWindow();
 });
 
 afterAll(async () => {
@@ -21,9 +22,9 @@ afterAll(async () => {
 
 describe("Welcome Screen Tests", () => {
   test("should show loading", async () => {
-    const title = await page.title();
+    const title = await splash.title();
     expect(title).toMatch(/Cargando.../i);
-    const heading = await page.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
+    const heading = await splash.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
     expect(heading).toBeTruthy();
   });
 

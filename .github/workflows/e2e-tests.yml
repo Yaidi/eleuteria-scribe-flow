@@ -12,8 +12,8 @@ jobs:
 
     env:
       DISPLAY: ":99"
-      CI: true
       ELECTRON_DISABLE_SANDBOX: "true"
+      SMOKE_TEST: "true"
 
     steps:
       - name: Checkout repository

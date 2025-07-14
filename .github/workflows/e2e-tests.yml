@@ -1,26 +1,53 @@
-name: CI
+name: Smoke Tests
 
 on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  smoke-tests:
     runs-on: ubuntu-latest
 
+    env:
+      DISPLAY: ":99"
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 24.3.0
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run Vitest with Electron using xvfb
-        run: xvfb-run --auto-servernum npm run test:smoke
-        env:
-          CI: true
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install venv
+        run: |
+            python -m venv backend/.venv
+            source backend/.venv/bin/activate
+            pip install -r backend/requirements.txt
+
+      - name: run build
+        run: npm run build:dev
+
+      - name: Start virtual display (Xvfb)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          echo "Virtual display started"
+
+      - name: Run smoke tests
+        run: npm run test:smoke

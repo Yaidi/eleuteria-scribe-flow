@@ -21,9 +21,10 @@ afterAll(async () => {
 
 describe("Welcome Screen Tests", () => {
   test("should show loading", async () => {
-    const title = await page.title();
+    const splash = app.windows()[0];
+    const title = await splash.title();
     expect(title).toMatch(/Cargando.../i);
-    const heading = await page.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
+    const heading = await splash.getByRole("heading", { name: /Iniciando Eleuteria/i }).isVisible();
     expect(heading).toBeTruthy();
   });
 

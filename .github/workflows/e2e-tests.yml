@@ -9,13 +9,20 @@ on:
 jobs:
   smoke-tests:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 30
     env:
       DISPLAY: ":99"
       ELECTRON_DISABLE_SANDBOX: "true"
       SMOKE_TEST: "true"
 
     steps:
+      - name: Setup virtual display (Xvfb)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+          echo "Virtual display started"
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,29 +34,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.13"
-
-      - name: Install venv
+      - name: Setup Python and install backend deps
         run: |
-            python -m venv backend/.venv
-            source backend/.venv/bin/activate
-            pip install -r backend/requirements.txt
+          python -m venv backend/.venv
+          ./backend/.venv/bin/pip install -r backend/requirements.txt
 
-      - name: run build
+      - name: Run build
         run: npm run build:dev
-
-      - name: Start virtual display (Xvfb)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          echo "Virtual display started"
 
       - name: Run smoke tests
         run: npm run test:smoke

@@ -35,7 +35,7 @@ describe("Welcome Screen Tests", () => {
     expect(heading).toBeTruthy();
     await page.getByRole("button", { name: /Novel/i }).click();
     const selectedTemplate = await page
-      .getByRole("heading", { name: /Yaidi Template/i })
+      .getByRole("heading", { name: /Novel Template/i })
       .isVisible();
     expect(selectedTemplate).toBeTruthy();
     await page.getByRole("button", { name: /Choose This Template/i }).click();

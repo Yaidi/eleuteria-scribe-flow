@@ -10,6 +10,12 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 20
 
+        permissions:
+          # Required to check out the code
+          contents: read
+          # Required to put a comment into the pull-request
+          pull-requests: write
+
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
@@ -24,3 +30,9 @@ jobs:
 
           - name: Run unit tests
             run: npm run test:unit
+
+          - name: 'Report Coverage'
+              # Set if: always() to also generate the report if tests are failing
+              # Only works if you set `reportOnFailure: true` in your vite config as specified above
+            if: always()
+            uses: davelosert/vitest-coverage-report-action@v2

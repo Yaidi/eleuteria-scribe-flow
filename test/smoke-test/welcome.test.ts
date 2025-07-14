@@ -31,7 +31,7 @@ describe("Welcome Screen Tests", () => {
   test("should welcome page", async () => {
     page = await app.waitForEvent("window");
     const welcomeTitle = await page.title();
-    expect(welcomeTitle).toMatch(/Eleuteria - Writing Studio/i);
+    expect(welcomeTitle).toMatch(/Yaidi/i);
     const heading = await page.getByRole("heading", { name: /Eleuteria/i }).isVisible();
     expect(heading).toBeTruthy();
     await page.getByRole("button", { name: /Novel/i }).click();

@@ -1,10 +1,16 @@
 {
   "name": "eleuteria",
   "private": true,
-  "author": {
-    "name": "Yaidi",
-    "email": ""
-  },
+  "authors": [
+    {
+      "name": "Yaidi",
+      "email": ""
+    },
+    {
+      "name": "Gabriel",
+      "email": ""
+    }
+  ],
   "version": "0.1.0",
   "type": "module",
   "scripts": {

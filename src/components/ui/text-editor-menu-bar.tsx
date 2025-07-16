@@ -36,7 +36,7 @@ function TextEditorMenuBar() {
   }
 
   return (
-    <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-2">
+    <div className="bg-gray-50 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-600 p-2">
       <div className="flex flex-wrap gap-1">
         {/* Formato de texto básico */}
         <div className="flex gap-1">
@@ -46,8 +46,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
           ${
             editor.isActive("bold")
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+              ? "bg-gray-900 dark:bg-slate-500 text-white"
+              : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
           }
           disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -59,8 +59,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
           ${
             editor.isActive("italic")
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+              ? "bg-gray-900 dark:bg-slate-500 text-white"
+              : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
           }
           disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -72,8 +72,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
           ${
             editor.isActive("strike")
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+              ? "bg-gray-900 dark:bg-slate-500 text-white"
+              : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
           }
           disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -85,8 +85,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
           ${
             editor.isActive("code")
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+              ? "bg-gray-900 dark:bg-slate-500 text-white"
+              : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
           }
           disabled:opacity-50 disabled:cursor-not-allowed`}
           >
@@ -95,7 +95,7 @@ function TextEditorMenuBar() {
         </div>
 
         {/* Separador */}
-        <div className="w-px h-6 bg-gray-200 mx-2 self-center" />
+        <div className="w-px h-6 bg-gray-200 dark:bg-slate-500 mx-2 self-center" />
 
         {/* Encabezados */}
         <div className="flex gap-1">
@@ -104,8 +104,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
               editor.isActive("heading", { level: 1 })
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                ? "bg-gray-900 dark:bg-slate-500 text-white"
+                : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
             }`}
           >
             <Heading1 className="w-4 h-4" />
@@ -115,8 +115,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
               editor.isActive("heading", { level: 2 })
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                ? "bg-gray-900 dark:bg-slate-500 text-white"
+                : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
             }`}
           >
             <Heading2 className="w-4 h-4" />
@@ -126,8 +126,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
               editor.isActive("heading", { level: 3 })
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                ? "bg-gray-900 dark:bg-slate-500 text-white"
+                : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
             }`}
           >
             <Heading3 className="w-4 h-4" />
@@ -135,7 +135,7 @@ function TextEditorMenuBar() {
         </div>
 
         {/* Separador */}
-        <div className="w-px h-6 bg-gray-200 mx-2 self-center" />
+        <div className="w-px h-6 bg-gray-200 dark:bg-slate-500 mx-2 self-center" />
 
         {/* Listas y bloques */}
         <div className="flex gap-1">
@@ -144,8 +144,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
               editor.isActive("bulletList")
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                ? "bg-gray-900 dark:bg-slate-500 text-white"
+                : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
             }`}
           >
             <List className="w-4 h-4" />
@@ -155,8 +155,8 @@ function TextEditorMenuBar() {
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
               editor.isActive("orderedList")
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                ? "bg-gray-900 dark:bg-slate-500 text-white"
+                : "bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300"
             }`}
           >
             <ListOrdered className="w-4 h-4" />
@@ -164,14 +164,14 @@ function TextEditorMenuBar() {
         </div>
 
         {/* Separador */}
-        <div className="w-px h-6 bg-gray-200 mx-2 self-center" />
+        <div className="w-px h-6 bg-gray-200 dark:bg-slate-500 mx-2 self-center" />
 
         {/* Acciones especiales */}
         <div className="flex gap-1">
           <button
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().chain().focus().undo().run()}
-            className="px-2 py-1 rounded text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700
+            className="px-2 py-1 rounded text-sm font-medium bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300
             disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Undo2 className="w-4 h-4" />
@@ -179,7 +179,7 @@ function TextEditorMenuBar() {
           <button
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().chain().focus().redo().run()}
-            className="px-2 py-1 rounded text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700
+            className="px-2 py-1 rounded text-sm font-medium bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300
             disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Redo2 className="w-4 h-4" />

@@ -8,17 +8,19 @@ const content = "";
 
 const TextEditor = () => {
   return (
-    <EditorProvider
-      extensions={extensions}
-      content={content}
-      slotBefore={<TextEditorMenuBar />}
-      editorProps={{
-        attributes: {
-          class:
-            "prose prose-sm m-5 focus:outline-none border border-gray-300 rounded-lg p-4 h-[500px] max-w-none overflow-y-auto",
-        },
-      }}
-    />
+    <div className="border border-gray-300 dark:border-slate-600 rounded-lg overflow-hidden">
+      <EditorProvider
+        extensions={extensions}
+        content={content}
+        slotBefore={<TextEditorMenuBar />}
+        editorProps={{
+          attributes: {
+            class:
+              "prose prose-sm dark:prose-invert m-0 p-4 focus:outline-none h-[500px] max-w-none overflow-y-auto bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100",
+          },
+        }}
+      />
+    </div>
   );
 };
 

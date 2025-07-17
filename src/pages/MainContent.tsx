@@ -11,7 +11,7 @@ import { ESections } from "@/types/sections.ts";
 import Sidebar from "@/pages/content/Sidebar.tsx";
 import MainHeader from "@/components/MainHeader.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/config.tsx";
+import { AppDispatch, RootState } from "@/store/config.ts";
 import { getCurrentId } from "@/store/electron/actions.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
 import NavbarSections from "@/pages/content/NavbarSections.tsx";

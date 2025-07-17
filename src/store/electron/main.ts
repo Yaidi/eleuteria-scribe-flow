@@ -3,10 +3,14 @@ import Store from "electron-store";
 
 const store = new Store();
 
-ipcMain.handle("set-project-id", (_event, id: number) => {
-  store.set("projectId", id);
-});
+export function registerIpcHandlers() {
+  ipcMain.handle("set-project-id", (_event, id: number) => {
+    store.set("projectId", id);
+  });
 
-ipcMain.handle("get-project-id", () => {
-  return store.get("projectId");
-});
+  ipcMain.handle("get-project-id", () => {
+    return store.get("projectId");
+  });
+}
+
+registerIpcHandlers();

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import FormsCharacters from "@/components/FormsCharacters.tsx";
 import { useSections } from "@/hooks/useSections.ts";
-import { AppDispatch, RootState } from "@/store/config.tsx";
+import { AppDispatch, RootState } from "@/store/config.ts";
 import { addCharacterFetch } from "@/store";
 
 const Characters = () => {

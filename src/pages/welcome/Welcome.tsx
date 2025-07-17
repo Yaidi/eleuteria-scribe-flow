@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FileText, Moon, Sun } from "lucide-react";
 import { addProjectFetch, projectsFetch } from "@/store/projects/slice.ts";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/config.tsx";
+import { AppDispatch } from "@/store/config.ts";
 import { ProjectType } from "@/types/project.ts";
 import { getTemplates } from "@/https/fetch.ts";
 import { Template } from "@/types/templates.ts";
@@ -30,12 +30,7 @@ const Welcome = () => {
   const handleCreateProject = async (type: ProjectType) => {
     try {
       await dispatch(addProjectFetch({ projectListID: 1, type })).unwrap();
-      navigate("/main", {
-        state: {
-          projectType: type,
-          template: selectedTemplate,
-        },
-      });
+      navigate("/main");
     } catch (error) {
       console.error("Error al crear el proyecto:", error);
     }
@@ -47,7 +42,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className={`min-h-screen flex ${darkMode ? "dark" : ""}`}>
+    <div data-testid="welcome-container" className={`min-h-screen flex ${darkMode ? "dark" : ""}`}>
       {/* Sidebar */}
       <div className="w-80 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-6">
         <div className="flex items-center justify-between mb-8">
@@ -57,7 +52,7 @@ const Welcome = () => {
             </div>
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Eleuteria</h1>
           </div>
-          <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
+          <Button data-testid="btn-dark-mode" variant="ghost" size="sm" onClick={toggleDarkMode}>
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </Button>
         </div>

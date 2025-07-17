@@ -1,5 +1,11 @@
 import { IChapter, ICharacter, IGeneral, IPlot, IWorld } from "@/types/sections.ts";
 
+export enum State {
+  LOADING = "loading",
+  ERROR = "error",
+  SUCCESS = "success",
+}
+
 export interface ProjectSections {
   wordGoal: number;
   words: number;

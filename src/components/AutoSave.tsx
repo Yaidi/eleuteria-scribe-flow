@@ -17,6 +17,7 @@ const AutoSave = () => {
         <div className="flex items-center justify-between">
           <span className="text-sm text-slate-600 dark:text-slate-400">Auto-save</span>
           <div
+            data-testid="toggle-indicator"
             className={`w-3 h-3 bg-white rounded-full transition-transform ${
               autoSave ? "translate-x-4" : "translate-x-0.5"
             }`}

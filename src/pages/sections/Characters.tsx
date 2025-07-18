@@ -12,15 +12,17 @@ const Characters = () => {
   const projectId = useSelector((state: RootState) => state.projectInfo.currentProject?.id);
   const dispatch = useDispatch<AppDispatch>();
 
-  const add = () => {
-    dispatch(addCharacterFetch(projectId));
+  const add = (id: number) => {
+    dispatch(addCharacterFetch(id));
   };
+
+  if (!projectId) return null;
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Characters</CardTitle>
-        <Button onClick={add} size="sm">
+        <Button data-testid="btn-add-character" onClick={() => add(projectId)} size="sm">
           <Plus className="w-4 h-4 mr-2" />
           Add Character
         </Button>

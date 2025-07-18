@@ -2,16 +2,19 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, HashRouter, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Welcome from "./pages/welcome/Welcome.tsx";
 import MainContent from "./pages/MainContent";
 import NotFound from "./pages/NotFound";
-import { electron } from "@/store/electron/actions.ts";
+import React, { FC, PropsWithChildren } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  const Router = electron ? HashRouter : BrowserRouter;
+export interface AppProps {
+  Router: FC<PropsWithChildren>;
+}
+
+const App: React.FC<AppProps> = ({ Router }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

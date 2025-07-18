@@ -34,7 +34,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   };
 
   return (
-    <div data-testid="character-form" key={character.id} className="border rounded-lg p-4">
+    <div data-testid="form-character" key={character.id} className="border rounded-lg p-4">
       <div className="flex justify-between items-start mb-4">
         <div className="grid grid-cols-2 gap-4 flex-1">
           <div>

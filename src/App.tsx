@@ -12,6 +12,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const Router = electron ? HashRouter : BrowserRouter;
+  console.log(Router.name);
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

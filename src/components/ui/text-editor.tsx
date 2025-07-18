@@ -1,12 +1,13 @@
 import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextEditorMenuBar from "@/components/ui/text-editor-menu-bar.tsx";
+import React from "react";
 
 const extensions = [StarterKit];
 
 const content = "";
 
-const TextEditor = () => {
+const TextEditor: React.FC = () => {
   return (
     <div className="border border-gray-300 dark:border-slate-600 rounded-lg overflow-hidden">
       <EditorProvider

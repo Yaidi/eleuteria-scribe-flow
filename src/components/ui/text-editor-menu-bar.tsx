@@ -1,5 +1,5 @@
 import { useCurrentEditor } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Undo2, Redo2 } from "lucide-react";
 import { List, ListOrdered } from "lucide-react";
 import { Heading1, Heading2, Heading3 } from "lucide-react";
@@ -28,7 +28,7 @@ const useEditorState = () => {
   return { editor };
 };
 
-function TextEditorMenuBar() {
+const TextEditorMenuBar: React.FC = () => {
   const { editor } = useEditorState();
 
   if (!editor) {
@@ -41,6 +41,7 @@ function TextEditorMenuBar() {
         {/* Formato de texto básico */}
         <div className="flex gap-1">
           <button
+            data-testid="button-bold"
             onClick={() => editor.chain().focus().toggleBold().run()}
             disabled={!editor.can().chain().focus().toggleBold().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
@@ -54,6 +55,7 @@ function TextEditorMenuBar() {
             <Bold className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-italic"
             onClick={() => editor.chain().focus().toggleItalic().run()}
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
@@ -67,6 +69,7 @@ function TextEditorMenuBar() {
             <Italic className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-strike"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             disabled={!editor.can().chain().focus().toggleStrike().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
@@ -80,6 +83,7 @@ function TextEditorMenuBar() {
             <Strikethrough className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-code"
             onClick={() => editor.chain().focus().toggleCode().run()}
             disabled={!editor.can().chain().focus().toggleCode().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
@@ -100,6 +104,7 @@ function TextEditorMenuBar() {
         {/* Encabezados */}
         <div className="flex gap-1">
           <button
+            data-testid="button-heading-1"
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
@@ -111,6 +116,7 @@ function TextEditorMenuBar() {
             <Heading1 className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-heading-2"
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
@@ -122,6 +128,7 @@ function TextEditorMenuBar() {
             <Heading2 className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-heading-3"
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
@@ -140,6 +147,7 @@ function TextEditorMenuBar() {
         {/* Listas y bloques */}
         <div className="flex gap-1">
           <button
+            data-testid="button-bullet-list"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
@@ -151,6 +159,7 @@ function TextEditorMenuBar() {
             <List className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-ordered-list"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={`px-2 py-1 rounded text-sm font-medium transition-colors
             ${
@@ -169,6 +178,7 @@ function TextEditorMenuBar() {
         {/* Acciones especiales */}
         <div className="flex gap-1">
           <button
+            data-testid="button-undo"
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().chain().focus().undo().run()}
             className="px-2 py-1 rounded text-sm font-medium bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300
@@ -177,6 +187,7 @@ function TextEditorMenuBar() {
             <Undo2 className="w-4 h-4" />
           </button>
           <button
+            data-testid="button-redo"
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().chain().focus().redo().run()}
             className="px-2 py-1 rounded text-sm font-medium bg-gray-100 dark:bg-slate-600 hover:bg-gray-200 dark:hover:bg-slate-500 text-gray-700 dark:text-slate-300
@@ -188,6 +199,6 @@ function TextEditorMenuBar() {
       </div>
     </div>
   );
-}
+};
 
 export default TextEditorMenuBar;

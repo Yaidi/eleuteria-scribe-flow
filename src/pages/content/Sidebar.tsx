@@ -7,7 +7,7 @@ import { selectChapter, selectScene, setCurrentCharacter, updateCharacter } from
 import { useSections } from "@/hooks/useSections.ts";
 import { useDispatch } from "react-redux";
 import { RequestUpdateCharacter } from "@/types/requests.ts";
-import { AppDispatch } from "@/store/config.tsx";
+import { AppDispatch } from "@/store/config.ts";
 
 interface SidebarProps {
   activeSection: ESections;

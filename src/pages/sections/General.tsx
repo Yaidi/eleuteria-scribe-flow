@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/config.tsx";
+import { RootState } from "@/store/config.ts";
 import { updateGeneral } from "@/store";
 import { useEffect, useState } from "react";
 import { IGeneral } from "@/types/sections.ts";

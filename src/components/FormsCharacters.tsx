@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/config.tsx";
+import { AppDispatch } from "@/store/config.ts";
 import { deleteCharacterFetch, updateCharacter } from "@/store";
 
 interface FormsCharactersProps {

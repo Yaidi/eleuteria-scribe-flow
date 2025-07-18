@@ -3,7 +3,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { IWorldElement } from "@/types/sections.ts";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/config.tsx";
+import { RootState } from "@/store/config.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Button } from "@/components/ui/button.tsx";

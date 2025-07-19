@@ -26,7 +26,7 @@ describe("GeneralReducer", () => {
   });
   test("should handle update general", () => {
     const action: UnknownAction = {
-      type: updateGeneral.type,
+      type: updateGeneral.fulfilled.type,
       payload: {
         title: "Updated Title",
       },

@@ -1,19 +1,21 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { screen, fireEvent } from "@testing-library/react";
 import General from "@/pages/sections/General.tsx";
 import userEvent, { PointerEventsCheckLevel } from "@testing-library/user-event";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
 import * as storeActions from "@/store/sections";
+import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
+import { IGeneral } from "@/types/sections.ts";
+import { mockGeneral } from "../../../mocks";
+import { updateGeneral } from "@/store/sections";
 
-const updateGeneralSpy = vi.spyOn(storeActions, "updateGeneral");
+mockThunkSuccess<IGeneral>(storeActions, "updateGeneral", mockGeneral);
 
 describe("General Component", () => {
   test("should render inputs with initial state", () => {
     renderWithProviders(<General />);
 
-    const title = screen.getByLabelText("Title");
-    fireEvent.change(title, { target: { value: "Updated Title" } });
-    expect(screen.getByLabelText("Title")).toHaveValue("Updated Title");
+    expect(screen.getByLabelText("Title")).toHaveValue("");
     expect(screen.getByLabelText("Subtitle")).toHaveValue("");
     expect(screen.getByLabelText(/Author/i)).toHaveValue("");
     expect(screen.getByLabelText(/Series/i)).toHaveValue("");
@@ -28,7 +30,10 @@ describe("General Component", () => {
     const titleInput = screen.getByLabelText("Title");
     fireEvent.change(titleInput, { target: { value: "Updated Title" } });
 
-    expect(updateGeneralSpy).toHaveBeenCalledWith({ title: "Updated Title" });
+    expect(updateGeneral).toHaveBeenCalledWith({
+      projectId: expect.any(Number),
+      general: { title: "Updated Title" },
+    });
   });
 
   test("should dispatch updateGeneral on select change", async () => {
@@ -41,7 +46,10 @@ describe("General Component", () => {
     const genreOption = screen.getByText("Fantasy");
     await user.click(genreOption);
 
-    expect(updateGeneralSpy).toHaveBeenCalledWith({ genre: "fantasy" });
+    expect(updateGeneral).toHaveBeenCalledWith({
+      projectId: expect.any(Number),
+      general: { genre: "fantasy" },
+    });
 
     // Select license
     const licenseTrigger = screen.getByText(/Select license/i);
@@ -49,6 +57,9 @@ describe("General Component", () => {
     const licenseOption = screen.getByText("Public Domain");
     await user.click(licenseOption);
 
-    expect(updateGeneralSpy).toHaveBeenCalledWith({ license: "public-domain" });
+    expect(updateGeneral).toHaveBeenCalledWith({
+      projectId: expect.any(Number),
+      general: { license: "public-domain" },
+    });
   });
 });

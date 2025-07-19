@@ -170,4 +170,4 @@ async def update_general_info(
         setattr(project, field, value)
 
     await repository.update_project(project)
-    return {"message": "General info updated successfully"}
+    return {"message": "General info updated successfully", "general": data}

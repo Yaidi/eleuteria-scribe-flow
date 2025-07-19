@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/config.tsx";
+import { RootState } from "@/store/config.ts";
 import { updateGeneral } from "@/store";
 import { useEffect, useState } from "react";
 import { IGeneral } from "@/types/sections.ts";
@@ -98,10 +98,10 @@ const General = () => {
             />
           </div>
           <div>
-            <Label htmlFor="genre">Genre</Label>
+            <Label id="genre">Genre</Label>
             <Select value={info.genre} onValueChange={(value) => updateSelect("genre", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select genre" />
+              <SelectTrigger aria-labelledby="genre">
+                <SelectValue data-testid="select-genre" placeholder="Select genre" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="fiction">Fiction</SelectItem>
@@ -117,9 +117,9 @@ const General = () => {
           </div>
         </div>
         <div>
-          <Label htmlFor="license">License</Label>
+          <Label id="license">License</Label>
           <Select value={info.license} onValueChange={(value) => updateSelect("license", value)}>
-            <SelectTrigger>
+            <SelectTrigger aria-labelledby="license">
               <SelectValue placeholder="Select license" />
             </SelectTrigger>
             <SelectContent>

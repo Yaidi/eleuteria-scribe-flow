@@ -17,6 +17,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.NOVEL:
       return (
         <button
+          data-testid="btn-novel"
           onClick={() => handleTemplateSelect(ProjectType.NOVEL)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.NOVEL
@@ -33,6 +34,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.THESIS:
       return (
         <button
+          data-testid="btn-thesis"
           onClick={() => handleTemplateSelect(ProjectType.THESIS)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.THESIS
@@ -49,6 +51,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.POETRY:
       return (
         <button
+          data-testid="btn-poetry"
           onClick={() => handleTemplateSelect(ProjectType.POETRY)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.POETRY
@@ -65,6 +68,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.ILLUSTRATED:
       return (
         <button
+          data-testid="btn-illustrated"
           onClick={() => handleTemplateSelect(template.type)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.ILLUSTRATED
@@ -81,6 +85,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.TRILOGY:
       return (
         <button
+          data-testid="btn-trilogy"
           onClick={() => handleTemplateSelect(ProjectType.TRILOGY)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.TRILOGY
@@ -99,6 +104,7 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
     case ProjectType.NON_FICTION:
       return (
         <button
+          data-testid="btn-non-fiction"
           onClick={() => handleTemplateSelect(ProjectType.NON_FICTION)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
             selectedTemplate === ProjectType.NON_FICTION

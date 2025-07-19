@@ -30,7 +30,7 @@ export interface IPlot {
   plotStepsResume: string;
   plotSteps: IPlotSteps[];
   result: string;
-  chapterReferences: [];
+  chapterReferences: string[];
   importance: PriorityType;
   characters: ICharacter[];
 }

@@ -1,6 +1,6 @@
 import { setCurrentSection } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/config.tsx";
+import { AppDispatch, RootState } from "@/store/config.ts";
 import { useSections } from "@/hooks/useSections.ts";
 import { ESections } from "@/types/sections.ts";
 

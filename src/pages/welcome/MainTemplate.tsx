@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { FileText } from "lucide-react";
 
 export interface MainTemplateProps {
   templates: Template[];
@@ -35,26 +34,12 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
 
   return (
     <div className="flex-1 bg-white dark:bg-slate-800 p-8">
-      {!selectedTemplate && (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <div className="w-24 h-24 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FileText className="w-12 h-12 text-slate-400" />
-            </div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-2">
-              Welcome to Eleuteria
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400">
-              Select a template from the sidebar to get started
-            </p>
-          </div>
-        </div>
-      )}
-
       {selectedTemplate && getTemplate && (
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle className="capitalize">{selectedTemplate} Template</CardTitle>
+            <CardTitle data-testid="template-name" className="capitalize">
+              {selectedTemplate} Template
+            </CardTitle>
             <CardDescription>{getTemplate.description}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -71,7 +56,11 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
                   ))}
                 </div>
               </div>
-              <Button onClick={() => void handleCreateProject(selectedTemplate)} className="w-full">
+              <Button
+                data-testid="btn-create-project"
+                onClick={() => void handleCreateProject(selectedTemplate)}
+                className="w-full"
+              >
                 Choose This Template
               </Button>
             </div>

@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { ICharacter, PriorityType } from "@/types/sections.ts";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/config.tsx";
+import { AppDispatch } from "@/store/config.ts";
 import { deleteCharacterFetch, updateCharacter } from "@/store";
 
 interface FormsCharactersProps {
@@ -34,12 +34,13 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
   };
 
   return (
-    <div key={character.id} className="border rounded-lg p-4">
+    <div data-testid="form-character" key={character.id} className="border rounded-lg p-4">
       <div className="flex justify-between items-start mb-4">
         <div className="grid grid-cols-2 gap-4 flex-1">
           <div>
             <Label>Name</Label>
             <Input
+              data-testid="input-character-name"
               name="name"
               value={character.name}
               onChange={(e) => update(character.id, { name: e.target.value })}
@@ -47,18 +48,18 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             />
           </div>
           <div>
-            <Label>Importance</Label>
+            <Label id="importance-id">Importance</Label>
             <Select
               name="importance"
-              value={character.importance?.toString()}
+              value={character.importance.toString()}
               onValueChange={(value: string) =>
                 update(character.id, {
                   importance: getImportance(value),
                 })
               }
             >
-              <SelectTrigger>
-                <SelectValue defaultValue={character.importance?.toString()} />
+              <SelectTrigger aria-labelledby="importance-id">
+                <SelectValue defaultValue={character.importance.toString()} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="0">Main Character</SelectItem>
@@ -68,7 +69,12 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             </Select>
           </div>
         </div>
-        <Button variant="destructive" size="sm" onClick={() => remove(character.id)}>
+        <Button
+          data-testid="btn-remove-character"
+          variant="destructive"
+          size="sm"
+          onClick={() => remove(character.id)}
+        >
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>
@@ -76,6 +82,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
         <div>
           <Label>Characteristics</Label>
           <Textarea
+            data-testid="textarea-characteristics"
             name="characteristics"
             value={character.characteristics}
             onChange={(e) => update(character.id, { characteristics: e.target.value })}

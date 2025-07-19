@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { addPlot, removePlot, updatePlot } from "@/store";
 import { useSections } from "@/hooks/useSections.ts";
-import { Select, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
 
 const Plot = () => {
   const { plots } = useSections().plots;
@@ -41,7 +41,7 @@ const Plot = () => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Plots</CardTitle>
-        <Button onClick={add} size="sm">
+        <Button data-testid="btn-add-plot" onClick={add} size="sm">
           <Plus className="w-4 h-4 mr-2" />
           Add Plot
         </Button>
@@ -54,6 +54,7 @@ const Plot = () => {
                 <div className="flex-1">
                   <Label>Plot Title</Label>
                   <Input
+                    data-testid={`input-plot-title-${plot.id}`}
                     name="title"
                     value={plot.title}
                     onChange={(e) =>
@@ -65,7 +66,12 @@ const Plot = () => {
                     placeholder="Plot title"
                   />
                 </div>
-                <Button variant="destructive" size="sm" onClick={() => remove(plot.id)}>
+                <Button
+                  data-testid={`btn-remove-plot-${plot.id}`}
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => remove(plot.id)}
+                >
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -73,6 +79,7 @@ const Plot = () => {
                 <div>
                   <Label>Description</Label>
                   <Textarea
+                    data-testid={`textarea-plot-description-${plot.id}`}
                     name="description"
                     value={plot.description}
                     onChange={(e) =>
@@ -87,12 +94,13 @@ const Plot = () => {
                 <div>
                   <Label>Manuscript Reference</Label>
                   <Input
+                    data-testid={`input-plot-reference-${plot.id}`}
                     name="chapterReference"
                     value={plot.chapterReferences.join(", ")}
                     onChange={(e) =>
                       update({
                         id: plot.id,
-                        plotStepsResume: e.target.value,
+                        chapterReferences: e.target.value.split(",").map((ref) => ref.trim()),
                       })
                     }
                     placeholder="Chapter/page reference where this plot occurs"
@@ -102,18 +110,20 @@ const Plot = () => {
                   <Label>Characters Involved</Label>
                   <Select name="characters" value="0" onValueChange={() => {}} disabled={true}>
                     <SelectTrigger></SelectTrigger>
-                    {plot.characters.map((character) => (
-                      <SelectItem key={`${character.name}-${plot.title}`} value="0">
-                        {character.name}
-                      </SelectItem>
-                    ))}
+                    <SelectContent>
+                      {plot.characters.map((character) => (
+                        <SelectItem key={`${character.name}-${plot.title}`} value="0">
+                          {character.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
             </div>
           ))}
           {plots.length === 0 && (
-            <div className="text-center py-8 text-slate-500">
+            <div data-testid="no-plots" className="text-center py-8 text-slate-500">
               No plots added yet. Click "Add Plot" to get started.
             </div>
           )}

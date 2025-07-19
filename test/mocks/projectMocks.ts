@@ -5,9 +5,10 @@ import {
   IGeneral,
   IPlot,
   IWorld,
+  IWorldElement,
   PriorityType,
 } from "@/types/sections";
-import { IProject, ProjectSections, ProjectType } from "@/types/project.ts";
+import { IProject, ProjectData, ProjectSections, ProjectType } from "@/types/project.ts";
 
 // Mock data for ICharacter
 export const mockCharacters: ICharacter[] = [
@@ -103,12 +104,42 @@ export const mockPlots: IPlot[] = [
     importance: PriorityType.SECONDARY,
   },
 ];
+// Mock data for IWorldElement
+export const mockWorldElements: IWorldElement[] = [
+  {
+    id: 1,
+    name: "The City",
+    description: "A sprawling metropolis filled with secrets and shadows.",
+    worldID: 0,
+    origin: "",
+    conflictCause: "",
+    worldElementID: 0,
+  },
+  {
+    id: 2,
+    name: "The Police Station",
+    description: "Where John works as a detective.",
+    worldID: 0,
+    origin: "",
+    conflictCause: "",
+    worldElementID: 0,
+  },
+  {
+    id: 3,
+    name: "The Dark Alley",
+    description: "A dangerous part of the city where many disappearances have occurred.",
+    worldID: 0,
+    origin: "",
+    conflictCause: "",
+    worldElementID: 0,
+  },
+];
 
 // Mock data for IWorld
 export const mockWorld: IWorld = {
   id: 0,
   projectID: 0,
-  worldElements: [],
+  worldElements: mockWorldElements,
 };
 
 // Mock data for IGeneral
@@ -168,3 +199,5 @@ export const mockProject: IProject = {
   type: ProjectType.NOVEL,
   projectListID: 0,
 };
+
+export const mockProjectData: ProjectData = { ...mockProject, sections: mockProjectSections };

@@ -3,7 +3,7 @@ import { updateGeneral } from "@/store/sections";
 import { GenreType, IGeneral } from "@/types/sections";
 
 const initialState: IGeneral = {
-  title: "Titulo",
+  title: "",
   author: "",
   subtitle: "",
   series: "",

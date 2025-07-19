@@ -1,4 +1,4 @@
-const isElectron = () => typeof window !== "undefined" && "electron" in window;
+export const isElectron = () => typeof window !== "undefined" && "electron" in window;
 
 export const electron = isElectron() ? window.electron : null;
 

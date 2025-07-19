@@ -1,26 +1,31 @@
 {
   "name": "eleuteria",
   "private": true,
-  "author": {
-    "name": "Yaidi",
-    "email": ""
-  },
+  "authors": [
+    {
+      "name": "Yaidi",
+      "email": ""
+    },
+    {
+      "name": "Gabriel",
+      "email": ""
+    }
+  ],
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
-    "start": "node start.js",
     "build": "tsc && vite build && electron-builder --config electron-builder.json5",
     "build:dev": "vite build --mode development",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"test/**/*.{ts,tsx,js,jsx,json}\"",
     "format-backend": "black backend/ --line-length 88",
     "prepare": "husky",
-    "test": "vitest",
-    "test:e2e": "vitest --watch",
+    "test:unit": "vitest run --silent false test/unit-test -c vitest.config.ts --coverage.enabled true",
+    "test:smoke": "vitest run --silent false test/smoke-test -c vitest.smoke.config.ts",
     "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
     "test-coverage-backend": "backend/.venv/bin/coverage report",
     "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
@@ -66,6 +71,9 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.56.2",
+    "@tiptap/react": "^3.0.6",
+    "@tiptap/starter-kit": "^3.0.6",
+    "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -92,7 +100,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@tailwindcss/typography": "^0.5.15",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -104,6 +111,7 @@
     "@typescript-eslint/parser": "^8.11.0",
     "@vitejs/plugin-react": "^4.6.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.2.0",
     "dotenv": "^17.0.1",

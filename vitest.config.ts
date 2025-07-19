@@ -11,8 +11,37 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    setupFiles: "./test/setup-unit.ts",
     environment: "jsdom",
-    setupFiles: "./test/setup.ts",
     include: ["test/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["test/smoke-test/**", "release/**"],
+    coverage: {
+      reporter: ["text", "json-summary", "json"],
+      exclude: [
+        "src/main.tsx",
+        "src/**/*.d.ts",
+        "test/**/*.test.{ts,tsx}",
+        "test/**/**",
+        "src/types/**",
+        "backend/**",
+        "**/*.config.*",
+        "dist/**",
+        "dist-electron/**",
+        ".**",
+        "electron/**",
+        "src/store/electron/**", // TODO: Add tests for these
+        "src/store/**/**config.ts",
+        "src/store/**config.ts",
+        "release/**",
+        "src/components/ui", // Exclude UI components from coverage TODO: Add tests for these
+      ],
+      thresholds: {
+        lines: 90,
+        branches: 90,
+        functions: 90,
+        statements: 90,
+      },
+      reportOnFailure: true,
+    },
   },
 });

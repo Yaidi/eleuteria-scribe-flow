@@ -1,33 +1,55 @@
 #!/bin/bash
 
-echo "Installing Poetry..."
-curl -sSL https://install.python-poetry.org | python3 -
+echo "🔍 Verificando instalación de Python..."
 
-echo "Adding Poetry to PATH..."
-SHELL_RC=""
-if [ -n "$ZSH_VERSION" ]; then
-    SHELL_RC="$HOME/.zshrc"
-elif [ -n "$BASH_VERSION" ]; then
-    SHELL_RC="$HOME/.bashrc"
-else
-    echo "bash or zsh not detected. Manually add Poetry to your PATH."
-    exit 1
+PYTHON_CMD=""
+for cmd in python3 python py; do
+  if command -v "$cmd" &>/dev/null; then
+    path=$(command -v "$cmd")
+    if [[ "$path" == *"WindowsApps"* ]]; then
+      echo "⚠️  Ignorando $cmd de Microsoft Store: $path"
+      continue
+    fi
+    PYTHON_CMD="$cmd"
+    break
+  fi
+done
+
+if [[ -z "$PYTHON_CMD" ]]; then
+  echo "❌ No se encontró Python válido. Descárgalo de https://www.python.org/downloads/"
+  exit 1
 fi
 
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
-source "$SHELL_RC"
+echo "✅ Usando Python: $PYTHON_CMD"
 
-echo "Configuring Poetry..."
+# === Instalar Poetry ===
+echo "📦 Instalando Poetry..."
+pip3 install poetry
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+if ! command -v poetry &>/dev/null; then
+  echo "❌ Poetry no está en PATH incluso después de instalar. Añade esto a tu ~/.bashrc:"
+  echo 'export PATH="$HOME/.poetry/bin:$PATH"'
+  exit 1
+fi
+
+# === Usar Poetry ===
+echo "✅ Configurando Poetry..."
 poetry config virtualenvs.in-project true
 
-echo "Moving to backend dir..."
-cd .. || { echo "'backend' not found"; exit 1; }
+echo "📂 Moviéndose al directorio backend..."
+cd .. || { echo "❌ No se encontró el directorio 'backend'"; exit 1; }
 
-echo "Creating Poetry Venv..."
+echo "🐍 Instalando dependencias con Poetry..."
 poetry install
 
-echo "Dependencies installed!"
+echo "✅ Dependencias instaladas."
 echo ""
-echo "To activate your Python virtual environment please run:"
+echo "👉 Para activar tu entorno virtual:"
 echo "source $(poetry env info --path)/bin/activate"
 echo ""
+echo "if you're on WINDOWS: "
+echo "source $(poetry env info --path)\bin\activate"
+
+# source C:/Users/theBeast/Documents/Github/eleuteria-scribe-flow/backend/.venv/Scripts/activate

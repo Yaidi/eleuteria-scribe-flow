@@ -23,7 +23,7 @@ export default tseslint.config(
       "@typescript-eslint": typescriptPlugin,
       ...tseslint.plugin,
     },
-    files: ["src/**/*.ts", "src/**/*.tsx"],
+    files: ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"],
     languageOptions: {
       parser: typescriptParser,
       ecmaVersion: 2020,

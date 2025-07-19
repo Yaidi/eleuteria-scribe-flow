@@ -79,6 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
                 .filter((char) => char.importance === role)
                 .map((character) => (
                   <Button
+                    data-testid={`character-${character.id}`}
                     draggable={true}
                     onDragEnd={() => setSelectedCharacter(null)}
                     onDragStart={(e) => handleDragStart(e, character.id)}
@@ -113,6 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
             <div key={chapter.id} className="space-y-1">
               <div className="flex items-center space-x-1">
                 <Button
+                  data-testid={`btn-chapter-${chapter.id}`}
                   variant="ghost"
                   size="sm"
                   className="h-6 w-6 p-0"

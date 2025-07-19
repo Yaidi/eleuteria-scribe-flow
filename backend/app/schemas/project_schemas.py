@@ -20,7 +20,7 @@ class General(BaseModel):
     resumePage: Optional[str] = None
 
     model_config = {
-        "exclude_none": True  # 👈 Esto hace que `None` no se incluya en el JSON
+        "exclude_none": False  # 👈 Esto hace que `None` no se incluya en el JSON
     }
 
 

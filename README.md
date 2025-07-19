@@ -25,10 +25,7 @@ fnm use
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Install dependency manager for the backend.
-npm run install-backend
-
-# Step 5: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run start
 ```
 
@@ -81,9 +78,10 @@ This project is built with:
 
 #### The Easy Way:
 
-Run our installation script: `npm run install-backend`
+Run our installation script:
 
-And after the first script finishes in a new terminal run: `npm run start`
+- on linux/macos: `./backend/scripts/dependencies-installer.sh`
+- on windows: `./backend/scripts/dependencies-installer.ps1`
 
 > Backend will be running on: http://localhost:8000. Front and Back will start together.
 
@@ -112,7 +110,7 @@ And after the first script finishes in a new terminal run: `npm run start`
 
 - `poetry install`
 
-4—you can run: `npm run dev-backend` or `npm run start` to run front and back together.
+4—you can run: `npm run dev-backend`.
 
 5—Backend will be running on: http://localhost:8000
 

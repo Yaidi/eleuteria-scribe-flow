@@ -56,7 +56,11 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection 
             {wordGoal && (
               <>
                 <span className="text-sm text-gray-500">{`${words} / ${wordGoal} words`}</span>
-                <Progress value={getProgressPercentage()} className="w-32 h-2" />
+                <Progress
+                  data-testid="progressbar"
+                  value={getProgressPercentage()}
+                  className="w-32 h-2"
+                />
               </>
             )}
           </div>

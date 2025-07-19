@@ -22,3 +22,6 @@ export function createMockStore(state?: Partial<RootState>) {
     },
   });
 }
+
+export const renderWithStore = (ui: React.ReactElement) =>
+  render(<Provider store={store}>{ui}</Provider>);

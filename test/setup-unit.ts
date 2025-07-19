@@ -1,4 +1,5 @@
-import { vi } from "vitest";
+import { vi, beforeAll } from "vitest";
+import "@testing-library/jest-dom";
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -10,4 +11,11 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
+});
+
+beforeAll(() => {
+  Element.prototype.hasPointerCapture = vi.fn();
+  Element.prototype.setPointerCapture = vi.fn();
+  Element.prototype.releasePointerCapture = vi.fn();
+  Element.prototype.scrollIntoView = vi.fn();
 });

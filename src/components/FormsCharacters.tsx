@@ -48,18 +48,18 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             />
           </div>
           <div>
-            <Label>Importance</Label>
+            <Label id="importance-id">Importance</Label>
             <Select
               name="importance"
-              value={character.importance?.toString()}
+              value={character.importance.toString()}
               onValueChange={(value: string) =>
                 update(character.id, {
                   importance: getImportance(value),
                 })
               }
             >
-              <SelectTrigger>
-                <SelectValue defaultValue={character.importance?.toString()} />
+              <SelectTrigger aria-labelledby="importance-id">
+                <SelectValue defaultValue={character.importance.toString()} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="0">Main Character</SelectItem>
@@ -69,7 +69,12 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
             </Select>
           </div>
         </div>
-        <Button variant="destructive" size="sm" onClick={() => remove(character.id)}>
+        <Button
+          data-testid="btn-remove-character"
+          variant="destructive"
+          size="sm"
+          onClick={() => remove(character.id)}
+        >
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>
@@ -77,6 +82,7 @@ const FormsCharacters: React.FC<FormsCharactersProps> = ({ character }) => {
         <div>
           <Label>Characteristics</Label>
           <Textarea
+            data-testid="textarea-characteristics"
             name="characteristics"
             value={character.characteristics}
             onChange={(e) => update(character.id, { characteristics: e.target.value })}

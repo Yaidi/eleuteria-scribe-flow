@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { IWorldElement } from "@/types/sections.ts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/config.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
@@ -11,20 +11,21 @@ import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store
 
 const World = () => {
   const { world } = useSelector((state: RootState) => state.sections.world);
+  const dispatch = useDispatch();
 
   const add = () => {
     const newElement: Partial<IWorldElement> = {
       worldID: world.id,
     };
-    addWorldElement(newElement);
+    dispatch(addWorldElement(newElement));
   };
 
   const update = (world: Partial<IWorldElement>) => {
-    updateWorldElement(world);
+    dispatch(updateWorldElement(world));
   };
 
   const remove = (id: number) => {
-    removeWorldElement(id);
+    dispatch(removeWorldElement(id));
   };
 
   return (
@@ -52,7 +53,12 @@ const World = () => {
                     />
                   </div>
                 </div>
-                <Button variant="destructive" size="sm" onClick={() => remove(element.id)}>
+                <Button
+                  data-testid={`btn-remove-world-el-${element.id}`}
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => remove(element.id)}
+                >
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

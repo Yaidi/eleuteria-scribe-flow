@@ -47,9 +47,7 @@ poetry install
 echo "✅ Dependencias instaladas."
 echo ""
 echo "👉 Para activar tu entorno virtual:"
-echo "source $(poetry env info --path)/bin/activate"
+command poetry env activate
 echo ""
-echo "if you're on WINDOWS: "
-echo "source $(poetry env info --path)\bin\activate"
 
 # source C:/Users/theBeast/Documents/Github/eleuteria-scribe-flow/backend/.venv/Scripts/activate

@@ -2,9 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/config.ts";
+import { AppDispatch, RootState } from "@/store/config.ts";
 import { updateGeneral } from "@/store";
-import { useEffect, useState } from "react";
 import { IGeneral } from "@/types/sections.ts";
 import {
   Select,
@@ -13,26 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
+import { useProjectId } from "@/hooks/useSections.ts";
 
 const General = () => {
   const { general } = useSelector((state: RootState) => state.sections);
-  const [info, setInfo] = useState<IGeneral>(general);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setInfo(general);
-  }, [general]);
+  const projectId = useProjectId();
+  const dispatch = useDispatch<AppDispatch>();
 
   const update = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const updated = { ...info, [name]: value };
-    setInfo(updated);
-    dispatch(updateGeneral({ [name]: value }));
+    const updated = { [name]: value };
+    dispatch(updateGeneral({ projectId: projectId, general: updated }));
   };
   const updateSelect = (name: string, value: string) => {
-    const updated = { ...info, [name]: value };
-    setInfo(updated);
-    dispatch(updateGeneral({ [name]: value }));
+    const updated: Partial<IGeneral> = { [name]: value };
+    dispatch(updateGeneral({ projectId: projectId, general: updated }));
   };
 
   return (
@@ -47,7 +41,7 @@ const General = () => {
             <Input
               id="title"
               name="title"
-              value={info.title}
+              value={general.title}
               onChange={update}
               placeholder="Enter book title"
             />
@@ -57,7 +51,7 @@ const General = () => {
             <Input
               id="author"
               name="author"
-              value={info.author}
+              value={general.author}
               onChange={update}
               placeholder="Enter author name"
             />
@@ -68,7 +62,7 @@ const General = () => {
           <Input
             id="subtitle"
             name="subtitle"
-            value={info.subtitle}
+            value={general.subtitle}
             onChange={update}
             placeholder="Enter subtitle (optional)"
           />
@@ -79,7 +73,7 @@ const General = () => {
             <Input
               id="series"
               name="series"
-              value={info.series}
+              value={general.series}
               onChange={update}
               placeholder="Series name"
             />
@@ -92,14 +86,14 @@ const General = () => {
               min="1"
               max="999"
               name="volume"
-              value={info.volume}
+              value={general.volume}
               onChange={update}
               placeholder="Volume number"
             />
           </div>
           <div>
             <Label id="genre">Genre</Label>
-            <Select value={info.genre} onValueChange={(value) => updateSelect("genre", value)}>
+            <Select value={general.genre} onValueChange={(value) => updateSelect("genre", value)}>
               <SelectTrigger aria-labelledby="genre">
                 <SelectValue data-testid="select-genre" placeholder="Select genre" />
               </SelectTrigger>
@@ -118,7 +112,7 @@ const General = () => {
         </div>
         <div>
           <Label id="license">License</Label>
-          <Select value={info.license} onValueChange={(value) => updateSelect("license", value)}>
+          <Select value={general.license} onValueChange={(value) => updateSelect("license", value)}>
             <SelectTrigger aria-labelledby="license">
               <SelectValue placeholder="Select license" />
             </SelectTrigger>

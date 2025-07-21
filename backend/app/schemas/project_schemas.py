@@ -19,6 +19,10 @@ class General(BaseModel):
     resumeParagraph: Optional[str] = None
     resumePage: Optional[str] = None
 
+    model_config = {
+        "exclude_none": False  # 👈 Esto hace que `None` no se incluya en el JSON
+    }
+
 
 class Sections(BaseModel):
     wordGoal: Optional[int] = 0

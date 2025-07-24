@@ -38,4 +38,12 @@ describe("NavbarSections", () => {
 
     expect(mockDispatch).toHaveBeenCalledWith(setCurrentSection(ESections.characters));
   });
+  test("dispatches setCurrentSection on button click", () => {
+    renderWithProviders(<NavbarSections />);
+
+    const settingsBtn = screen.getByText("Settings");
+    fireEvent.click(settingsBtn);
+
+    expect(mockDispatch).toHaveBeenCalledWith(setCurrentSection(ESections.settings));
+  });
 });

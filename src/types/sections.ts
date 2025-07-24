@@ -104,4 +104,5 @@ export enum ESections {
   references = "References",
   bibliography = "Bibliography",
   Any = "Any",
+  settings = "Settings",
 }

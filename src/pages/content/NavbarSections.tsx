@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/config.ts";
 import { useSections } from "@/hooks/useSections.ts";
 import { ESections } from "@/types/sections.ts";
+import { Button } from "@/components/ui/button.tsx";
+import { Settings } from "lucide-react";
 
 const getSection = (section: string): ESections => {
   return ESections[section as keyof typeof ESections];
@@ -28,6 +30,15 @@ const NavbarSections = () => {
           <span className="capitalize">{section}</span>
         </button>
       ))}
+      <Button
+        variant="outline"
+        size="sm"
+        className="w-full justify-start"
+        onClick={() => dispatch(setCurrentSection(ESections.settings))}
+      >
+        <Settings className="w-4 h-4 mr-2" />
+        Settings
+      </Button>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Moon, Settings, Sun } from "lucide-react";
+import { ArrowLeft, Moon, Sun } from "lucide-react";
 import Sidebar from "@/pages/content/Sidebar.tsx";
 import MainHeader from "@/pages/content/MainHeader.tsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,10 +56,6 @@ const MainContent = () => {
               <section className="flex flex-col space-y-2 mb-6">
                 <NavbarSections></NavbarSections>
               </section>
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
             </nav>
             <Sidebar activeSection={currentSection}></Sidebar>
           </section>

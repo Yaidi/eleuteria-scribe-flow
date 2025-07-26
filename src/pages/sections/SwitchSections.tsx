@@ -4,6 +4,7 @@ import Characters from "@/pages/sections/Characters.tsx";
 import Plot from "@/pages/sections/Plot.tsx";
 import World from "@/pages/sections/World.tsx";
 import Manuscript from "@/pages/sections/Manuscript.tsx";
+import Settings from "@/pages/Settings.tsx";
 
 export const renderCurrentSection = (currentSection: ESections) => {
   switch (currentSection) {
@@ -15,6 +16,8 @@ export const renderCurrentSection = (currentSection: ESections) => {
       return <Plot />;
     case ESections.world:
       return <World />;
+    case ESections.settings:
+      return <Settings />;
     default:
       return <Manuscript section={currentSection} />;
   }

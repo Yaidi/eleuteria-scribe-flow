@@ -16,6 +16,7 @@ dist-electron
 backend/build/
 backend/dist/
 .playwright-temp
+backend-rust/target
 
 # Editor directories and files
 .vscode/*

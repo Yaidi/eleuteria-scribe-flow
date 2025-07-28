@@ -1,9 +1,8 @@
 import { describe, expect, test } from "vitest";
 import { IProjectsReducer, ProjectsReducer } from "@/store/projects/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
-import { addProjectFetch, projectsFetch } from "@/store/projects/slice.ts";
-import { mockProjectData } from "../../../mocks";
-import { removeProject, updateProject } from "@/store";
+import { addProjectFetch, projectsFetch, removeProject } from "@/store/projects/slice.ts";
+import { mockProject, mockProjectData } from "../../../mocks";
 import { State } from "@/types/project.ts";
 
 describe("ProjectsReducer", () => {
@@ -21,12 +20,10 @@ describe("ProjectsReducer", () => {
   test("should handle get all projects", () => {
     const action: UnknownAction = {
       type: projectsFetch.fulfilled.type,
-      payload: {
-        projects: [mockProjectData, { ...mockProjectData, id: 2 }],
-      },
+      payload: [mockProject],
     };
     const result = ProjectsReducer(initialState, action);
-    expect(result.projects).toEqual([mockProjectData, { ...mockProjectData, id: 2 }]);
+    expect(result.projects).toEqual([mockProject]);
     expect(result.state).toEqual(State.SUCCESS);
   });
 
@@ -41,20 +38,11 @@ describe("ProjectsReducer", () => {
   });
   test("should handle remove project", () => {
     const action: UnknownAction = {
-      type: removeProject.type,
-      payload: mockProjectData.id,
+      type: removeProject.fulfilled.type,
+      payload: { id: mockProject.id },
     };
-    const result = ProjectsReducer({ projects: [mockProjectData], state: State.LOADING }, action);
+    const result = ProjectsReducer({ projects: [mockProject], state: State.SUCCESS }, action);
     expect(result.projects).toEqual([]);
-    expect(result.state).toEqual(State.LOADING);
-  });
-  test("should handle update project", () => {
-    const action: UnknownAction = {
-      type: updateProject.type,
-      payload: { ...mockProjectData, name: "Updated Project" },
-    };
-    const result = ProjectsReducer({ projects: [mockProjectData], state: State.LOADING }, action);
-    expect(result.projects).toEqual([{ ...mockProjectData, name: "Updated Project" }]);
-    expect(result.state).toEqual(State.LOADING);
+    expect(result.state).toEqual(State.SUCCESS);
   });
 });

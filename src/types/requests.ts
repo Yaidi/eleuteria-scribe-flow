@@ -1,4 +1,4 @@
-import { ProjectType } from "@/types/project.ts";
+import { ProjectData, ProjectType } from "@/types/project.ts";
 import { ICharacter } from "@/types/sections.ts";
 
 export interface RequestAddProject {
@@ -13,4 +13,12 @@ export interface RequestUpdateSection {
 export interface RequestUpdateCharacter {
   id: number;
   info: Partial<ICharacter>;
+}
+
+export interface ResponseProjects {
+  projects: ProjectData[];
+}
+
+export interface ResponseId {
+  id: number;
 }

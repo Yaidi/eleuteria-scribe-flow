@@ -45,23 +45,21 @@ const MainContent = () => {
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">
-              {currentProject.projectName}
+              Eleuteria
             </h2>
             <Button data-testid="btn-dark-mode" variant="ghost" size="sm" onClick={toggleDarkMode}>
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
           </header>
-          <section className="flex h-full">
+          <section className="flex h-full w-full">
             <nav className="min-w-40 max-w-64 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
-              <section className="flex flex-col space-y-2 mb-6">
-                <NavbarSections></NavbarSections>
-              </section>
+              <NavbarSections></NavbarSections>
             </nav>
             <Sidebar activeSection={currentSection}></Sidebar>
           </section>
         </div>
         <main className="flex flex-col bg-white dark:bg-slate-800 p-8 overflow-auto w-full">
-          <MainHeader currentProject={currentProject} currentSection={currentSection}></MainHeader>
+          <MainHeader currentProject={currentProject}></MainHeader>
           {renderCurrentSection(currentSection)}
         </main>
       </div>

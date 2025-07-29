@@ -181,8 +181,6 @@ export const mockChapters: IChapter[] = [
 
 // Mock data for ProjectSections
 export const mockProjectSections: ProjectSections = {
-  wordGoal: 0,
-  words: 0,
   general: mockGeneral,
   characters: mockCharacters,
   plots: mockPlots,
@@ -198,10 +196,12 @@ export const mockProject: IProject = {
   projectName: "The Dark Streets",
   type: ProjectType.novel,
   projectListID: 0,
-  status: Status.planing,
+  status: Status.planning,
   description: "",
-  created: "",
-  updated: "",
+  created: "2025-07-29T09:52:08.710677",
+  updated: "2025-07-29T09:52:08.710677",
+  wordGoal: 0,
+  words: 0,
 };
 
 export const mockProjectData: ProjectData = { ...mockProject, sections: mockProjectSections };

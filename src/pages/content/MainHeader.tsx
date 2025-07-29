@@ -4,17 +4,15 @@ import { Progress } from "@/components/ui/progress.tsx";
 import { Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { ProjectData } from "@/types/project.ts";
-import { ESections } from "@/types/sections.ts";
 import { useToast } from "@/hooks/use-toast.ts";
 
 export interface MainHeaderProps {
   currentProject: ProjectData;
-  currentSection: ESections;
 }
 
-const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection }) => {
+const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   const [autoSave, setAutoSave] = useState(true);
-  const { words, wordGoal } = currentProject.sections;
+  const { words, wordGoal } = currentProject;
   const { toast } = useToast();
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject, currentSection 
       <div className="flex justify-between items-center space-x-4">
         <div>
           <h1 className="text-2xl font-bold dark:text-white text-gray-800">
-            {currentSection.toString()}
+            {currentProject.projectName}
           </h1>
           <div className="flex items-center space-x-4 mt-1">
             <Badge variant="outline" className="text-xs dark:border-gray-50">

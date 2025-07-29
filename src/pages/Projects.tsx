@@ -37,7 +37,7 @@ const Projects = () => {
     return <div data-testid="project-loading">Loading...</div>;
   }
   return (
-    <div className="flex h-full">
+    <div className="flex h-full w-full">
       <SidebarProjects projects={projects} handleProject={setCurrentProject} />
       <Project
         project={currentProject}

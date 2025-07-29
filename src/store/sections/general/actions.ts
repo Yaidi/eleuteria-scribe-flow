@@ -19,7 +19,7 @@ export const updateGeneral = createAsyncThunk<IGeneral, requestGeneral>(
       }),
     });
     if (!response.ok) {
-      throw new Error("Error UPDATE CHARACTER");
+      throw new Error("Error update General Info");
     }
     const responseData = (await response.json()).general;
     return responseData as IGeneral;

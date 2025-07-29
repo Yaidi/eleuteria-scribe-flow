@@ -12,7 +12,7 @@ import Templates from "@/pages/welcome/Templates.tsx";
 import MainTemplate from "@/pages/welcome/MainTemplate.tsx";
 
 const Welcome = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.NOVEL);
+  const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.novel);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const [templates, setTemplates] = useState<Template[]>([]);

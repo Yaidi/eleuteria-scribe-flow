@@ -9,7 +9,7 @@ describe("Templates component", () => {
   it("should render all templates and header", () => {
     const props: TemplatesProps = {
       templates: templates,
-      selectedTemplate: ProjectType.NOVEL,
+      selectedTemplate: ProjectType.novel,
       handleTemplateSelect: vi.fn(),
     };
 
@@ -26,17 +26,17 @@ describe("Templates component", () => {
 
     const props: TemplatesProps = {
       templates: templates,
-      selectedTemplate: ProjectType.NOVEL,
+      selectedTemplate: ProjectType.novel,
       handleTemplateSelect: mockHandler,
     };
 
     render(<Templates {...props} />);
 
     await user.click(screen.getByTestId("btn-thesis"));
-    expect(mockHandler).toHaveBeenCalledWith(ProjectType.THESIS);
+    expect(mockHandler).toHaveBeenCalledWith(ProjectType.thesis);
 
     await user.click(screen.getByTestId("btn-novel"));
-    expect(mockHandler).toHaveBeenCalledWith(ProjectType.NOVEL);
+    expect(mockHandler).toHaveBeenCalledWith(ProjectType.novel);
 
     expect(mockHandler).toHaveBeenCalledTimes(2);
   });

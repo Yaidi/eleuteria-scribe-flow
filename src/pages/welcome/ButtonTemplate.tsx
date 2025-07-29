@@ -14,13 +14,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
   selectedTemplate,
 }) => {
   switch (template.type) {
-    case ProjectType.NOVEL:
+    case ProjectType.novel:
       return (
         <button
           data-testid="btn-novel"
-          onClick={() => handleTemplateSelect(ProjectType.NOVEL)}
+          onClick={() => handleTemplateSelect(ProjectType.novel)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.NOVEL
+            selectedTemplate === ProjectType.novel
               ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
@@ -31,13 +31,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
           </div>
         </button>
       );
-    case ProjectType.THESIS:
+    case ProjectType.thesis:
       return (
         <button
           data-testid="btn-thesis"
-          onClick={() => handleTemplateSelect(ProjectType.THESIS)}
+          onClick={() => handleTemplateSelect(ProjectType.thesis)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.THESIS
+            selectedTemplate === ProjectType.thesis
               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
@@ -48,13 +48,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
           </div>
         </button>
       );
-    case ProjectType.POETRY:
+    case ProjectType.poetry:
       return (
         <button
           data-testid="btn-poetry"
-          onClick={() => handleTemplateSelect(ProjectType.POETRY)}
+          onClick={() => handleTemplateSelect(ProjectType.poetry)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.POETRY
+            selectedTemplate === ProjectType.poetry
               ? "border-pink-500 bg-pink-50 dark:bg-pink-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
@@ -65,13 +65,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
           </div>
         </button>
       );
-    case ProjectType.ILLUSTRATED:
+    case ProjectType.illustrated:
       return (
         <button
           data-testid="btn-illustrated"
           onClick={() => handleTemplateSelect(template.type)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.ILLUSTRATED
+            selectedTemplate === ProjectType.illustrated
               ? "border-orange-500 bg-orange-50 dark:bg-orange-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
@@ -82,13 +82,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
           </div>
         </button>
       );
-    case ProjectType.TRILOGY:
+    case ProjectType.trilogy:
       return (
         <button
           data-testid="btn-trilogy"
-          onClick={() => handleTemplateSelect(ProjectType.TRILOGY)}
+          onClick={() => handleTemplateSelect(ProjectType.trilogy)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.TRILOGY
+            selectedTemplate === ProjectType.trilogy
               ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
@@ -101,13 +101,13 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
           </div>
         </button>
       );
-    case ProjectType.NON_FICTION:
+    case ProjectType.non_fiction:
       return (
         <button
           data-testid="btn-non-fiction"
-          onClick={() => handleTemplateSelect(ProjectType.NON_FICTION)}
+          onClick={() => handleTemplateSelect(ProjectType.non_fiction)}
           className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left hover:shadow-md ${
-            selectedTemplate === ProjectType.NON_FICTION
+            selectedTemplate === ProjectType.non_fiction
               ? "border-teal-500 bg-teal-50 dark:bg-teal-900/20"
               : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
           }`}

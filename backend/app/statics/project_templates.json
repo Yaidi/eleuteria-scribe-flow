@@ -1,6 +1,6 @@
 [
   {
-    "type": "Novel",
+    "type": "novel",
     "sections": [
       "General",
       "Characters",
@@ -12,7 +12,7 @@
     "description": "Perfect for long-form fiction with complex characters and world-building"
   },
   {
-    "type": "Thesis",
+    "type": "thesis",
     "sections": [
       "General",
       "Manuscript",
@@ -23,7 +23,7 @@
     "description": "Academic writing with proper citation and reference management"
   },
   {
-    "type": "Poetry",
+    "type": "poetry",
     "sections": [
       "General",
       "Manuscript",
@@ -33,7 +33,7 @@
     "description": "Poetry collections with thematic organization"
   },
   {
-    "type": "Illustrated",
+    "type": "illustrated",
     "sections": [
       "Legal and Credits",
       "General",

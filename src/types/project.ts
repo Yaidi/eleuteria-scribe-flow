@@ -6,6 +6,13 @@ export enum State {
   SUCCESS = "success",
 }
 
+export enum Status {
+  planing = "planing",
+  writing = "writing",
+  editing = "editing",
+  completed = "completed",
+}
+
 export interface ProjectSections {
   wordGoal: number;
   words: number;
@@ -27,14 +34,18 @@ export interface IProject {
   projectListID: number;
   projectName: string;
   type: ProjectType;
+  status: Status;
+  description: string;
+  created: string;
+  updated: string;
 }
 
 export enum ProjectType {
-  NOVEL = "Novel",
-  TRILOGY = "Trilogy",
-  NON_FICTION = "Non-fiction",
-  RESEARCH = "Research",
-  POETRY = "Poetry",
-  THESIS = "Thesis",
-  ILLUSTRATED = "Illustrated",
+  novel = "novel",
+  trilogy = "trilogy",
+  non_fiction = "non-fiction",
+  thesis = "thesis",
+  research = "research",
+  poetry = "poetry",
+  illustrated = "illustrated",
 }

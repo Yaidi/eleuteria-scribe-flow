@@ -1,6 +1,10 @@
+from datetime import datetime
+from http.client import HTTPException
+
 from sqlalchemy import select
 from typing import Sequence
 
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import with_polymorphic
 
@@ -30,9 +34,15 @@ class ProjectRepository:
         await self.session.refresh(new_list)
 
     async def create_project(self, new_project):
-        self.session.add(new_project)
-        await self.session.commit()
-        await self.session.refresh(new_project)
+        try:
+            self.session.add(new_project)
+            await self.session.commit()
+            await self.session.refresh(new_project)
+            return new_project
+        except SQLAlchemyError as e:
+            await self.session.rollback()
+            print(e, "create_project")
+            raise HTTPException(status_code=500, detail="Error al crear el proyecto")
 
     async def get_project(self, project_id: int):
         project_polymorphic = with_polymorphic(
@@ -44,6 +54,7 @@ class ProjectRepository:
         return result.scalar_one_or_none()
 
     async def update_project(self, project_to_update: BaseProject):
+        project_to_update.updated_at = datetime.now()
         await self.session.commit()
         await self.session.refresh(project_to_update)
 

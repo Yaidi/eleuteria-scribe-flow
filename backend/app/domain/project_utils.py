@@ -10,11 +10,10 @@ from backend.app.data.entities.project_entities import (
 from backend.app.schemas.sections.character_schemas import CharacterSchema
 from backend.app.schemas.project_schemas import (
     CreateProjectRequest,
-    UpdateProjectRequest,
     General,
     Sections,
     BaseProjectSchema,
-    MinimalBaseProjectSchema,
+    ProjectResponseList, ProjectType,
 )
 from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 from backend.app.schemas.sections.world_schemas import (
@@ -23,44 +22,42 @@ from backend.app.schemas.sections.world_schemas import (
 )
 
 
-def update_project_type_on_response(project: BaseProject) -> MinimalBaseProjectSchema:
-
+def project_on_response_list(project: BaseProject) -> ProjectResponseList:
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,
         "projectName": project.project_name,
+        "type": ProjectType(project.type),
+        "wordGoal": project.word_goal,
+        "words": project.words,
+        "status": project.status,
+        "description": project.description,
+        "created": project.created_at,
+        "updated": project.updated_at
     }
-    return MinimalBaseProjectSchema(**base_kwargs)
+    return ProjectResponseList(**base_kwargs)
 
 
 def create_project_object_from_request(data: CreateProjectRequest):
-    match data.type.lower():
-        case "novel":
-            return FictionProject(projectListID=data.projectListID, duration=data.type)
-        case "trilogy":
-            return FictionProject(projectListID=data.projectListID, duration=data.type)
-        case "non-fiction":
+    match data.type:
+        case ProjectType.novel:
+            return FictionProject(projectListID=data.projectListID, type=data.type)
+        case ProjectType.non_fiction:
             return NonFictionProject(
                 projectListID=data.projectListID,
             )
-        case "thesis":
-            return ThesisProject(projectListID=data.projectListID, duration=data.type)
-        case "research":
-            return ThesisProject(projectListID=data.projectListID, duration=data.type)
-        case "poetry":
+        case ProjectType.thesis:
+            return ThesisProject(projectListID=data.projectListID, type=ProjectType.thesis)
+        case ProjectType.research:
+            return ThesisProject(projectListID=data.projectListID, type=ProjectType.research)
+        case ProjectType.poetry:
             return PoetryProject(
-                projectListID=data.projectListID,
+                projectListID=data.projectListID, type=ProjectType.poetry
             )
         case _:
             return BaseProject(
-                projectListID=data.projectListID,
+                projectListID=data.projectListID, type=ProjectType.illustrated
             )
-
-
-def update_project(data: UpdateProjectRequest, project_to_update: BaseProject):
-    project_to_update.projectListID = data.projectListID
-    project_to_update.project_name = data.projectName
-
 
 def project_schema_factory(
     project,
@@ -75,7 +72,7 @@ def project_schema_factory(
         subtitle=project.subtitle,
         author=project.author,
         series=getattr(project, "series", None),
-        volume=getattr(project, "volume", None),
+        volume=getattr(project, "volume", 1),
         genre=getattr(project, "genre", None),
         license=getattr(project, "license", None),
         situation=getattr(project, "situation", None),
@@ -121,19 +118,12 @@ def project_schema_factory(
         characters=characters_schema,
         plots=plots_with_steps,
     )
-
-    project_type = project.type.capitalize()
-
-    if project_type == "Fiction" or project_type == "Thesis":
-        project_type = getattr(project, "duration", "")
-    elif project_type == "Base":
-        project_type = "Book"
-
+    print(project.type, "sent type")
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,
         "projectName": project.project_name,
-        "type": project_type,
+        "type": project.type,
         "sections": sections,
     }
     return BaseProjectSchema(**base_kwargs)

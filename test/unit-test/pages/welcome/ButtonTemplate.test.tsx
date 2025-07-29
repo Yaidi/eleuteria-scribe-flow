@@ -15,7 +15,7 @@ describe("ButtonTemplate", () => {
     render(
       <ButtonTemplate
         template={templateThesis}
-        selectedTemplate={ProjectType.THESIS}
+        selectedTemplate={ProjectType.thesis}
         handleTemplateSelect={mockHandleTemplateSelect}
       ></ButtonTemplate>,
     );
@@ -28,7 +28,7 @@ describe("ButtonTemplate", () => {
     render(
       <ButtonTemplate
         template={templateNovel}
-        selectedTemplate={ProjectType.NOVEL}
+        selectedTemplate={ProjectType.novel}
         handleTemplateSelect={mockHandleTemplateSelect}
       ></ButtonTemplate>,
     );
@@ -40,7 +40,7 @@ describe("ButtonTemplate", () => {
     render(
       <ButtonTemplate
         template={templatePoetry}
-        selectedTemplate={ProjectType.POETRY}
+        selectedTemplate={ProjectType.poetry}
         handleTemplateSelect={mockHandleTemplateSelect}
       ></ButtonTemplate>,
     );
@@ -49,7 +49,7 @@ describe("ButtonTemplate", () => {
     render(
       <ButtonTemplate
         template={templateIllustraded}
-        selectedTemplate={ProjectType.ILLUSTRATED}
+        selectedTemplate={ProjectType.illustrated}
         handleTemplateSelect={mockHandleTemplateSelect}
       ></ButtonTemplate>,
     );

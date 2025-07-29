@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,14 +15,14 @@ from backend.app.domain.plot_utils import plot_list_with_steps_factory
 from backend.app.domain.project_utils import (
     create_project_object_from_request,
     project_schema_factory,
-    update_project_type_on_response,
+    project_on_response_list,
 )
 
 from backend.app.schemas.project_schemas import (
     BaseProjectSchema,
     CreateProjectRequest,
-    UpdateProjectRequest,
     General,
+    ProjectStatus,
 )
 from backend.app.schemas.sections.words_stats_schemas import WordStatsUpdate
 from backend.app.statics.load_static import load_static_content
@@ -37,7 +39,7 @@ async def get_project_list(session: AsyncSession = Depends(get_session)):
 
     projects_list_response = []
     for project in projects_list:
-        projects_list_response.append(update_project_type_on_response(project))
+        projects_list_response.append(project_on_response_list(project))
 
     if len(projects_list) == 0:
         await repository.create_project_list()
@@ -53,6 +55,9 @@ async def create_project(
 ):
     repository = ProjectRepository(session)
     new_project = create_project_object_from_request(data)
+    new_project.created_at = datetime.now()
+    new_project.updated_at = datetime.now()
+    new_project.status = ProjectStatus.planning
 
     await repository.create_project(new_project)
     return project_schema_factory(new_project)
@@ -97,25 +102,6 @@ async def get_project(id: int, session: AsyncSession = Depends(get_session)):
         characters=character_list,
         plots_with_steps=plots_with_steps,
     )
-
-
-@projects_router.post("/updateProject", response_model_exclude_none=True)
-async def update_project(
-    data: UpdateProjectRequest, session: AsyncSession = Depends(get_session)
-):
-    repository = ProjectRepository(session)
-
-    project_to_update = await repository.get_project(data.id)
-
-    if not project_to_update:
-        raise HTTPException(status_code=404, detail="Project not found")
-
-    if project_to_update:
-        project_to_update.projectListID = data.projectListID
-        project_to_update.project_name = data.projectName
-        await repository.update_project(project_to_update)
-
-    return {"message": "Project info updated successfully"}
 
 
 @projects_router.get("/project/templates")
@@ -168,6 +154,8 @@ async def update_general_info(
 
     for field, value in data.model_dump(exclude_none=True).items():
         setattr(project, field, value)
+
+    project.project_name = data.title
 
     await repository.update_project(project)
     return {

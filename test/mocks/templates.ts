@@ -3,7 +3,7 @@ import { ProjectType } from "@/types/project.ts";
 import { ESections } from "@/types/sections.ts";
 
 export const templateNovel: Template = {
-  type: ProjectType.NOVEL,
+  type: ProjectType.novel,
   sections: [
     ESections.general,
     ESections.characters,
@@ -16,19 +16,19 @@ export const templateNovel: Template = {
 };
 
 export const templatePoetry: Template = {
-  type: ProjectType.POETRY,
+  type: ProjectType.poetry,
   sections: [ESections.general, ESections.manuscript, ESections.references],
   description: "Poetry collections with thematic organization",
 };
 
 export const templateThesis: Template = {
-  type: ProjectType.THESIS,
+  type: ProjectType.thesis,
   sections: [ESections.general, ESections.manuscript, ESections.bibliography, ESections.resources],
   description: "Academic writing with proper citation and reference management",
 };
 
 export const templateIllustraded: Template = {
-  type: ProjectType.ILLUSTRATED,
+  type: ProjectType.illustrated,
   sections: [ESections.general, ESections.manuscript, ESections.illustrations, ESections.resources],
   description: "Picture books and illustrated works with visual elements",
 };

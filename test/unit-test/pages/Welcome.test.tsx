@@ -74,7 +74,7 @@ describe("Welcome Page", () => {
       await vi.waitFor(() => {
         expect(projectsSlice.addProjectFetch).toHaveBeenCalledWith({
           projectListID: 1,
-          type: ProjectType.NOVEL,
+          type: ProjectType.novel,
         });
       });
       expect(mockNavigate).toHaveBeenCalledWith("/main");
@@ -100,7 +100,7 @@ describe("Welcome Page", () => {
       await vi.waitFor(() => {
         expect(projectsSlice.addProjectFetch).toHaveBeenCalledWith({
           projectListID: 1,
-          type: ProjectType.NOVEL,
+          type: ProjectType.novel,
         });
       });
       expect(mockNavigate).not.toHaveBeenCalled();

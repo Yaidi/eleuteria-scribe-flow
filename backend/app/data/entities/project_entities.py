@@ -31,7 +31,7 @@ class BaseProject(Base):
     title = Column(String)
     subtitle = Column(String)
     author = Column(String)
-    type = Column(String, nullable=False)# Needed for polymorphism
+    type = Column(String, nullable=False)  # Needed for polymorphism
     status = Column(String, nullable=False)
     description = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

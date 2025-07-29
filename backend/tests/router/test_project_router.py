@@ -306,6 +306,7 @@ class TestGetProject:
             plots_with_steps=mock_plots_with_steps,
         )
 
+
 class TestGetProjectTemplates:
     @patch("backend.app.router.project_router.load_static_content")
     def test_get_project_templates(self, mock_load_static, client):

@@ -21,7 +21,8 @@ from backend.app.domain.project_utils import (
 from backend.app.schemas.project_schemas import (
     BaseProjectSchema,
     CreateProjectRequest,
-    General, ProjectStatus,
+    General,
+    ProjectStatus,
 )
 from backend.app.schemas.sections.words_stats_schemas import WordStatsUpdate
 from backend.app.statics.load_static import load_static_content
@@ -101,6 +102,7 @@ async def get_project(id: int, session: AsyncSession = Depends(get_session)):
         characters=character_list,
         plots_with_steps=plots_with_steps,
     )
+
 
 @projects_router.get("/project/templates")
 async def get_project_templates():

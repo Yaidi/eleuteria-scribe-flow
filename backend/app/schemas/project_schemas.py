@@ -25,6 +25,7 @@ class General(BaseModel):
         "exclude_none": False  # 👈 Esto hace que `None` no se incluya en el JSON
     }
 
+
 class Sections(BaseModel):
     wordGoal: Optional[int] = 0
     words: Optional[int] = 0
@@ -37,10 +38,12 @@ class Sections(BaseModel):
         "exclude_none": True  # 👈 Esto hace que `None` no se incluya en el JSON
     }
 
+
 class ProjectStatus(str, Enum):
     planning = "planning"
     in_progress = "in_progress"
     done = "done"
+
 
 class ProjectType(str, Enum):
     novel = "novel"
@@ -50,6 +53,7 @@ class ProjectType(str, Enum):
     research = "research"
     poetry = "poetry"
     illustrated = "illustrated"
+
 
 # ───── Proyecto base ─────
 class BaseProjectSchema(BaseModel):
@@ -86,6 +90,7 @@ class ProjectListResponse(BaseModel):
 class CreateProjectRequest(BaseModel):
     type: ProjectType
     projectListID: int
+
 
 # Para hacer update de proyecto
 class UpdateProjectRequest(BaseModel):

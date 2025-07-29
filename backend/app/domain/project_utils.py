@@ -13,7 +13,8 @@ from backend.app.schemas.project_schemas import (
     General,
     Sections,
     BaseProjectSchema,
-    ProjectResponseList, ProjectType,
+    ProjectResponseList,
+    ProjectType,
 )
 from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 from backend.app.schemas.sections.world_schemas import (
@@ -33,7 +34,7 @@ def project_on_response_list(project: BaseProject) -> ProjectResponseList:
         "status": project.status,
         "description": project.description,
         "created": project.created_at,
-        "updated": project.updated_at
+        "updated": project.updated_at,
     }
     return ProjectResponseList(**base_kwargs)
 
@@ -47,9 +48,13 @@ def create_project_object_from_request(data: CreateProjectRequest):
                 projectListID=data.projectListID,
             )
         case ProjectType.thesis:
-            return ThesisProject(projectListID=data.projectListID, type=ProjectType.thesis)
+            return ThesisProject(
+                projectListID=data.projectListID, type=ProjectType.thesis
+            )
         case ProjectType.research:
-            return ThesisProject(projectListID=data.projectListID, type=ProjectType.research)
+            return ThesisProject(
+                projectListID=data.projectListID, type=ProjectType.research
+            )
         case ProjectType.poetry:
             return PoetryProject(
                 projectListID=data.projectListID, type=ProjectType.poetry
@@ -58,6 +63,7 @@ def create_project_object_from_request(data: CreateProjectRequest):
             return BaseProject(
                 projectListID=data.projectListID, type=ProjectType.illustrated
             )
+
 
 def project_schema_factory(
     project,
@@ -118,7 +124,6 @@ def project_schema_factory(
         characters=characters_schema,
         plots=plots_with_steps,
     )
-    print(project.type, "sent type")
     base_kwargs = {
         "id": project.id,
         "projectListID": project.projectListID,

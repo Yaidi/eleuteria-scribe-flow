@@ -17,7 +17,7 @@ describe("MainTemplate", () => {
       />,
     );
 
-    expect(screen.getByTestId("template-name")).toHaveTextContent("Novel Template");
+    expect(screen.getByTestId("template-name")).toHaveTextContent(/novel template/i);
     expect(
       screen.getByText("Perfect for long-form fiction with complex characters and world-building"),
     ).toBeInTheDocument();

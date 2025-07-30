@@ -68,7 +68,7 @@ export const mockCharacters: ICharacter[] = [
 // Mock data for IPlot
 export const mockPlots: IPlot[] = [
   {
-    id: "plot-1",
+    id: 1,
     title: "The Main Mystery",
     description: "A series of unexplained disappearances in the city.",
     plotStepsResume: "Chapters 1-5",
@@ -80,7 +80,7 @@ export const mockPlots: IPlot[] = [
     importance: PriorityType.MAIN,
   },
   {
-    id: "plot-2",
+    id: 2,
     title: "The Subplot",
     description: "John's personal journey to overcome his past trauma.",
     plotStepsResume: "Chapters 6-9",
@@ -92,7 +92,7 @@ export const mockPlots: IPlot[] = [
     importance: PriorityType.SECONDARY,
   },
   {
-    id: "plot-3",
+    id: 3,
     title: "The Twist",
     description: "The revelation that Robert is behind the disappearances.",
     plotStepsResume: "Chapter 10",

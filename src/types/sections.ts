@@ -23,7 +23,7 @@ export enum PriorityType {
 }
 
 export interface IPlot {
-  id: string;
+  id: number;
   projectID: number;
   title: string;
   description: string;
@@ -36,7 +36,7 @@ export interface IPlot {
 }
 
 export interface IPlotSteps {
-  id: string;
+  id: number;
   name: string;
   nextStepID: number;
   previousStepID: number;

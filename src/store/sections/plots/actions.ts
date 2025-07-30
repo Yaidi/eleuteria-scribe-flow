@@ -1,8 +1,63 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IPlot } from "@/types/sections.ts";
+import { host } from "@/https/fetch.ts";
 
-export const addPlot = createAction<IPlot>("[Plot] Add Product to cart");
+export interface requestPlot {
+  plot: Partial<IPlot>;
+}
+export interface responseDelete {
+  id: number;
+}
 
-export const updatePlot = createAction<Partial<IPlot>>("[Plot] Add Product to cart success");
+export const updatePlot = createAsyncThunk<IPlot, requestPlot>(
+  "[Plot] Update Plot",
+  async ({ plot }) => {
+    const response = await fetch(`${host}/plot/${plot.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...plot,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Error update plot");
+    }
+    const responseData = await response.json();
+    return responseData as IPlot;
+  },
+);
 
-export const removePlot = createAction<string>("[Plot] Remove Product to cart");
+export const removePlot = createAsyncThunk<responseDelete, number>(
+  "[Plot] Remove Plot",
+  async (id) => {
+    const response = await fetch(`${host}/plot/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error remove plot");
+    }
+    return (await response.json()) as responseDelete;
+  },
+);
+
+export const addPlot = createAsyncThunk<IPlot, number>("[Plot] Add Plot", async (projectId) => {
+  const response = await fetch(`${host}/plot/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      projectID: projectId,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error("Error update plot");
+  }
+  const responseData = await response.json();
+  return responseData as IPlot;
+});

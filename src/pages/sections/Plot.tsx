@@ -1,40 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { IPlot, PriorityType } from "@/types/sections.ts";
+import { IPlot } from "@/types/sections.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { addPlot, removePlot, updatePlot } from "@/store";
-import { useSections } from "@/hooks/useSections.ts";
+import { useProjectId, useSections } from "@/hooks/useSections.ts";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
+import { AppDispatch } from "@/store/config.ts";
 
 const Plot = () => {
   const { plots } = useSections().plots;
-  const dispatch = useDispatch();
+  const projectId = useProjectId();
+  const dispatch = useDispatch<AppDispatch>();
 
   const add = () => {
-    const newPlot: IPlot = {
-      id: Date.now().toString(),
-      title: "",
-      description: "",
-      plotStepsResume: "",
-      characters: [],
-      projectID: 0,
-      plotSteps: [],
-      result: "",
-      chapterReferences: [],
-      importance: PriorityType.MAIN,
-    };
-    dispatch(addPlot(newPlot));
+    dispatch(addPlot(projectId));
   };
 
   const update = (plot: Partial<IPlot>) => {
-    dispatch(updatePlot(plot));
+    dispatch(updatePlot({ plot: plot }));
   };
 
-  const remove = (id: string) => {
+  const remove = (id: number) => {
     dispatch(removePlot(id));
   };
   return (
@@ -91,12 +81,13 @@ const Plot = () => {
                     placeholder="Describe what happens in this plot..."
                   />
                 </div>
-                <div>
+                {/*
+                 <div>
                   <Label>Manuscript Reference</Label>
                   <Input
                     data-testid={`input-plot-reference-${plot.id}`}
                     name="chapterReference"
-                    value={plot.chapterReferences.join(", ")}
+                    value={plot.chapterReferences?.join(", ")}
                     onChange={(e) =>
                       update({
                         id: plot.id,
@@ -106,6 +97,7 @@ const Plot = () => {
                     placeholder="Chapter/page reference where this plot occurs"
                   />
                 </div>
+                   */}
                 <div>
                   <Label>Characters Involved</Label>
                   <Select name="characters" value="0" onValueChange={() => {}} disabled={true}>

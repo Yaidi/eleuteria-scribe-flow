@@ -27,8 +27,6 @@ class General(BaseModel):
 
 
 class Sections(BaseModel):
-    wordGoal: Optional[int] = 0
-    words: Optional[int] = 0
     general: Optional[General]
     world: Optional[WorldWithElementsSchema] = None
     characters: Optional[List[CharacterSchema]] = None
@@ -54,13 +52,16 @@ class ProjectType(str, Enum):
     poetry = "poetry"
     illustrated = "illustrated"
 
-
 # ───── Proyecto base ─────
 class BaseProjectSchema(BaseModel):
     id: int
     projectListID: int
     projectName: Optional[str] = ""
     type: ProjectType
+    wordGoal: Optional[int] = 0
+    words: Optional[int] = 0
+    status: ProjectStatus = ProjectStatus.planning
+    description: Optional[str] = ""
     sections: Optional[Sections] = None
 
     model_config = ConfigDict(from_attributes=True)

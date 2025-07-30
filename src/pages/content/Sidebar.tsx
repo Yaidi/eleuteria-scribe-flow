@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
   switch (activeSection) {
     case ESections.characters:
       return (
-        <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r rounded-t-sm border-slate-200 dark:border-slate-700 p-4">
+        <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r border-t rounded-br-md border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3
               data-testid="character-section-title"
@@ -102,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
       );
     case ESections.manuscript:
       return (
-        <div className="space-y-2">
+        <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r border-t rounded-br-md border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-sm text-gray-700">Structure</h3>
             <Button size="sm" variant="ghost" className="h-6 w-6 p-0">

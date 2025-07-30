@@ -32,9 +32,10 @@ const MainContent = () => {
 
   if (currentProject != undefined)
     return (
-      <div className={`min-h-screen flex ${darkMode ? "dark" : ""}`}>
-        <div className="">
-          <header className="w-full flex items-center justify-start p-6">
+      <div className={`h-screen flex ${darkMode ? "dark" : ""}`}>
+        {/* Columna izquierda */}
+        <div className="flex flex-col h-full">
+          <header className="w-full flex items-center justify-start px-6 pb-8 pt-8">
             <Button
               data-testid="btn-back"
               variant="ghost"
@@ -51,15 +52,19 @@ const MainContent = () => {
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
           </header>
-          <section className="flex h-full w-full">
-            <nav className="min-w-40 max-w-64 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
-              <NavbarSections></NavbarSections>
+          <section className="flex flex-1 w-full overflow-hidden">
+            <nav className="min-w-40 max-w-64 bg-slate-50 dark:bg-slate-900 border-r border-t border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-4 overflow-auto">
+              <NavbarSections />
             </nav>
-            <Sidebar activeSection={currentSection}></Sidebar>
+
+            {/* Sidebar */}
+            <Sidebar activeSection={currentSection} />
           </section>
         </div>
+
+        {/* Contenido principal */}
         <main className="flex flex-col bg-white dark:bg-slate-800 p-8 overflow-auto w-full">
-          <MainHeader currentProject={currentProject}></MainHeader>
+          <MainHeader currentProject={currentProject} />
           {renderCurrentSection(currentSection)}
         </main>
       </div>

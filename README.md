@@ -96,16 +96,13 @@ And then:
 
 1—Install Poetry dependency manager running the following commands in Terminal:
 
-- MacOS, Linux, WSL: `curl -sSL https://install.python-poetry.org | python3 -`
-
-- Windows PowerShell: `(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -`
+- MacOS, Linux, WSL, Bash: `curl -sSL https://install.python-poetry.org | python3 -`
 
   > If you have installed Python through the Microsoft Store, replace "py" with "python" in the command above.
 
 - Export Poetry to your path:
   - Terminal Zsh: `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc`
   - Terminal Bash: `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc`
-  - Windows PowerShell: `Add-Content -Path $PROFILE -Value ' $env:Path = "$env:USERPROFILE\.poetry\bin;" + $env:Path'` then: `. $PROFILE`
 
 2—After Poetry installation:
 

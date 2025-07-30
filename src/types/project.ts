@@ -7,15 +7,13 @@ export enum State {
 }
 
 export enum Status {
-  planing = "planing",
+  planning = "planning",
   writing = "writing",
   editing = "editing",
   completed = "completed",
 }
 
 export interface ProjectSections {
-  wordGoal: number;
-  words: number;
   general: IGeneral;
   world: IWorld;
   characters: ICharacter[];
@@ -38,6 +36,8 @@ export interface IProject {
   description: string;
   created: string;
   updated: string;
+  wordGoal: number;
+  words: number;
 }
 
 export enum ProjectType {

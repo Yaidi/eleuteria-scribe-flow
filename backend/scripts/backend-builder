@@ -90,7 +90,7 @@ case "$1" in
 
     if [ ! -f "$PYINSTALLER" ]; then
       echo "❌ pyinstaller not found at $PYINSTALLER. Did you run 'backend-builder install'?"
-      echo "💡 Try running: $0 install"
+      echo "💡 Try running: $0 install or npm run build:backend:install"
       exit 1
     fi
 

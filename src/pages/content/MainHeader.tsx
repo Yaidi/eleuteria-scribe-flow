@@ -41,7 +41,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   };
 
   return (
-    <header className="px-6 py-4 border-b border-gray-200  backdrop-blur-sm flex items-center justify-between">
+    <header className="px-6 pb-4 backdrop-blur-sm flex items-center justify-between">
       <div className="flex justify-between items-center space-x-4">
         <div>
           <h1 className="text-2xl font-bold dark:text-white text-gray-800">

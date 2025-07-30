@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+set -e
+
+# Detectar ruta del script compatible con bash y zsh
+if [ -n "$BASH_VERSION" ]; then
+  SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+elif [ -n "$ZSH_VERSION" ]; then
+  SCRIPT_DIR="$( cd "$( dirname "${(%):-%x}" )" && pwd )"
+else
+  echo "❌ Not compatible Shell. Please use bash or zsh."
+  exit 1
+fi
+
+# Función para mostrar ayuda
+show_help() {
+    cat << EOF
+🚀 Eleuteria Backend Builder
+
+USAGE:
+    $0 [COMMAND]
+
+COMMANDS:
+    install        Install Python dependencies using Poetry
+                   - Sets up virtual environment
+                   - Installs all dependencies from pyproject.toml
+                   - Installs PyInstaller for building
+
+    build          Build the backend executable using PyInstaller
+                   - Creates a standalone binary from Python code
+                   - Output: backend/dist/eleuteria-backend
+                   - Requires dependencies to be installed first
+
+    clean-venv     Remove the Python virtual environment
+                   - Deletes the .venv directory completely
+                   - Use this to reset your Python environment
+
+    clean-build    Remove build artifacts and cache files
+                   - Deletes build/, backend/dist/, and __pycache__ directories
+                   - Cleans up PyInstaller temporary files
+
+    rebuild        Clean build files and rebuild the backend
+                   - Combines clean-build + build commands
+                   - Recommended for fresh builds
+
+    --help, -h     Show this help message
+
+EXAMPLES:
+    $0 install              # Set up the development environment
+    $0 build                # Build the backend executable
+    $0 rebuild              # Clean and rebuild everything
+    $0 clean-venv           # Reset virtual environment
+
+REQUIREMENTS:
+    - Python 3.13+
+    - Poetry (for dependency management)
+    - PyInstaller (installed via Poetry)
+
+NOTES:
+    - Run 'install' first before any build commands
+    - The built executable will be at: backend/dist/eleuteria-backend
+    - Compatible with bash and zsh shells
+    - Works on macOS, Linux, and Windows
+
+For more information, see the project README.md
+EOF
+}
+
+case "$1" in
+  install)
+    echo "📦 Installing Python dependencies..."
+    "$SCRIPT_DIR/dependencies-installer"
+    ;;
+
+  clean-venv)
+    echo "🧹 Cleaning virtual environment..."
+    cd ..
+    rm -rf .venv
+    echo "✅ Virtual environment deleted."
+    ;;
+
+  build)
+    echo "🔨 Building backend executable..."
+    cd ..
+
+    if [[ "$OS" == "Windows_NT" ]]; then
+      PYINSTALLER=".venv/Scripts/pyinstaller.exe"
+    else
+      PYINSTALLER=".venv/bin/pyinstaller"
+    fi
+
+    if [ ! -f "$PYINSTALLER" ]; then
+      echo "❌ pyinstaller not found at $PYINSTALLER. Did you run 'backend-builder install'?"
+      echo "💡 Try running: $0 install"
+      exit 1
+    fi
+
+    echo "📝 Using PyInstaller spec: eleuteria-backend.spec"
+    "$PYINSTALLER" --distpath dist eleuteria-backend.spec
+    echo "✅ Backend build completed successfully!"
+    echo "📍 Binary location: backend/dist/eleuteria-backend"
+    ;;
+
+  clean-build)
+    echo "🧹 Cleaning build artifacts..."
+    cd ..
+    rm -rf build backend/dist backend/__pycache__
+    echo "✅ Build files deleted."
+    ;;
+
+  rebuild)
+    echo "🔄 Rebuilding backend (clean + build)..."
+    "$0" clean-build
+    "$0" build
+    ;;
+
+  --help|-h|help)
+    show_help
+    ;;
+
+  "")
+    echo "❌ No command provided."
+    echo ""
+    show_help
+    exit 1
+    ;;
+
+  *)
+    echo "❌ Unknown command: $1"
+    echo ""
+    echo "Available commands: install, clean-venv, build, clean-build, rebuild, --help"
+    echo ""
+    echo "Run '$0 --help' for detailed usage information."
+    exit 1
+    ;;
+esac

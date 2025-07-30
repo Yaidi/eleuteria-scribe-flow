@@ -35,7 +35,7 @@ if ! command -v poetry &>/dev/null; then
 fi
 
 # === Usar Poetry ===
-echo "✅ Configurando Poetry..."
+echo "✅ Configuring Poetry..."
 poetry config virtualenvs.in-project true
 
 echo "📂 Moving to backend Directory..."
@@ -46,12 +46,10 @@ poetry install
 
 echo "✅ Dependencies installed."
 echo ""
-echo "👉 To activate python virtual environment:"
+echo "👉 To activate python virtual environment run this on your terminal:"
 command poetry env activate
 echo ""
 echo "If you're on WINDOWS run this:"
 unix_path=$(poetry env info --path)
 windows_path=$(echo "$unix_path" | tr '\\' '/')
 echo "source $windows_path/Scripts/activate"
-
-# source C:/Users/theBeast/Documents/Github/eleuteria-scribe-flow/backend/.venv/Scripts/activate

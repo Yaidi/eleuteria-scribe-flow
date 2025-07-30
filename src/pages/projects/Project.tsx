@@ -23,7 +23,6 @@ export interface ProjectProps {
 const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject }) => {
   if (!project) return null;
   const progressPercentage = Math.round((project.words / project.wordGoal) * 100);
-  console.log(progressPercentage);
   return (
     <div data-testid="project" className="flex flex-col p-6 space-y-6 w-3/4">
       <header className="flex flex-col">

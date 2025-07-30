@@ -52,6 +52,7 @@ class ProjectType(str, Enum):
     poetry = "poetry"
     illustrated = "illustrated"
 
+
 # ───── Proyecto base ─────
 class BaseProjectSchema(BaseModel):
     id: int

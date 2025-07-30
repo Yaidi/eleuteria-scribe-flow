@@ -1,3 +1,4 @@
+
 name: backend-unit-tests
 on:
   push:
@@ -7,6 +8,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +23,7 @@ jobs:
           node-version: 24.3.0
 
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -29,12 +35,24 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Install Python dependencies and run tests
+      - name: Install Python dependencies
         run: |
           cd backend
           poetry config virtualenvs.in-project true
           poetry install
+
+      - name: Run backend tests with coverage
+        run: |
+          cd backend
           poetry run coverage run -m pytest
+          poetry run coverage xml
           poetry run coverage report
         env:
           CI: true
+
+      - name: Coverage comment
+        uses: py-cov-action/python-coverage-comment-action@v3
+        if: github.event_name == 'pull_request'
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          COVERAGE_PATH: backend/.coverage

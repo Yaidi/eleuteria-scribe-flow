@@ -19,14 +19,18 @@ Installation steps:
 ```sh
 # Step 1: Install fnm (Fast Node Manager) to manage Node.js versions.
 brew install fnm
+
 # Step 2: install and use the node js version with this
 fnm use
 
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run start
+# Step 4: Install the necessary dependencies to build our backend.
+npm run build:backend:install
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
+npm run dev
 ```
 
 **Edit a file directly in GitHub**
@@ -80,8 +84,11 @@ This project is built with:
 
 Run our installation script:
 
-- on linux/macos: `./backend/scripts/dependencies-installer.sh`
-- on windows: `./backend/scripts/dependencies-installer.ps1`
+- `npm run build:backend:install`
+
+And then:
+
+- `npm run dev`
 
 > Backend will be running on: http://localhost:8000. Front and Back will start together.
 
@@ -110,9 +117,9 @@ Run our installation script:
 
 - `poetry install`
 
-4—you can run: `npm run dev-backend`.
+4—you can run: `npm run dev`.
 
-5—Backend will be running on: http://localhost:8000
+> Backend will be running on: http://localhost:8000. Front and Back will start together.
 
 ## Backend API Documentation
 

@@ -45,4 +45,8 @@ describe("renderCurrentSection", () => {
     render(renderCurrentSection("somethingElse" as ESections));
     expect(screen.getByText("Manuscript Section - somethingElse")).toBeInTheDocument();
   });
+  test("Should render <Settings /> when currentSection is settings", () => {
+    render(renderCurrentSection(ESections.settings));
+    expect(screen.getByTestId("settings-page")).toBeInTheDocument();
+  });
 });

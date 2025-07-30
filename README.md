@@ -118,4 +118,18 @@ Run our installation script:
 
 APIs: http://localhost:8000/redoc
 
+## Manuscript sync use a different Backend
+
+This part of the backend is made in Rust, so you have to install `Cargo` following the steps on this URL:
+
+https://doc.rust-lang.org/cargo/getting-started/installation.html
+
+Once done, you can do this:
+
+- `cd backend-rust`
+- `cargo run`
+- WebSocket will be running at: `ws://localhost:9001/manuscript`
+
+## Backend Testing
+
 run tests with test coverage: `npm run test-backend`

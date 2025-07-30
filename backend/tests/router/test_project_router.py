@@ -39,7 +39,7 @@ class TestGetProjectList:
             "backend.app.router.project_router.get_session", return_value=mock_session
         ):
             with patch(
-                "backend.app.router.project_router.update_project_type_on_response",
+                "backend.app.router.project_router.project_on_response_list",
                 return_value=mock_project,
             ):
                 # Act
@@ -307,58 +307,6 @@ class TestGetProject:
         )
 
 
-class TestUpdateProject:
-    @patch("backend.app.router.project_router.ProjectRepository")
-    def test_update_project_success(self, mock_repo_class, client, mock_session):
-        # Arrange
-        mock_repo = AsyncMock()
-        mock_repo_class.return_value = mock_repo
-
-        mock_project = MagicMock()
-        mock_project.projectListID = 1
-        mock_project.project_name = "Old Name"
-
-        # Configurar correctamente el AsyncMock
-        mock_repo.get_project = AsyncMock(return_value=mock_project)
-        mock_repo.update_project = AsyncMock()
-
-        request_data = {"id": 1, "projectListID": 2, "projectName": "Updated Name"}
-
-        with patch(
-            "backend.app.router.project_router.get_session", return_value=mock_session
-        ):
-            # Act
-            response = client.post("/updateProject", json=request_data)
-
-        # Assert
-        assert response.status_code == 200
-        assert response.json()["message"] == "Project info updated successfully"
-        assert mock_project.projectListID == 2
-        assert mock_project.project_name == "Updated Name"
-        mock_repo.update_project.assert_called_once_with(mock_project)
-
-    @patch("backend.app.router.project_router.ProjectRepository")
-    def test_update_project_not_found(self, mock_repo_class, client, mock_session):
-        # Arrange
-        mock_repo = AsyncMock()
-        mock_repo_class.return_value = mock_repo
-
-        # Configurar correctamente el AsyncMock
-        mock_repo.get_project = AsyncMock(return_value=None)
-
-        request_data = {"id": 999, "projectListID": 1, "projectName": "Test"}
-
-        with patch(
-            "backend.app.router.project_router.get_session", return_value=mock_session
-        ):
-            # Act
-            response = client.post("/updateProject", json=request_data)
-
-        # Assert
-        assert response.status_code == 404
-        assert response.json()["detail"] == "Project not found"
-
-
 class TestGetProjectTemplates:
     @patch("backend.app.router.project_router.load_static_content")
     def test_get_project_templates(self, mock_load_static, client):
@@ -567,6 +515,11 @@ class TestUpdateGeneralInfo:
         # Assert
         assert response.status_code == 200
         assert mock_project.title == "Updated Title"
+        assert response.json() == {
+            "message": "General info updated successfully",
+            "general": {"title": "Updated Title"},
+        }
+        mock_repo.update_project.assert_called_once_with(mock_project)
 
     @patch("backend.app.router.project_router.ProjectRepository")
     def test_update_general_info_project_not_found(

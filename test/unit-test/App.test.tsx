@@ -10,11 +10,11 @@ vi.mock("@/https/fetch.ts", () => ({
 }));
 
 describe("App", () => {
-  test("Show Welcome Page", () => {
+  test("Show Projects Page", () => {
     window.history.pushState({}, "", "/");
     renderWithProviders(<App Router={BrowserRouter}></App>);
     expect(window.location.pathname).toBe("/");
-    expect(screen.getByRole("heading", { name: /Eleuteria/i })).toBeTruthy();
+    expect(screen.getByTestId("project-loading")).toBeTruthy();
   });
 
   test("Show Not Found Page when path is invalid", async () => {
@@ -30,6 +30,6 @@ describe("App", () => {
     window.location.hash = "#/";
     renderWithProviders(<App Router={HashRouter}></App>);
     expect(window.location.hash).toBe("#/");
-    expect(screen.getByRole("heading", { name: /Eleuteria/i })).toBeTruthy();
+    expect(screen.getByTestId("project-loading")).toBeTruthy();
   });
 });

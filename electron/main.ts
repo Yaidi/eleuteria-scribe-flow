@@ -111,7 +111,7 @@ function startBackend() {
   });
 
   backendProcess.stderr?.on("data", (data) => {
-    console.error(`[backend stderr]: ${data.toString()}`);
+    console.log(`[backend stderr]: ${data.toString()}`);
   });
 }
 

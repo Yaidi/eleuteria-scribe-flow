@@ -13,6 +13,14 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
+
 beforeAll(() => {
   Element.prototype.hasPointerCapture = vi.fn();
   Element.prototype.setPointerCapture = vi.fn();

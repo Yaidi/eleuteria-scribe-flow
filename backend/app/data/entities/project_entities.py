@@ -1,6 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.orm.decl_api import DeclarativeMeta
+from sqlalchemy.sql import func
+
+from backend.app.schemas.project_schemas import ProjectType
 
 Base = declarative_base()  # type: DeclarativeMeta
 
@@ -29,6 +32,10 @@ class BaseProject(Base):
     subtitle = Column(String)
     author = Column(String)
     type = Column(String, nullable=False)  # Needed for polymorphism
+    status = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     project_list = relationship(
         "ProjectList", back_populates="projects", passive_deletes=True
@@ -54,7 +61,7 @@ class FictionProject(BaseProject):
     resume_paragraph = Column(String)
     resume_page = Column(String)
 
-    __mapper_args__ = {"polymorphic_identity": "fiction"}
+    __mapper_args__ = {"polymorphic_identity": ProjectType.novel}
 
 
 # ───── NonFictionProject ─────
@@ -68,7 +75,7 @@ class NonFictionProject(BaseProject):
     volume = Column(Integer)
     license = Column(String)
 
-    __mapper_args__ = {"polymorphic_identity": "non-fiction"}
+    __mapper_args__ = {"polymorphic_identity": ProjectType.thesis}
 
 
 # ───── Thesis ─────
@@ -80,7 +87,7 @@ class ThesisProject(BaseProject):
     )
     duration = Column(String)  # Indicar si es Articulo/Research o Tesis
 
-    __mapper_args__ = {"polymorphic_identity": "thesis"}
+    __mapper_args__ = {"polymorphic_identity": ProjectType.thesis}
 
 
 # ───── Poetry ─────
@@ -91,4 +98,4 @@ class PoetryProject(BaseProject):
         Integer, ForeignKey("base_projects.id", ondelete="CASCADE"), primary_key=True
     )
 
-    __mapper_args__ = {"polymorphic_identity": "poetry"}
+    __mapper_args__ = {"polymorphic_identity": ProjectType.poetry}

@@ -3,6 +3,8 @@ import { GenreType, IGeneral } from "@/types/sections.ts";
 import { generalReducer } from "@/store/sections/general/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { updateGeneral } from "@/store";
+import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
+import { mockProjectData } from "../../../mocks";
 
 describe("GeneralReducer", () => {
   const initialState: IGeneral = {
@@ -26,7 +28,7 @@ describe("GeneralReducer", () => {
   });
   test("should handle update general", () => {
     const action: UnknownAction = {
-      type: updateGeneral.type,
+      type: updateGeneral.fulfilled.type,
       payload: {
         title: "Updated Title",
       },
@@ -35,6 +37,29 @@ describe("GeneralReducer", () => {
     expect(result).toEqual({
       ...initialState,
       title: "Updated Title",
+    });
+  });
+  test("should field info", () => {
+    const action: UnknownAction = {
+      type: getProjectFetch.fulfilled.type,
+      payload: mockProjectData,
+    };
+    const result = generalReducer(initialState, action);
+    expect(result).toEqual({
+      ...initialState,
+      ...mockProjectData.sections.general,
+    });
+  });
+
+  test("should field info", () => {
+    const action: UnknownAction = {
+      type: addProjectFetch.fulfilled.type,
+      payload: mockProjectData,
+    };
+    const result = generalReducer(initialState, action);
+    expect(result).toEqual({
+      ...initialState,
+      ...mockProjectData.sections.general,
     });
   });
 });

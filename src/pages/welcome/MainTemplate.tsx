@@ -69,7 +69,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
       )}
 
       <>
-        {selectedTemplate === ProjectType.NON_FICTION && (
+        {selectedTemplate === ProjectType.non_fiction && (
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
               <CardTitle>Create Custom Template</CardTitle>
@@ -104,7 +104,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
                   />
                 </div>
                 <Button
-                  onClick={() => void handleCreateProject(ProjectType.NON_FICTION)}
+                  onClick={() => void handleCreateProject(ProjectType.non_fiction)}
                   className="w-full"
                 >
                   Create Template
@@ -114,7 +114,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
           </Card>
         )}
 
-        {selectedTemplate === ProjectType.NON_FICTION && (
+        {selectedTemplate === ProjectType.non_fiction && (
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
               <CardTitle>Create New Book</CardTitle>
@@ -127,7 +127,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
                   <Input id="book-title" value={0} placeholder="Enter your book title" />
                 </div>
                 <Button
-                  onClick={() => void handleCreateProject(ProjectType.NON_FICTION)}
+                  onClick={() => void handleCreateProject(ProjectType.non_fiction)}
                   className="w-full"
                 >
                   Create Book

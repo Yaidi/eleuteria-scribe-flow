@@ -8,7 +8,7 @@ import {
   IWorldElement,
   PriorityType,
 } from "@/types/sections";
-import { IProject, ProjectData, ProjectSections, ProjectType } from "@/types/project.ts";
+import { IProject, ProjectData, ProjectSections, ProjectType, Status } from "@/types/project.ts";
 
 // Mock data for ICharacter
 export const mockCharacters: ICharacter[] = [
@@ -181,8 +181,6 @@ export const mockChapters: IChapter[] = [
 
 // Mock data for ProjectSections
 export const mockProjectSections: ProjectSections = {
-  wordGoal: 0,
-  words: 0,
   general: mockGeneral,
   characters: mockCharacters,
   plots: mockPlots,
@@ -196,8 +194,14 @@ export const mockProjectSections: ProjectSections = {
 export const mockProject: IProject = {
   id: 1,
   projectName: "The Dark Streets",
-  type: ProjectType.NOVEL,
+  type: ProjectType.novel,
   projectListID: 0,
+  status: Status.planning,
+  description: "",
+  created: "2025-07-29T09:52:08.710677",
+  updated: "2025-07-29T09:52:08.710677",
+  wordGoal: 0,
+  words: 0,
 };
 
 export const mockProjectData: ProjectData = { ...mockProject, sections: mockProjectSections };

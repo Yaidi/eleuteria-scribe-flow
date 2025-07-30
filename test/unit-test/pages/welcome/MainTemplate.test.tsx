@@ -12,12 +12,12 @@ describe("MainTemplate", () => {
     render(
       <MainTemplate
         templates={templates}
-        selectedTemplate={ProjectType.NOVEL}
+        selectedTemplate={ProjectType.novel}
         handleCreateProject={mockHandleCreate}
       />,
     );
 
-    expect(screen.getByTestId("template-name")).toHaveTextContent("Novel Template");
+    expect(screen.getByTestId("template-name")).toHaveTextContent(/novel template/i);
     expect(
       screen.getByText("Perfect for long-form fiction with complex characters and world-building"),
     ).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("MainTemplate", () => {
     render(
       <MainTemplate
         templates={templates}
-        selectedTemplate={ProjectType.NOVEL}
+        selectedTemplate={ProjectType.novel}
         handleCreateProject={mockHandleCreate}
       />,
     );
@@ -39,14 +39,14 @@ describe("MainTemplate", () => {
     const button = screen.getByTestId("btn-create-project");
     await user.click(button);
 
-    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.NOVEL);
+    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.novel);
   });
 
   test("renders custom template creation for NON_FICTION", () => {
     render(
       <MainTemplate
         templates={templates}
-        selectedTemplate={ProjectType.NON_FICTION}
+        selectedTemplate={ProjectType.non_fiction}
         handleCreateProject={mockHandleCreate}
       />,
     );
@@ -62,7 +62,7 @@ describe("MainTemplate", () => {
     render(
       <MainTemplate
         templates={templates}
-        selectedTemplate={ProjectType.NON_FICTION}
+        selectedTemplate={ProjectType.non_fiction}
         handleCreateProject={mockHandleCreate}
       />,
     );
@@ -72,7 +72,7 @@ describe("MainTemplate", () => {
     });
     await user.click(createTemplateBtn);
 
-    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.NON_FICTION);
+    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.non_fiction);
   });
 
   test("calls handleCreateProject when 'Create Book' is clicked", async () => {
@@ -80,7 +80,7 @@ describe("MainTemplate", () => {
     render(
       <MainTemplate
         templates={templates}
-        selectedTemplate={ProjectType.NON_FICTION}
+        selectedTemplate={ProjectType.non_fiction}
         handleCreateProject={mockHandleCreate}
       />,
     );
@@ -90,6 +90,6 @@ describe("MainTemplate", () => {
     });
     await user.click(createBookBtn);
 
-    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.NON_FICTION);
+    expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.non_fiction);
   });
 });

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import { FileText, Moon, Sun } from "lucide-react";
-import { addProjectFetch, projectsFetch } from "@/store/projects/slice.ts";
+import { addProjectFetch } from "@/store/projects/slice.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/config.ts";
 import { ProjectType } from "@/types/project.ts";
@@ -12,7 +12,7 @@ import Templates from "@/pages/welcome/Templates.tsx";
 import MainTemplate from "@/pages/welcome/MainTemplate.tsx";
 
 const Welcome = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.NOVEL);
+  const [selectedTemplate, setSelectedTemplate] = useState<ProjectType>(ProjectType.novel);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const [templates, setTemplates] = useState<Template[]>([]);
@@ -23,9 +23,8 @@ const Welcome = () => {
   };
 
   useEffect(() => {
-    void dispatch(projectsFetch());
     getTemplates().then((res) => setTemplates(res.templates));
-  }, [dispatch]);
+  }, []);
 
   const handleCreateProject = async (type: ProjectType) => {
     try {

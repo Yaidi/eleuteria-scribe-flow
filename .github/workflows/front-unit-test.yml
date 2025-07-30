@@ -1,70 +1,38 @@
-
-name: backend-unit-tests
+name: front-unit-test.yml
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+    front-unit-tests:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
 
-    permissions:
-      # Required to check out the code
-      contents: read
-      # Required to put a comment into the pull-request
-      pull-requests: write
+        permissions:
+          # Required to check out the code
+          contents: read
+          # Required to put a comment into the pull-request
+          pull-requests: write
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24.3.0
+          - name: Setup Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: 24.3.0
 
-      - name: Install Node dependencies
-        run: npm ci
+          - name: Install dependencies
+            run: npm ci
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+          - name: Run unit tests
+            run: npm run test:unit
 
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install Python dependencies
-        run: |
-          cd backend
-          poetry config virtualenvs.in-project true
-          poetry install
-
-      - name: Run backend tests with coverage
-        run: |
-          cd backend
-          poetry run coverage run -m pytest
-          poetry run coverage xml
-          poetry run coverage report
-        env:
-          CI: true
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          file: ./backend/coverage.xml
-          flags: backend
-          name: backend-coverage
-          fail_ci_if_error: false
-
-      - name: Coverage comment
-        uses: py-cov-action/python-coverage-comment-action@v3
-        if: github.event_name == 'pull_request'
-        with:
-          GITHUB_TOKEN: ${{ github.token }}
-          COVERAGE_PATH: backend/coverage.xml
-          COVERAGE_DATA_PATH: backend/.coverage
+          - name: 'Report Coverage'
+              # Set if: always() to also generate the report if tests are failing
+              # Only works if you set `reportOnFailure: true` in your vite config as specified above
+            if: always()
+            uses: davelosert/vitest-coverage-report-action@v2

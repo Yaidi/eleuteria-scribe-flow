@@ -1,8 +1,6 @@
-# Welcome to your Lovable project
+# Welcome to Eleuteria
 
 ## Project info
-
-**URL**: https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5
 
 **Use your preferred IDE**
 

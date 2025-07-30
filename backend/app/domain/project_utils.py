@@ -117,8 +117,6 @@ def project_schema_factory(
         ]
 
     sections = Sections(
-        wordGoal=project.word_goal,
-        words=project.words,
         general=general,
         world=world_schema,
         characters=characters_schema,
@@ -129,6 +127,10 @@ def project_schema_factory(
         "projectListID": project.projectListID,
         "projectName": project.project_name,
         "type": project.type,
+        "words": project.words,
+        "wordGoal": project.word_goal,
+        "status": project.status,
+        "description": project.description,
         "sections": sections,
     }
     return BaseProjectSchema(**base_kwargs)

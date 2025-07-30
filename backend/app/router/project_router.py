@@ -58,6 +58,8 @@ async def create_project(
     new_project.created_at = datetime.now()
     new_project.updated_at = datetime.now()
     new_project.status = ProjectStatus.planning
+    new_project.word_goal = 1000
+    new_project.words = 0
 
     await repository.create_project(new_project)
     return project_schema_factory(new_project)

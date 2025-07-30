@@ -58,10 +58,10 @@ jobs:
           # Create summary with emoji based on coverage
           if [ "$COVERAGE_PERCENT" -ge 90 ]; then
             COVERAGE_EMOJI="🟢"
-            COVERAGE_STATUS="Excellent"
+            COVERAGE_STATUS="Right on the target!"
           elif [ "$COVERAGE_PERCENT" -ge 70 ]; then
             COVERAGE_EMOJI="🟡"
-            COVERAGE_STATUS="Good"
+            COVERAGE_STATUS="Almost There"
           else
             COVERAGE_EMOJI="🔴"
             COVERAGE_STATUS="Needs Improvement"
@@ -96,8 +96,8 @@ jobs:
             </details>
             
             ### Coverage Legend
-            - 🟢 **Excellent** (≥90%) - Great job! 
-            - 🟡 **Good** (≥70%) - Not bad, room for improvement
+            - 🟢 **Target** (≥90%) - Great job! 
+            - 🟡 **Almost There** (≥70%) - Just a bit more testing
             - 🔴 **Needs Improvement** (<70%) - Consider adding more tests
             
             ---

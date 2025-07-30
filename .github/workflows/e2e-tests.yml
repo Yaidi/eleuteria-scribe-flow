@@ -31,13 +31,24 @@ jobs:
         with:
           node-version: 24.3.0
 
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: npm ci
 
-      - name: Setup Python and install backend deps
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
         run: |
-          python -m venv backend/.venv
-          ./backend/.venv/bin/pip install -r backend/requirements.txt
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          poetry config virtualenvs.in-project true
+          poetry install
 
       - name: Run build
         run: npm run build:dev

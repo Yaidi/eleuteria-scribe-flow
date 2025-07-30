@@ -29,8 +29,7 @@
     "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
     "test-coverage-backend": "backend/.venv/bin/coverage report",
     "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
-    "test:watch": "vitest --watch",
-    "install-backend": "node install-backend.js"
+    "test:watch": "vitest --watch"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [

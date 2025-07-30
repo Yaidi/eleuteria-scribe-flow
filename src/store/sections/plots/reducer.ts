@@ -12,19 +12,19 @@ const initialState: IPlotsReducer = {
 
 export const plotsReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(addPlot, (state, { payload }) => {
+    .addCase(addPlot.fulfilled, (state, { payload }) => {
       return { ...state, plots: [...state.plots, payload] };
     })
-    .addCase(updatePlot, (state, { payload }) => {
+    .addCase(updatePlot.fulfilled, (state, { payload }) => {
       return {
         ...state,
         plots: state.plots.map((plot) => (plot.id === payload.id ? { ...plot, ...payload } : plot)),
       };
     })
-    .addCase(removePlot, (state, { payload }) => {
+    .addCase(removePlot.fulfilled, (state, { payload }) => {
       return {
         ...state,
-        plots: state.plots.filter((plot) => plot.id !== payload),
+        plots: state.plots.filter((plot) => plot.id !== payload.id),
       };
     });
 });

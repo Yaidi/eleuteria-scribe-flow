@@ -16,7 +16,7 @@ describe("PlotsReducer", () => {
 
   test("should handle add plot", () => {
     const action: UnknownAction = {
-      type: addPlot.type,
+      type: addPlot.fulfilled.type,
       payload: mockPlots[0],
     };
     const result = plotsReducer(initialState, action);
@@ -24,7 +24,7 @@ describe("PlotsReducer", () => {
   });
   test("should handle update Plot", () => {
     const action: UnknownAction = {
-      type: updatePlot.type,
+      type: updatePlot.fulfilled.type,
       payload: { ...mockPlots[0], name: "Updated Plot" },
     };
     const result = plotsReducer({ ...initialState, plots: mockPlots }, action);
@@ -32,8 +32,8 @@ describe("PlotsReducer", () => {
   });
   test("should handle remove plot", () => {
     const action: UnknownAction = {
-      type: removePlot.type,
-      payload: mockPlots[0].id,
+      type: removePlot.fulfilled.type,
+      payload: { id: mockPlots[0].id },
     };
     const result = plotsReducer({ ...initialState, plots: mockPlots }, action);
     expect(result.plots).not.toContain(mockPlots[0]);

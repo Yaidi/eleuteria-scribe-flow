@@ -496,6 +496,7 @@ class TestUpdateGeneralInfo:
         mock_repo_class.return_value = mock_repo
 
         mock_project = MagicMock()
+        mock_project.id = 1
 
         # Configurar correctamente los AsyncMocks
         mock_repo.get_project = AsyncMock(return_value=mock_project)
@@ -515,10 +516,7 @@ class TestUpdateGeneralInfo:
         # Assert
         assert response.status_code == 200
         assert mock_project.title == "Updated Title"
-        assert response.json() == {
-            "message": "General info updated successfully",
-            "general": {"title": "Updated Title"},
-        }
+        assert response.json() == {'message': 'General info updated successfully', 'general': {'title': 'Updated Title'}, 'projectName': 'Updated Title', 'projectId': 1}
         mock_repo.update_project.assert_called_once_with(mock_project)
 
     @patch("backend.app.router.project_router.ProjectRepository")

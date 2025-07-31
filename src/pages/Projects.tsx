@@ -9,7 +9,7 @@ import SidebarProjects from "@/pages/projects/SidebarProjects.tsx";
 import Project from "@/pages/projects/Project.tsx";
 
 const Projects = () => {
-  const { projects, state } = useSelector((state: RootState) => state.projects);
+  const { projects, status } = useSelector((state: RootState) => state.projects);
   const [currentProject, setCurrentProject] = useState<IProject | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -27,13 +27,12 @@ const Projects = () => {
     dispatch(getProjectFetch(id)).unwrap();
     navigate("/main");
   };
-
   useEffect(() => {
-    if (projects.length === 0 && state != State.LOADING) {
+    if (projects.length === 0 && status != State.LOADING) {
       navigate("/template");
     }
-  }, [navigate, projects, state]);
-  if (state == State.LOADING) {
+  }, [navigate, projects, status]);
+  if (status == State.LOADING) {
     return <div data-testid="project-loading">Loading...</div>;
   }
   return (

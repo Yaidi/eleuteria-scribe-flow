@@ -18,7 +18,11 @@ describe("updateGeneral thunk", () => {
   test("dispatches fulfilled action on success", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ general: mockGeneral }),
+      json: async () => ({
+        projectName: mockGeneral.title,
+        projectId: request.projectId,
+        general: mockGeneral,
+      }),
     });
     global.fetch = mockFetch;
 
@@ -34,7 +38,11 @@ describe("updateGeneral thunk", () => {
     );
 
     expect(result.type).toBe("[General] Update info/fulfilled");
-    expect(result.payload).toEqual(mockGeneral);
+    expect(result.payload).toEqual({
+      projectName: mockGeneral.title,
+      projectId: 42,
+      general: mockGeneral,
+    });
   });
 
   test("dispatches rejected action on error response", async () => {

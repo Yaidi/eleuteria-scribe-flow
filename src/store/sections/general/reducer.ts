@@ -19,7 +19,7 @@ const initialState: IGeneral = {
 
 export const generalReducer = createReducer(initialState, (builder) => {
   builder.addCase(updateGeneral.fulfilled, (state, { payload }) => {
-    return { ...state, ...payload };
+    return { ...state, ...payload.general };
   });
   builder.addCase(getProjectFetch.fulfilled, (state, { payload }) => {
     return { ...state, ...payload.sections.general };

@@ -53,7 +53,7 @@ describe("Projects component", () => {
     renderWithProviders(<Projects />, {
       projects: {
         projects: [],
-        state: State.SUCCESS,
+        status: State.SUCCESS,
       },
     });
 
@@ -66,7 +66,7 @@ describe("Projects component", () => {
     renderWithProviders(<Projects />, {
       projects: {
         projects: [mockProject, { ...mockProject, id: 2, projectName: "" }],
-        state: State.SUCCESS,
+        status: State.SUCCESS,
       },
     });
 
@@ -89,7 +89,7 @@ describe("Projects component", () => {
     renderWithProviders(<Projects />, {
       projects: {
         projects: [mockProject],
-        state: State.SUCCESS,
+        status: State.SUCCESS,
       },
     });
 

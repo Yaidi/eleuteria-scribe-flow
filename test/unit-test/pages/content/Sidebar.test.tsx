@@ -1,13 +1,13 @@
 import { screen, fireEvent } from "@testing-library/react";
-import { ESections, ICharacter, PriorityType } from "@/types/sections";
+import { ESections, ICharacter, IPlot, PriorityType } from "@/types/sections";
 import { vi, expect, describe, test } from "vitest";
-import { setCurrentCharacter, updateCharacter } from "@/store";
+import { setCurrentCharacter, setCurrentPlot, updateCharacter, updatePlot } from "@/store";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
-import { mockChapters, mockCharacters } from "../../../mocks";
+import { mockChapters, mockCharacters, mockPlots } from "../../../mocks";
 import Sidebar from "@/pages/content/Sidebar.tsx";
 import { store } from "@/store/config.ts";
 import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
-import * as asyncActions from "@/store/sections/characters/slice.ts";
+import * as asyncActions from "@/store";
 
 const mockDispatch = vi.fn();
 vi.mock("react-redux", async () => {
@@ -19,8 +19,55 @@ vi.mock("react-redux", async () => {
 });
 
 mockThunkSuccess<ICharacter>(asyncActions, "updateCharacter", mockCharacters[0]);
+mockThunkSuccess<IPlot>(asyncActions, "updatePlot", mockPlots[0]);
 
 describe("Sidebar component", () => {
+  describe("Sidebar Plots", () => {
+    test("set current Plot", () => {
+      renderWithProviders(<Sidebar activeSection={ESections.plots} />, {
+        sections: {
+          ...store.getState().sections,
+          plots: {
+            plots: mockPlots,
+          },
+        },
+      });
+      fireEvent.click(screen.getByText("The Main Mystery"));
+      expect(mockDispatch).toHaveBeenCalledWith(setCurrentPlot(mockPlots[0]));
+    });
+
+    test("dispatches updatePlot on drop", () => {
+      renderWithProviders(<Sidebar activeSection={ESections.plots} />, {
+        sections: {
+          ...store.getState().sections,
+          plots: {
+            plots: mockPlots,
+          },
+        },
+      });
+
+      const dropZone = screen.getByText("MAIN").closest("div")!;
+      const draggable = screen.getByText("The Main Mystery");
+
+      const mockDataTransfer = {
+        getData: vi.fn().mockReturnValue(mockPlots[1].id),
+        setData: vi.fn().mockReturnValue(mockPlots[1].id),
+      };
+
+      fireEvent.dragStart(draggable, { dataTransfer: mockDataTransfer });
+      fireEvent.dragEnter(dropZone, { dataTransfer: mockDataTransfer });
+      fireEvent.dragOver(dropZone, { dataTransfer: mockDataTransfer });
+      fireEvent.drop(dropZone, { dataTransfer: mockDataTransfer });
+
+      expect(mockDispatch).toHaveBeenCalled();
+      expect(updatePlot).toHaveBeenCalledWith({
+        plot: {
+          id: 2,
+          importance: 0,
+        },
+      });
+    });
+  });
   test("renders character section and allows drag start", () => {
     renderWithProviders(<Sidebar activeSection={ESections.characters} />, {
       sections: {

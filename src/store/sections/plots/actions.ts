@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { IPlot } from "@/types/sections.ts";
 import { host } from "@/https/fetch.ts";
 
@@ -61,3 +61,5 @@ export const addPlot = createAsyncThunk<IPlot, number>("[Plot] Add Plot", async 
   const responseData = await response.json();
   return responseData as IPlot;
 });
+
+export const setCurrentPlot = createAction<IPlot>("[Plot] Set Current Plot");

@@ -1,4 +1,4 @@
-# Welcome to Eleuteria
+# Welcome to Eleuteria Writing Studio
 
 ## Project info
 
@@ -9,18 +9,25 @@ If you want to work locally using your own IDE, you can clone this repo and push
 Follow these steps:
 we use fnm (as system control version manager for Node.js) https://github.com/Schniz/fnm
 
-Install
+You need to install Python 3.13 before run our installation scripts, which you can download from here:
+https://www.python.org/downloads/release/python-3135/. Install the one you need for your OS.
+
+Installation steps:
 
 ```sh
 # Step 1: Install fnm (Fast Node Manager) to manage Node.js versions.
 brew install fnm
+
 # Step 2: install and use the node js version with this
 fnm use
 
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Install the necessary dependencies to build our backend.
+npm run build:backend:install
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
@@ -67,23 +74,47 @@ This project is built with:
 
 ![Models And Relations](eleuteria_data_models.drawio.png)
 
-## How can I deploy this project?
+## Backend setup
 
-Simply open [Lovable](https://lovable.dev/projects/130b1ba2-93d1-4c94-a455-269e9c7ca3b5) and click on Share -> Publish.
+### To set up and run backend, you have two ways:
 
-## Backend setup:
+#### The Easy Way:
 
-To setup and run backend you need to follow these steps:
+Run our installation script:
 
-1 - run on terminal:
+- `npm run build:backend:install`
 
-```
-cd backend && python3 -m venv .venv && source .venv/bin/activate && pip3 install -r requirements.txt
-```
+And then:
 
-2 - you can run: `npm run dev-backend`
+- `npm run dev`
 
-3 - Backend will be running on: http://localhost:8000
+> Backend will be running on: http://localhost:8000. Front and Back will start together.
+
+#### The Manual Way:
+
+1—Install Poetry dependency manager running the following commands in Terminal:
+
+- MacOS, Linux, WSL, Bash: `curl -sSL https://install.python-poetry.org | python3 -`
+
+  > If you have installed Python through the Microsoft Store, replace "py" with "python" in the command above.
+
+- Export Poetry to your path:
+  - Terminal Zsh: `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc`
+  - Terminal Bash: `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc`
+
+2—After Poetry installation:
+
+- run: `poetry config virtualenvs.in-project true`
+- then run: `cd backend && poetry env activate`
+- copy, paste and run the command it shows (should start with "source").
+
+3—Install dependencies with:
+
+- `poetry install`
+
+4—you can run: `npm run dev`.
+
+> Backend will be running on: http://localhost:8000. Front and Back will start together.
 
 ## Backend API Documentation
 

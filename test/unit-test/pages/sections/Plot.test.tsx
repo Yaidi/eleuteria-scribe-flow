@@ -45,6 +45,7 @@ describe("Plot Component", () => {
         ...store.getState().sections,
         plots: {
           plots: mockPlots,
+          currentPlot: mockPlots[0],
         },
       },
     });
@@ -65,6 +66,7 @@ describe("Plot Component", () => {
         ...store.getState().sections,
         plots: {
           plots: mockPlots,
+          currentPlot: mockPlots[0],
         },
       },
     });
@@ -85,6 +87,7 @@ describe("Plot Component", () => {
         ...store.getState().sections,
         plots: {
           plots: mockPlots,
+          currentPlot: mockPlots[0],
         },
       },
     });

@@ -33,7 +33,7 @@ describe("Sidebar component", () => {
           ...store.getState().sections,
           plots: {
             plots: mockPlots,
-            currentPlot: undefined,
+            currentPlot: null,
           },
         },
       });
@@ -47,7 +47,7 @@ describe("Sidebar component", () => {
           ...store.getState().sections,
           plots: {
             plots: mockPlots,
-            currentPlot: undefined,
+            currentPlot: null,
           },
         },
       });

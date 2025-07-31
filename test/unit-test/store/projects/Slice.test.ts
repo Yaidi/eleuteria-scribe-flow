@@ -51,6 +51,7 @@ describe("project thunks", () => {
 
       expect(result.type).toBe("[Project] Get Project/fulfilled");
       expect(result.payload).toEqual(project);
+      expect(setCurrentId).toHaveBeenCalledWith(1);
     });
 
     test("returns error if request fails", async () => {

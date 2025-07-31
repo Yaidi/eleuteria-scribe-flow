@@ -2,11 +2,10 @@ export const isElectron = () => typeof window !== "undefined" && "electron" in w
 
 export const electron = isElectron() ? window.electron : null;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-export const getCurrentId: () => Promise<number> = async () => {
+export const getCurrentId = async () => {
   if (electron) {
-    return await window.electron.ipcRenderer.invoke("get-project-id");
+    const result = await window.electron.ipcRenderer.invoke("get-project-id");
+    return Number(result) || 0;
   } else {
     return Number(localStorage.getItem("projectId")) || 0;
   }

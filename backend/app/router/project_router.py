@@ -163,4 +163,6 @@ async def update_general_info(
     return {
         "message": "General info updated successfully",
         "general": data.model_dump(exclude_none=True),
+        "projectName": project.project_name,
+        "projectId": project.id,
     }

@@ -4,11 +4,12 @@ import { UnknownAction } from "@reduxjs/toolkit";
 import { addProjectFetch, projectsFetch, removeProject } from "@/store/projects/slice.ts";
 import { mockProject, mockProjectData } from "../../../mocks";
 import { State } from "@/types/project.ts";
+import { updateGeneral } from "@/store";
 
 describe("ProjectsReducer", () => {
   const initialState: IProjectsReducer = {
     projects: [],
-    state: State.LOADING,
+    status: State.LOADING,
   };
 
   test("should handle initial state with unknown action", () => {
@@ -24,7 +25,7 @@ describe("ProjectsReducer", () => {
     };
     const result = ProjectsReducer(initialState, action);
     expect(result.projects).toEqual([mockProject]);
-    expect(result.state).toEqual(State.SUCCESS);
+    expect(result.status).toEqual(State.SUCCESS);
   });
 
   test("should handle add project", () => {
@@ -34,15 +35,26 @@ describe("ProjectsReducer", () => {
     };
     const result = ProjectsReducer(initialState, action);
     expect(result.projects).toEqual([mockProjectData]);
-    expect(result.state).toEqual(State.SUCCESS);
+    expect(result.status).toEqual(State.SUCCESS);
   });
   test("should handle remove project", () => {
     const action: UnknownAction = {
       type: removeProject.fulfilled.type,
       payload: { id: mockProject.id },
     };
-    const result = ProjectsReducer({ projects: [mockProject], state: State.SUCCESS }, action);
+    const result = ProjectsReducer({ projects: [mockProject], status: State.SUCCESS }, action);
     expect(result.projects).toEqual([]);
-    expect(result.state).toEqual(State.SUCCESS);
+    expect(result.status).toEqual(State.SUCCESS);
+  });
+  test("should handle updateGeneral", () => {
+    const action: UnknownAction = {
+      type: updateGeneral.fulfilled.type,
+      payload: {
+        projectName: "New Name",
+        projectId: 1,
+      },
+    };
+    const result = ProjectsReducer({ projects: [mockProject], status: State.SUCCESS }, action);
+    expect(result.projects[0].projectName).eq("New Name");
   });
 });

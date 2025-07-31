@@ -30,7 +30,9 @@ describe("GeneralReducer", () => {
     const action: UnknownAction = {
       type: updateGeneral.fulfilled.type,
       payload: {
-        title: "Updated Title",
+        general: {
+          title: "Updated Title",
+        },
       },
     };
     const result = generalReducer(initialState, action);

@@ -57,6 +57,11 @@ jobs:
           profile: minimal
           override: true
 
+      - name: Build Rust backend
+        run: |
+          cd backend-rust
+          cargo build
+
       - name: Clean dist-electron directory
         run: |
           if [ -d "dist-electron" ]; then

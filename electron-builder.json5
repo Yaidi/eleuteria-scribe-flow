@@ -48,6 +48,10 @@
       to: "resources/eleuteria-backend",
     },
     {
+      from: "backend-rust/target/release/backend-rust",
+      to: "resources/backend-rust",
+    },
+    {
       from: "dist",
       to: "resources/dist"
     }

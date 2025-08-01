@@ -23,7 +23,8 @@ process.env.VITE_PUBLIC =
 
 let win: BrowserWindow | null;
 let splash: BrowserWindow | null = null;
-let backendProcess: ChildProcess | null = null;
+let pythonBackendProcess: ChildProcess | null = null;
+let rustBackendProcess: ChildProcess | null = null;
 
 function createWindow() {
   const preloadPath =
@@ -51,6 +52,7 @@ function createWindow() {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
 }
+
 function waitForBackend(
   url = "http://127.0.0.1:8000",
   timeout = 10000,
@@ -87,41 +89,87 @@ function waitForBackend(
 function startBackend() {
   const isDev = !!VITE_DEV_SERVER_URL;
 
-  const backendPath =
+  // Rust Backend
+  const rustBackendPath =
+    isDev || isSmokeTest ? "cargo" : path.join(process.resourcesPath, "backend-rust");
+
+  const rustBackendArgs = isDev || isSmokeTest ? ["run"] : [];
+
+  rustBackendProcess = spawn(rustBackendPath, rustBackendArgs, {
+    cwd:
+      isDev || isSmokeTest
+        ? path.join(process.env.APP_ROOT, "backend-rust")
+        : path.dirname(rustBackendPath),
+
+    shell: false,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  rustBackendProcess.stdout?.on("data", (data) => {
+    //if (rustBackendProcess?.killed) return;
+    try {
+      console.log(`[Rust Backend]: ${data.toString()}`);
+    } catch (e) {
+      console.log(`Rust Backend Process Exception: ${e}`);
+    }
+  });
+
+  rustBackendProcess.stderr?.on("data", async (data) => {
+    //if (rustBackendProcess?.killed) return;
+    try {
+      console.info(`[Rust Backend]: ${data.toString()}`);
+    } catch (e) {
+      console.error(`Rust Backend Process Exception: ${e}`);
+    }
+  });
+
+  rustBackendProcess.on("close", async (code) => {
+    //if (rustBackendProcess?.killed) return;
+    console.log(`Rust server exited with code ${code}`);
+  });
+
+  // Python Backend
+  const pythonBackendPath =
     isDev || isSmokeTest
       ? path.join(process.env.APP_ROOT, "backend", ".venv", "bin", "uvicorn")
       : path.join(process.resourcesPath, "eleuteria-backend"); // Binario incluido en build
 
-  const backendArgs =
+  const pythonBackendArgs =
     isDev || isSmokeTest ? ["backend.app.main:app", "--host", "127.0.0.1", "--port", "8000"] : []; // El binario PyInstaller ya corre el servidor
 
-  backendProcess = spawn(backendPath, backendArgs, {
-    cwd: isDev || isSmokeTest ? process.env.APP_ROOT : path.dirname(backendPath),
+  pythonBackendProcess = spawn(pythonBackendPath, pythonBackendArgs, {
+    cwd: isDev || isSmokeTest ? process.env.APP_ROOT : path.dirname(pythonBackendPath),
     shell: false, // ⚠️ más seguro en prod
     stdio: ["ignore", "pipe", "pipe"],
   });
 
-  backendProcess.on("close", (code) => {
+  pythonBackendProcess.on("close", (code) => {
     console.log(`Backend process exited with code ${code}`);
-    backendProcess = null;
+    pythonBackendProcess = null;
   });
 
-  backendProcess.stdout?.on("data", (data) => {
-    console.log(`[backend stdout]: ${data.toString()}`);
+  pythonBackendProcess.stdout?.on("data", (data) => {
+    console.log(`[Python Backend stdout]: ${data.toString()}`);
   });
 
-  backendProcess.stderr?.on("data", (data) => {
-    console.log(`[backend stderr]: ${data.toString()}`);
+  pythonBackendProcess.stderr?.on("data", (data) => {
+    console.info(`[Python Backend stderr]: ${data.toString()}`);
   });
 }
 
 app.on("window-all-closed", async () => {
   const isCI = process.env.CI === "true";
 
-  if (backendProcess) {
-    backendProcess.kill();
-    backendProcess = null;
+  if (pythonBackendProcess) {
+    pythonBackendProcess.kill();
+    pythonBackendProcess = null;
     await killPort(8000);
+  }
+
+  if (rustBackendProcess) {
+    rustBackendProcess.kill();
+    rustBackendProcess = null;
+    await killPort(9001);
   }
 
   if (process.platform !== "darwin" || isCI) {
@@ -138,6 +186,7 @@ app.on("activate", () => {
 
 app.whenReady().then(async () => {
   await killPort(8000);
+  await killPort(9001);
   splash = new BrowserWindow({
     width: 300,
     height: 200,
@@ -153,6 +202,7 @@ app.whenReady().then(async () => {
 
   try {
     await waitForBackend();
+    await waitForBackend("http://127.0.0.1:9001/"); // await for Rust backend
     splash?.close();
     splash = null;
     createWindow();

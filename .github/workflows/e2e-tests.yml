@@ -50,6 +50,27 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry install
 
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Build Rust backend
+        run: |
+          cd backend-rust
+          cargo build --release
+
+      - name: Clean dist-electron directory
+        run: |
+          if [ -d "dist-electron" ]; then
+            rm -rf dist-electron
+            echo "dist-electron directory removed"
+          else
+            echo "dist-electron directory does not exist"
+          fi
+
       - name: Run build
         run: npm run build:dev
 

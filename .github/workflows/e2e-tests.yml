@@ -62,13 +62,20 @@ jobs:
           cd backend-rust
           cargo build
 
-      - name: Clean dist-electron directory
+      - name: Clean dist-electron directory and database
         run: |
           if [ -d "dist-electron" ]; then
             rm -rf dist-electron
             echo "dist-electron directory removed"
           else
             echo "dist-electron directory does not exist"
+          fi
+          
+          if [ -f "schemas.db" ]; then
+            rm -f schemas.db
+            echo "schemas.db file removed"
+          else
+            echo "schemas.db file does not exist"
           fi
 
       - name: Run build

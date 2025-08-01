@@ -1,12 +1,13 @@
 import { describe, expect, test } from "vitest";
 import { IPlotsReducer, plotsReducer } from "@/store/sections/plots/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
-import { addPlot, removePlot, updatePlot } from "@/store";
+import { addPlot, removePlot, setCurrentPlot, updatePlot } from "@/store";
 import { mockPlots } from "../../../mocks";
 
 describe("PlotsReducer", () => {
   const initialState: IPlotsReducer = {
     plots: [],
+    currentPlot: null,
   };
   test("should handle initial state with unknown action", () => {
     const action = { type: "unknown" };
@@ -21,6 +22,7 @@ describe("PlotsReducer", () => {
     };
     const result = plotsReducer(initialState, action);
     expect(result.plots).toEqual([mockPlots[0]]);
+    expect(result.currentPlot).toEqual(mockPlots[0]);
   });
   test("should handle update Plot", () => {
     const action: UnknownAction = {
@@ -37,5 +39,12 @@ describe("PlotsReducer", () => {
     };
     const result = plotsReducer({ ...initialState, plots: mockPlots }, action);
     expect(result.plots).not.toContain(mockPlots[0]);
+    expect(result.currentPlot).toEqual(null);
+  });
+  test("should handle current plot", () => {
+    const action = setCurrentPlot(mockPlots[0]);
+
+    const result = plotsReducer({ ...initialState, plots: mockPlots }, action);
+    expect(result.currentPlot).toEqual(mockPlots[0]);
   });
 });

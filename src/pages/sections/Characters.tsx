@@ -1,15 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import FormsCharacters from "@/components/FormsCharacters.tsx";
-import { useSections } from "@/hooks/useSections.ts";
-import { AppDispatch, RootState } from "@/store/config.ts";
+import { useProjectId, useSections } from "@/hooks/useSections.ts";
+import { AppDispatch } from "@/store/config.ts";
 import { addCharacterFetch } from "@/store";
 
 const Characters = () => {
   const { characters, currentCharacter } = useSections().characters;
-  const projectId = useSelector((state: RootState) => state.projectInfo.currentProject?.id);
+  const projectId = useProjectId();
   const dispatch = useDispatch<AppDispatch>();
 
   const add = (id: number) => {

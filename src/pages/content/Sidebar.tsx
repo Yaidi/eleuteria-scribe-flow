@@ -232,7 +232,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
         </div>
       );
     default:
-      return <div></div>;
+      return <div data-testid="default"></div>;
   }
 };
 

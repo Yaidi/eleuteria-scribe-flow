@@ -22,6 +22,10 @@ mockThunkSuccess<ICharacter>(asyncActions, "updateCharacter", mockCharacters[0])
 mockThunkSuccess<IPlot>(asyncActions, "updatePlot", mockPlots[0]);
 
 describe("Sidebar component", () => {
+  test("renders empty div", () => {
+    renderWithProviders(<Sidebar activeSection={ESections.Any} />);
+    expect(screen.getByTestId("default")).toBeInTheDocument();
+  });
   describe("Sidebar Plots", () => {
     test("set current Plot", () => {
       renderWithProviders(<Sidebar activeSection={ESections.plots} />, {
@@ -29,6 +33,7 @@ describe("Sidebar component", () => {
           ...store.getState().sections,
           plots: {
             plots: mockPlots,
+            currentPlot: null,
           },
         },
       });
@@ -42,6 +47,7 @@ describe("Sidebar component", () => {
           ...store.getState().sections,
           plots: {
             plots: mockPlots,
+            currentPlot: null,
           },
         },
       });

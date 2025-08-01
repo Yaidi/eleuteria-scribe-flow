@@ -1,18 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { Plus, Trash2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea.tsx";
+import { Plus } from "lucide-react";
 import { IPlot } from "@/types/sections.ts";
-import { Input } from "@/components/ui/input.tsx";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button.tsx";
-import { Label } from "@/components/ui/label.tsx";
 import { addPlot, removePlot, updatePlot } from "@/store";
 import { useProjectId, useSections } from "@/hooks/useSections.ts";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
 import { AppDispatch } from "@/store/config.ts";
+import FormPlots from "@/components/FormPlots.tsx";
 
 const Plot = () => {
-  const { plots } = useSections().plots;
+  const { plots, currentPlot } = useSections().plots;
   const projectId = useProjectId();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -38,82 +35,9 @@ const Plot = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {plots.map((plot) => (
-            <div key={plot.id} className="border rounded-lg p-4">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <Label>Plot Title</Label>
-                  <Input
-                    data-testid={`input-plot-title-${plot.id}`}
-                    name="title"
-                    value={plot.title}
-                    onChange={(e) =>
-                      update({
-                        id: plot.id,
-                        title: e.target.value,
-                      })
-                    }
-                    placeholder="Plot title"
-                  />
-                </div>
-                <Button
-                  data-testid={`btn-remove-plot-${plot.id}`}
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => remove(plot.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <Label>Description</Label>
-                  <Textarea
-                    data-testid={`textarea-plot-description-${plot.id}`}
-                    name="description"
-                    value={plot.description}
-                    onChange={(e) =>
-                      update({
-                        id: plot.id,
-                        description: e.target.value,
-                      })
-                    }
-                    placeholder="Describe what happens in this plot..."
-                  />
-                </div>
-                {/*
-                 <div>
-                  <Label>Manuscript Reference</Label>
-                  <Input
-                    data-testid={`input-plot-reference-${plot.id}`}
-                    name="chapterReference"
-                    value={plot.chapterReferences?.join(", ")}
-                    onChange={(e) =>
-                      update({
-                        id: plot.id,
-                        chapterReferences: e.target.value.split(",").map((ref) => ref.trim()),
-                      })
-                    }
-                    placeholder="Chapter/page reference where this plot occurs"
-                  />
-                </div>
-                   */}
-                <div>
-                  <Label>Characters Involved</Label>
-                  <Select name="characters" value="0" onValueChange={() => {}} disabled={true}>
-                    <SelectTrigger></SelectTrigger>
-                    <SelectContent>
-                      {plot.characters.map((character) => (
-                        <SelectItem key={`${character.name}-${plot.title}`} value="0">
-                          {character.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          ))}
+          {currentPlot && (
+            <FormPlots currentPlot={currentPlot} handleRemove={remove} handleUpdate={update} />
+          )}
           {plots.length === 0 && (
             <div data-testid="no-plots" className="text-center py-8 text-slate-500">
               No plots added yet. Click "Add Plot" to get started.

@@ -131,7 +131,6 @@
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
-    "lovable-tagger": "^1.1.7",
     "playwright": "^1.53.2",
     "postcss": "^8.4.47",
     "prettier": "^3.6.2",

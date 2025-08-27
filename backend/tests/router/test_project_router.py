@@ -75,21 +75,30 @@ class TestGetProjectList:
 class TestCreateProject:
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.create_project_object_from_request")
+    @patch("backend.app.router.project_router.WorldRepository")
     @patch("backend.app.router.project_router.project_schema_factory")
     def test_create_project_success(
         self,
         mock_schema_factory,
-        mock_create_obj,
+        mock_proj_repo_class,
         mock_repo_class,
+        mock_world_repo_class,
         client,
         mock_session,
     ):
         # Arrange
         mock_repo = AsyncMock()
+        mock_world_repo = AsyncMock()
+        mock_project_repo = AsyncMock()
+        mock_world_repo_class.return_value = mock_world_repo
+        mock_proj_repo_class.return_value = mock_project_repo
         mock_repo_class.return_value = mock_repo
 
         mock_project = MagicMock()
-        mock_create_obj.return_value = mock_project
+        mock_new_world = MagicMock()
+
+        mock_proj_repo_class = AsyncMock(return_value=mock_project)
+        mock_world_repo.create_world = AsyncMock(return_value=mock_new_world)
 
         # Mock que cumple con BaseProjectSchema
         valid_project_response = {
@@ -116,8 +125,10 @@ class TestCreateProject:
         assert response_data["projectName"] == "New Project"
         assert response_data["type"] == "novel"
         mock_repo.create_project.assert_called_once_with(mock_project)
-        mock_create_obj.assert_called_once()
+        mock_project.assert_called_once()
         mock_schema_factory.assert_called_once_with(mock_project)
+        mock_world_repo.get_world_by_project_id.assert_called_once_with(1)
+        mock_world_repo.get_world_elements.assert_called_once_with(world_id=1)
 
 
 class TestGetProject:

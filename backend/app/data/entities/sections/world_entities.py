@@ -22,6 +22,6 @@ class WorldElement(Base):
         Integer,
         ForeignKey("world_elements.id", ondelete="CASCADE"),
         nullable=True,
-        default=None
+        default=None,
     )
     worldId = Column(Integer, ForeignKey("worlds.id", ondelete="CASCADE"))

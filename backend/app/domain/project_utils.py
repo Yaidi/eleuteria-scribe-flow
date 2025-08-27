@@ -98,8 +98,8 @@ def project_schema_factory(
                     description=element.description,
                     origin=element.origin,
                     conflictCause=element.conflictCause,
-                    worldElementID=element.worldElementID,
-                    worldID=element.worldID,
+                    parentId=element.parentId,
+                    worldId=element.worldId,
                 )
             )
 

@@ -53,16 +53,18 @@ async def get_project_list(session: AsyncSession = Depends(get_session)):
 async def create_project(
     data: CreateProjectRequest, session: AsyncSession = Depends(get_session)
 ):
-    repository = ProjectRepository(session)
+    project_repository = ProjectRepository(session)
+    world_repository = WorldRepository(session)
     new_project = create_project_object_from_request(data)
     new_project.created_at = datetime.now()
     new_project.updated_at = datetime.now()
     new_project.status = ProjectStatus.planning
     new_project.word_goal = 1000
     new_project.words = 0
+    await project_repository.create_project(new_project)
 
-    await repository.create_project(new_project)
-    return project_schema_factory(new_project)
+    new_world = await world_repository.create_world(new_project.id)
+    return project_schema_factory(new_project, world=new_world)
 
 
 # 🔹 GET /getProject

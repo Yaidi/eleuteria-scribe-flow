@@ -3,7 +3,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { IWorldElement } from "@/types/sections.ts";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/config.ts";
+import { AppDispatch, RootState } from "@/store/config.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -11,28 +11,26 @@ import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store
 
 const World = () => {
   const { world } = useSelector((state: RootState) => state.sections.world);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const add = () => {
-    const newElement: Partial<IWorldElement> = {
-      worldID: world.id,
-    };
-    dispatch(addWorldElement(newElement));
+  const add = (id: number) => {
+    dispatch(addWorldElement(id));
   };
 
-  const update = (world: Partial<IWorldElement>) => {
-    dispatch(updateWorldElement(world));
+  const update = (worldElement: Partial<IWorldElement>) => {
+    dispatch(updateWorldElement(worldElement));
   };
 
   const remove = (id: number) => {
     dispatch(removeWorldElement(id));
   };
+  if (!world) return null;
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>World Building</CardTitle>
-        <Button onClick={add} size="sm">
+        <Button onClick={() => add(world.id)} size="sm">
           <Plus className="w-4 h-4 mr-2" />
           Add Element
         </Button>

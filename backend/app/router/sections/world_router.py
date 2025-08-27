@@ -52,14 +52,14 @@ async def get_world(world_id: int, session: AsyncSession = Depends(get_session))
                     description=element.description,
                     origin=element.origin,
                     conflictCause=element.conflictCause,
-                    worldElementID=element.worldElementID,
-                    worldID=element.worldID,
+                    parentId=element.parentId,
+                    worldId=element.worldId,
                 )
             )
 
     complete_world = WorldWithElementsSchema(
         id=world_id,
-        world_elements=world_elements_schema,
+        worldElements=world_elements_schema,
     )
     return complete_world
 
@@ -86,14 +86,14 @@ async def get_world_by_project_id(
                     description=element.description,
                     origin=element.origin,
                     conflictCause=element.conflictCause,
-                    worldElementID=element.worldElementID,
-                    worldID=element.worldID,
+                    parentId=element.parentId,
+                    worldId=element.worldId,
                 )
             )
 
     complete_world = WorldWithElementsSchema(
         id=world.id,
-        world_elements=world_elements_schema,
+        worldElements=world_elements_schema,
     )
     return complete_world
 

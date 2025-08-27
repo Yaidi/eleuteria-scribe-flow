@@ -61,9 +61,9 @@ async def create_project(
     new_project.status = ProjectStatus.planning
     new_project.word_goal = 1000
     new_project.words = 0
-    new_world = await world_repository.create_world(new_project.id)
-
     await project_repository.create_project(new_project)
+
+    new_world = await world_repository.create_world(new_project.id)
     return project_schema_factory(new_project, world=new_world)
 
 

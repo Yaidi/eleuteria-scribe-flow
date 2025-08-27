@@ -39,7 +39,7 @@ def mock_world_element():
     element.description = "Test description"
     element.origin = "Test origin"
     element.conflictCause = "Test conflict"
-    element.worldElementID = None
+    element.parentId = None
     element.worldID = 1  # ✅ Asegurar que worldID sea un entero válido
     return element
 
@@ -116,8 +116,8 @@ class TestGetWorld:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert len(response_data["world_elements"]) == 1
-        assert response_data["world_elements"][0]["id"] == 1
+        assert len(response_data["worldElements"]) == 1
+        assert response_data["worldElements"][0]["id"] == 1
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -142,7 +142,7 @@ class TestGetWorld:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["world_elements"] == []
+        assert response_data["worldElements"] == []
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -188,7 +188,7 @@ class TestGetWorldByProjectId:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert len(response_data["world_elements"]) == 1
+        assert len(response_data["worldElements"]) == 1
         mock_repo.get_world_by_project_id.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -318,7 +318,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element = AsyncMock(return_value=mock_world_element)
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -331,7 +331,8 @@ class TestCreateWorldElement:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["worldID"] == 1
+        assert response_data["worldId"] == 1
+        assert response_data["parentId"] is None
         mock_repo.create_world_element.assert_called_once_with(world_id=1)
 
     @patch("backend.app.router.sections.world_router.WorldRepository")

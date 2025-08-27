@@ -18,7 +18,10 @@ class WorldElement(Base):
     description = Column(Text)
     origin = Column(Text)
     conflictCause = Column(Text)
-    worldElementID = Column(
-        Integer, ForeignKey("world_elements.id", ondelete="CASCADE")
+    parentId = Column(
+        Integer,
+        ForeignKey("world_elements.id", ondelete="CASCADE"),
+        nullable=True,
+        default=None
     )
-    worldID = Column(Integer, ForeignKey("worlds.id", ondelete="CASCADE"))
+    worldId = Column(Integer, ForeignKey("worlds.id", ondelete="CASCADE"))

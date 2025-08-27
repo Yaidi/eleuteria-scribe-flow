@@ -59,7 +59,7 @@ async def get_world(world_id: int, session: AsyncSession = Depends(get_session))
 
     complete_world = WorldWithElementsSchema(
         id=world_id,
-        world_elements=world_elements_schema,
+        worldElements=world_elements_schema,
     )
     return complete_world
 
@@ -93,7 +93,7 @@ async def get_world_by_project_id(
 
     complete_world = WorldWithElementsSchema(
         id=world.id,
-        world_elements=world_elements_schema,
+        worldElements=world_elements_schema,
     )
     return complete_world
 

@@ -21,7 +21,9 @@ export const getProjectFetch = createAsyncThunk<ProjectData, number>(
       throw new Error("Error fetching projects");
     }
     await setCurrentId(id);
-    return (await response.json()) as ProjectData;
+    const res = (await response.json()) as ProjectData;
+    console.log(res);
+    return res;
   },
 );
 
@@ -39,6 +41,7 @@ export const addProjectFetch = createAsyncThunk<ProjectData, RequestAddProject>(
       throw new Error("Error fetching projects");
     }
     const data = (await response.json()) as ProjectData;
+    console.log(data.sections);
     await setCurrentId(data.id);
     return data;
   },

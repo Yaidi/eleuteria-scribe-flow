@@ -107,7 +107,7 @@ def project_schema_factory(
     if world:
         world_schema = WorldWithElementsSchema(
             id=world.id,
-            world_elements=world_elements_schema,
+            worldElements=world_elements_schema,
         )
 
     characters_schema = []

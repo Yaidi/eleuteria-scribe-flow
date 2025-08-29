@@ -14,7 +14,7 @@ const Manuscript: React.FC<ManuscriptProps> = ({ section }) => {
         <CardTitle className="capitalize">{section.toString()}</CardTitle>
       </CardHeader>
       <CardContent>
-        <TextEditor />
+        <TextEditor project_id={1} />
       </CardContent>
     </Card>
   );

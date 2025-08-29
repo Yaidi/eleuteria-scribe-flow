@@ -4,14 +4,34 @@ import TextEditor from "@/components/ui/text-editor";
 import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
+// Mock fetch globally
+global.fetch = vi.fn();
+
 // Mock the EditorProvider component
 vi.mock("@tiptap/react", () => ({
-  EditorProvider: vi.fn(({ children, slotBefore, ...props }) => (
+  EditorProvider: vi.fn(({ children, slotBefore, onUpdate, ...props }) => (
     <div data-testid="editor-provider" {...props}>
       {slotBefore}
       {children}
+      <button
+        data-testid="mock-editor-update"
+        onClick={() =>
+          onUpdate?.({
+            editor: {
+              getHTML: () => "<p>Updated content</p>",
+            },
+          })
+        }
+      >
+        Trigger Update
+      </button>
     </div>
   )),
+  useCurrentEditor: vi.fn(() => ({
+    editor: {
+      getHTML: () => "<p>Current content</p>",
+    },
+  })),
 }));
 
 // Mock the TextEditorMenuBar component
@@ -24,79 +44,107 @@ vi.mock("@tiptap/starter-kit", () => ({
   default: "StarterKit",
 }));
 
+// Mock CharacterCount extension
+vi.mock("@tiptap/extensions", () => ({
+  CharacterCount: {
+    configure: vi.fn(() => "CharacterCount"),
+  },
+}));
+
+// Mock Button component
+vi.mock("@/components/ui/button.tsx", () => ({
+  Button: vi.fn(({ children, onClick, disabled, ...props }) => (
+    <button onClick={onClick} disabled={disabled} data-testid="mock-button" {...props}>
+      {children}
+    </button>
+  )),
+}));
+
 describe("TextEditor", () => {
+  const defaultProps = {
+    project_id: 1,
+    filename: "test-document.md",
+    relativePath: "test-folder",
+    initialContent: "<p>Initial content</p>",
+    autoSaveDelay: 1000,
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ session_id: "mock-session-id" }),
+    } as Response);
   });
 
   describe("Rendering", () => {
-    it("renders the text editor container with correct structure", () => {
-      render(<TextEditor />);
-
-      // Check if the main container exists with correct classes
-      const container = screen.getByTestId("editor-provider").parentElement;
-      expect(container).toBeDefined();
-      expect(container?.className).toContain("border");
-      expect(container?.className).toContain("border-gray-300");
-      expect(container?.className).toContain("dark:border-slate-600");
-      expect(container?.className).toContain("rounded-lg");
-      expect(container?.className).toContain("overflow-hidden");
-    });
-
-    it("renders the EditorProvider with correct props", () => {
-      render(<TextEditor />);
+    it("renders with required props", () => {
+      render(<TextEditor {...defaultProps} />);
 
       const editorProvider = screen.getByTestId("editor-provider");
       expect(editorProvider).toBeDefined();
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
-          extensions: [StarterKit],
-          content: "",
-          editorProps: {
-            attributes: {
-              class:
-                "prose prose-sm dark:prose-invert m-0 p-4 focus:outline-none h-[500px] max-w-none overflow-y-auto bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100",
-            },
-          },
+          content: "<p>Initial content</p>",
+          extensions: expect.arrayContaining([StarterKit]),
         }),
         expect.any(Object),
       );
     });
 
-    it("renders the TextEditorMenuBar as slotBefore", () => {
-      render(<TextEditor />);
+    it("renders with default props when minimal props provided", () => {
+      const minimalProps = { project_id: 1 };
+      render(<TextEditor {...minimalProps} />);
 
-      const menuBar = screen.getByTestId("text-editor-menu-bar");
-      expect(menuBar).toBeDefined();
-      expect(menuBar.textContent).toBe("Menu Bar");
+      expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
+        expect.objectContaining({
+          content: "",
+          extensions: expect.arrayContaining([StarterKit]),
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("renders save status component", () => {
+      render(<TextEditor {...defaultProps} />);
+
+      // Should show initial "Sin guardar" status
+      expect(screen.getByText("Sin guardar")).toBeDefined();
+    });
+
+    it("renders manual save button", () => {
+      render(<TextEditor {...defaultProps} />);
+
+      const saveButton = screen.getByText("Guardar");
+      expect(saveButton).toBeDefined();
     });
   });
 
   describe("Configuration", () => {
     it("uses StarterKit extension", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
-          extensions: [StarterKit],
+          extensions: expect.arrayContaining([StarterKit]),
         }),
         expect.any(Object),
       );
     });
 
     it("initializes with empty content", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
-          content: "",
+          content: "<p>Initial content</p>",
         }),
         expect.any(Object),
       );
     });
 
     it("applies correct editor attributes for styling", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -111,7 +159,7 @@ describe("TextEditor", () => {
     });
 
     it("sets editor height to 500px", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -128,7 +176,7 @@ describe("TextEditor", () => {
 
   describe("Component Integration", () => {
     it("maintains component structure consistency", () => {
-      const { container } = render(<TextEditor />);
+      const { container } = render(<TextEditor {...defaultProps} />);
 
       // Check if the structure is maintained: Container -> EditorProvider -> MenuBar
       const editorContainer = container.firstChild;
@@ -144,7 +192,7 @@ describe("TextEditor", () => {
 
   describe("CSS Classes", () => {
     it("applies correct container styling classes", () => {
-      const { container } = render(<TextEditor />);
+      const { container } = render(<TextEditor {...defaultProps} />);
 
       const editorContainer = container.firstChild as HTMLElement;
       expect(editorContainer.className).toContain(
@@ -153,7 +201,7 @@ describe("TextEditor", () => {
     });
 
     it("applies correct editor prose classes", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -168,7 +216,7 @@ describe("TextEditor", () => {
     });
 
     it("applies correct spacing and layout classes", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -183,7 +231,7 @@ describe("TextEditor", () => {
     });
 
     it("applies correct focus and overflow classes", () => {
-      render(<TextEditor />);
+      render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({

@@ -24,7 +24,7 @@ process.env.VITE_PUBLIC =
 let win: BrowserWindow | null;
 let splash: BrowserWindow | null = null;
 let pythonBackendProcess: ChildProcess | null = null;
-let rustBackendProcess: ChildProcess | null = null;
+// let rustBackendProcess: ChildProcess | null = null; TODO: Backend en RUST Clausurado hasta nuevo aviso :v
 
 function createWindow() {
   const preloadPath =
@@ -89,7 +89,8 @@ function waitForBackend(
 function startBackend() {
   const isDev = !!VITE_DEV_SERVER_URL;
 
-  // Rust Backend
+  // Rust Backend TODO: Backend en RUST Clausurado hasta nuevo aviso :v
+  /*
   const rustBackendPath =
     isDev || isSmokeTest ? "cargo" : path.join(process.resourcesPath, "backend-rust");
 
@@ -127,6 +128,7 @@ function startBackend() {
     //if (rustBackendProcess?.killed) return;
     console.log(`Rust server exited with code ${code}`);
   });
+  */
 
   // Python Backend
   const pythonBackendPath =
@@ -165,13 +167,13 @@ app.on("window-all-closed", async () => {
     pythonBackendProcess = null;
     await killPort(8000);
   }
-
+  /* TODO: Backend en RUST Clausurado hasta nuevo aviso :v
   if (rustBackendProcess) {
     rustBackendProcess.kill();
     rustBackendProcess = null;
     await killPort(9001);
   }
-
+*/
   if (process.platform !== "darwin" || isCI) {
     app.quit();
     win = null;
@@ -202,7 +204,7 @@ app.whenReady().then(async () => {
 
   try {
     await waitForBackend();
-    await waitForBackend("http://127.0.0.1:9001/"); // await for Rust backend
+    // await waitForBackend("http://127.0.0.1:9001/"); // await for Rust backend TODO: Backend en RUST Clausurado hasta nuevo aviso :v
     splash?.close();
     splash = null;
     createWindow();

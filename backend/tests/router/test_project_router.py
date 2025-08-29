@@ -516,7 +516,12 @@ class TestUpdateGeneralInfo:
         # Assert
         assert response.status_code == 200
         assert mock_project.title == "Updated Title"
-        assert response.json() == {'message': 'General info updated successfully', 'general': {'title': 'Updated Title'}, 'projectName': 'Updated Title', 'projectId': 1}
+        assert response.json() == {
+            "message": "General info updated successfully",
+            "general": {"title": "Updated Title"},
+            "projectName": "Updated Title",
+            "projectId": 1,
+        }
         mock_repo.update_project.assert_called_once_with(mock_project)
 
     @patch("backend.app.router.project_router.ProjectRepository")

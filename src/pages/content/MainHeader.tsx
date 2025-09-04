@@ -1,10 +1,7 @@
-import { Button } from "@/components/ui/button.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { Progress } from "@/components/ui/progress.tsx";
-import { Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { ProjectData } from "@/types/project.ts";
-import { useToast } from "@/hooks/use-toast.ts";
 
 export interface MainHeaderProps {
   currentProject: ProjectData;
@@ -13,7 +10,6 @@ export interface MainHeaderProps {
 const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   const [autoSave, setAutoSave] = useState(true);
   const { words, wordGoal } = currentProject;
-  const { toast } = useToast();
 
   useEffect(() => {
     if (autoSave) {
@@ -30,14 +26,6 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   const getProgressPercentage = () => {
     if (!wordGoal || !words) return 0;
     return (words / wordGoal) * 100;
-  };
-
-  const handleSave = () => {
-    localStorage.setItem("eleuteria-project", JSON.stringify(currentProject));
-    toast({
-      title: "Project saved",
-      description: "Your work has been saved successfully.",
-    });
   };
 
   return (
@@ -64,12 +52,6 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
           </div>
         </div>
       </div>
-      <section className="flex justify-center items-center space-x-2">
-        <Button onClick={handleSave} size="sm">
-          <Save className="w-4 h-4" />
-          Save
-        </Button>
-      </section>
     </header>
   );
 };

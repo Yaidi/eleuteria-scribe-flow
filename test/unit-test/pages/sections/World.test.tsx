@@ -3,7 +3,7 @@ import { vi, test, expect, describe } from "vitest";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
 import World from "@/pages/sections/World.tsx";
 import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store";
-import { mockProjectData, mockWorld } from "../../../mocks";
+import { mockProjectData, mockWorld, mockWorldElements } from "../../../mocks";
 import { ESections } from "@/types/sections.ts";
 import { store } from "@/store/config.ts";
 import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
@@ -22,6 +22,11 @@ mockThunkSuccess(actions, "updateWorldElement", mockWorld);
 mockThunkSuccess(actions, "addWorldElement", mockWorld);
 
 describe("World component", () => {
+  const mockCurrentWorldElement = {
+    ...mockWorldElements[0],
+    parentId: null,
+    childrenIds: [],
+  };
   test("calls addWorldElement when 'Add Element' button is clicked", () => {
     renderWithProviders(<World />, {
       projectInfo: {
@@ -51,8 +56,10 @@ describe("World component", () => {
         ...store.getState().sections,
         world: {
           world: mockWorld,
-          worldElements: {},
-          currentWorldElement: null,
+          worldElements: {
+            1: mockCurrentWorldElement,
+          },
+          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });
@@ -62,8 +69,8 @@ describe("World component", () => {
 
     expect(mockDispatch).toHaveBeenCalled();
     expect(updateWorldElement).toHaveBeenCalledWith({
+      ...mockCurrentWorldElement,
       name: "Updated Name",
-      id: 1,
     });
   });
 
@@ -73,19 +80,23 @@ describe("World component", () => {
         ...store.getState().sections,
         world: {
           world: mockWorld,
-          worldElements: {},
-          currentWorldElement: null,
+          worldElements: {
+            1: mockCurrentWorldElement,
+          },
+          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });
 
-    const descInput = screen.getByDisplayValue("Where John works as a detective.");
+    const descInput = screen.getByDisplayValue(
+      "A sprawling metropolis filled with secrets and shadows.",
+    );
     fireEvent.change(descInput, { target: { value: "New description" } });
 
     expect(mockDispatch).toHaveBeenCalled();
     expect(updateWorldElement).toHaveBeenCalledWith({
+      ...mockCurrentWorldElement,
       description: "New description",
-      id: 2,
     });
   });
 
@@ -95,8 +106,10 @@ describe("World component", () => {
         ...store.getState().sections,
         world: {
           world: mockWorld,
-          worldElements: {},
-          currentWorldElement: null,
+          worldElements: {
+            1: mockCurrentWorldElement,
+          },
+          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });

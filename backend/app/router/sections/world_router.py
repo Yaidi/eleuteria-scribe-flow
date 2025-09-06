@@ -127,7 +127,7 @@ async def create_world_element(
     data: WorldElementCreate, session: AsyncSession = Depends(get_session)
 ):
     repository = WorldRepository(session)
-    new_element = await repository.create_world_element(world_id=data.worldID)
+    new_element = await repository.create_world_element(world_id=data.worldId)
 
     return new_element
 

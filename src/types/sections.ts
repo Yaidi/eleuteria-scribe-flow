@@ -63,6 +63,7 @@ export interface IWorldElement {
 export interface IWorldElementWithChildren extends IWorldElement {
   childrenIds: number[];
 }
+export type IWorldElementsObject = Record<number, IWorldElementWithChildren>;
 
 export interface IGeneral {
   author: string;

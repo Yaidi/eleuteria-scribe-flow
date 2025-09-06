@@ -60,13 +60,10 @@ describe("WorldReducer", () => {
     };
 
     const result = worldReducer(stateWithWorld, action);
-    expect(result.world?.worldElements).toContainEqual({
-      id: 3,
-      name: "New Element",
-      parentId: null,
-      childrenIds: [],
-    });
-    expect(result.worldElements[3]).toBeDefined();
+    const element = result.worldElements[3];
+    expect(element.id).toBe(3);
+    expect(element.name).toBe("New Element");
+    expect(element.parentId).toBe(null);
     expect(result.currentWorldElement?.id).toBe(3);
   });
 
@@ -85,7 +82,6 @@ describe("WorldReducer", () => {
     };
 
     const result = worldReducer(stateWithWorld, action);
-    expect(result.world?.worldElements[0].name).toBe("Updated Root");
     expect(result.worldElements[1].name).toBe("Updated Root");
     expect(result.currentWorldElement?.name).toBe("Updated Root");
   });
@@ -105,7 +101,6 @@ describe("WorldReducer", () => {
     };
 
     const result = worldReducer(stateWithWorld, action);
-    expect(result.world?.worldElements).toHaveLength(0);
     expect(result.worldElements[1]).toBeUndefined();
     expect(result.currentWorldElement).toBeNull();
   });
@@ -114,5 +109,112 @@ describe("WorldReducer", () => {
     const action = setCurrentWorldElement(mockWorldElements[0]);
     const result = worldReducer(initialState, action);
     expect(result.currentWorldElement).toEqual(mockWorldElements[0]);
+  });
+
+  test("should update element without change parentId", () => {
+    const action = {
+      type: updateWorldElement.fulfilled.type,
+      payload: { id: 2, name: "Updated element", parentId: null },
+    };
+    const stateWithElement: WorldState = {
+      ...initialState,
+      worldElements: {
+        2: { ...mockWorldElements[1], parentId: null, childrenIds: [] },
+      },
+    };
+
+    const newState = worldReducer(stateWithElement, action);
+
+    expect(newState.worldElements[2].name).toBe("Updated element");
+    expect(newState.worldElements[2].parentId).toBe(null); //
+  });
+
+  test("should move the element to a new parent", () => {
+    const action = {
+      type: updateWorldElement.fulfilled.type,
+      payload: { id: 2, parentId: 4 },
+    };
+    const stateWithoutParent: WorldState = {
+      ...initialState,
+      worldElements: {
+        1: {
+          id: 1,
+          name: "Root",
+          description: "",
+          conflictCause: "",
+          origin: "",
+          worldId: 1,
+          parentId: null,
+          childrenIds: [2],
+        },
+        2: {
+          id: 2,
+          name: "Root",
+          description: "",
+          conflictCause: "",
+          origin: "",
+          worldId: 1,
+          parentId: 1,
+          childrenIds: [],
+        },
+        4: {
+          id: 4,
+          name: "",
+          description: "",
+          conflictCause: "",
+          origin: "",
+          worldId: 1,
+          parentId: null,
+          childrenIds: [],
+        },
+      },
+    };
+
+    const newState = worldReducer(stateWithoutParent, action);
+
+    // ya no debe estar en el padre anterior (1)
+    expect(newState.worldElements[1].childrenIds).not.toContain(2);
+    // debe estar en el nuevo padre (3)
+    expect(newState.worldElements[4].childrenIds).toContain(2);
+    // y su parentId se actualizó
+    expect(newState.worldElements[2].parentId).toBe(4);
+  });
+
+  test("should assign a parent", () => {
+    const stateWithoutParent: WorldState = {
+      ...initialState,
+      worldElements: {
+        1: {
+          id: 1,
+          name: "Root",
+          description: "",
+          conflictCause: "",
+          origin: "",
+          worldId: 1,
+          parentId: null,
+          childrenIds: [],
+        },
+        4: {
+          id: 4,
+          name: "",
+          description: "",
+          conflictCause: "",
+          origin: "",
+          worldId: 1,
+          parentId: null,
+          childrenIds: [],
+        },
+      },
+    };
+
+    const action = {
+      type: updateWorldElement.fulfilled.type,
+      payload: { id: 4, parentId: 1 },
+    };
+
+    const newState = worldReducer(stateWithoutParent, action);
+
+    expect(newState.worldElements[4].parentId).toBe(1);
+    expect(newState.worldElements[1].childrenIds).toContain(4);
   });
 });

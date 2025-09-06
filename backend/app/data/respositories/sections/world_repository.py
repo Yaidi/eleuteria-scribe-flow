@@ -52,7 +52,7 @@ class WorldRepository:
 
     async def create_world_element(self, world_id: int) -> WorldElement:
         new_element = WorldElement()
-        new_element.worldID = world_id
+        new_element.worldId = world_id
         self.session.add(new_element)
         await self.session.commit()
         await self.session.refresh(new_element)

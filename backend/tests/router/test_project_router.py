@@ -105,7 +105,6 @@ class TestCreateProject:
         valid_project_response = {
             "id": 1,
             "projectListID": 1,
-            "projectName": "New Project",
             "type": "novel",
             "sections": None,
         }
@@ -122,7 +121,7 @@ class TestCreateProject:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["projectName"] == "New Project"
+        assert response_data["projectName"] == ""
         assert response_data["type"] == "novel"
 
         mock_create_project_object_from_request.assert_called_once()

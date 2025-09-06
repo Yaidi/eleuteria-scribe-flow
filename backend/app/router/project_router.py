@@ -61,6 +61,7 @@ async def create_project(
     new_project.status = ProjectStatus.planning
     new_project.word_goal = 1000
     new_project.words = 0
+    new_project.project_name = ""
     await project_repository.create_project(new_project)
 
     new_world = await world_repository.create_world(new_project.id)

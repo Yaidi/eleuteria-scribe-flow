@@ -344,7 +344,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element.side_effect = Exception("Database error")
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",

@@ -318,7 +318,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element = AsyncMock(return_value=mock_world_element)
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -331,7 +331,7 @@ class TestCreateWorldElement:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["worldID"] == 1
+        assert response_data["worldId"] == 1
         assert response_data["parentId"] is None
         mock_repo.create_world_element.assert_called_once_with(world_id=1)
 
@@ -344,7 +344,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element.side_effect = Exception("Database error")
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",

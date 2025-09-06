@@ -12,7 +12,7 @@ class WorldSchema(WorldCreate):
 
 
 class WorldElementCreate(BaseModel):
-    worldID: int
+    worldId: int
 
 
 class WorldElementSchema(WorldElementCreate):

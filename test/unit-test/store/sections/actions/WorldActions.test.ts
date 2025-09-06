@@ -51,10 +51,10 @@ describe("World API Actions", () => {
 
     const result = await updateWorldElement(element)(vi.fn(), vi.fn(), {});
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining("/world/element/2"),
+      expect.stringContaining("/api/world/element/2"),
       expect.objectContaining({
         method: "PUT",
-        body: JSON.stringify(element),
+        body: JSON.stringify({ name: "Updated Name" }),
       }),
     );
     expect(result.payload).toEqual(mockResponse);
@@ -83,10 +83,10 @@ describe("World API Actions", () => {
 
     const result = await addWorldElement(10)(vi.fn(), vi.fn(), {});
     expect(mockFetch).toHaveBeenCalledWith(
-      expect.stringContaining("/world/element"),
+      expect.stringContaining("/api/world/element"),
       expect.objectContaining({
         method: "POST",
-        body: JSON.stringify({ worldID: 10 }),
+        body: JSON.stringify({ worldId: 10 }),
       }),
     );
     expect(result.payload).toEqual(mockResponse);

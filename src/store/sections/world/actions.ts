@@ -28,7 +28,12 @@ export const updateWorldElement = createAsyncThunk<Partial<IWorldElement>, Parti
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...worldElement,
+        name: worldElement.name,
+        description: worldElement.description,
+        origin: worldElement.origin,
+        conflictCause: worldElement.conflictCause,
+        parentId: worldElement.parentId,
+        worldId: worldElement.worldId,
       }),
     });
     const responseData = await response.json();
@@ -45,7 +50,7 @@ export const addWorldElement = createAsyncThunk<IWorldElement, number>(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        worldID: worldId,
+        worldId: worldId,
       }),
     });
     if (!response.ok) {

@@ -5,12 +5,17 @@ import {
   setCurrentWorldElement,
   updateWorldElement,
 } from "@/store/sections";
-import { IWorld, IWorldElement, IWorldElementWithChildren } from "@/types/sections";
+import {
+  IWorld,
+  IWorldElement,
+  IWorldElementsObject,
+  IWorldElementWithChildren,
+} from "@/types/sections";
 import { getProjectFetch } from "@/store";
 
 export interface WorldState {
   world: IWorld | null;
-  worldElements: Record<number, IWorldElementWithChildren>;
+  worldElements: IWorldElementsObject;
   currentWorldElement: IWorldElement | null;
 }
 
@@ -30,14 +35,8 @@ export const worldReducer = createReducer(initialState, (builder) => {
       };
     })
     .addCase(removeWorldElement.fulfilled, (state, { payload }) => {
-      if (!state.world) return state; // Ensure state.world is not null
-
       return {
         ...state,
-        world: {
-          ...state.world,
-          worldElements: state.world.worldElements.filter((element) => element.id !== payload.id),
-        },
         worldElements: Object.fromEntries(
           Object.entries(state.worldElements).filter(([key]) => parseInt(key, 10) !== payload.id),
         ),
@@ -51,17 +50,8 @@ export const worldReducer = createReducer(initialState, (builder) => {
       };
     })
     .addCase(addWorldElement.fulfilled, (state, { payload }) => {
-      if (!state.world) return state; // Ensure state.world is not null
-
       return {
         ...state,
-        world: {
-          ...state.world,
-          worldElements: [
-            ...state.world.worldElements,
-            { ...payload, childrenIds: [] }, // Ensure payload matches IWorldElementWithChildren
-          ],
-        },
         worldElements: {
           ...state.worldElements,
           [payload.id]: { ...payload, childrenIds: [] }, // Add childrenIds for consistency
@@ -70,28 +60,52 @@ export const worldReducer = createReducer(initialState, (builder) => {
       };
     })
     .addCase(updateWorldElement.fulfilled, (state, { payload }) => {
-      if (!state.world) return state; // Ensure state.world is not null
-      if (!payload.id) return state; // Ensure payload has an id
+      const elementId = payload.id!;
+      const prevParentId = state.worldElements[elementId]?.parentId ?? null;
+      const nextParentId = payload.parentId ?? null;
+
+      // 1. Update the element itself
+      let updatedWorldElements = {
+        ...state.worldElements,
+        [elementId]: {
+          ...state.worldElements[elementId],
+          ...payload,
+        },
+      };
+
+      // 2. Remove from previous parent if changed
+      if (prevParentId && prevParentId !== nextParentId) {
+        updatedWorldElements = {
+          ...updatedWorldElements,
+          [prevParentId]: {
+            ...updatedWorldElements[prevParentId],
+            childrenIds: updatedWorldElements[prevParentId].childrenIds.filter(
+              (cid: number) => cid !== elementId,
+            ),
+          },
+        };
+      }
+
+      // 3. Add to new parent if changed
+      if (nextParentId !== null) {
+        updatedWorldElements = {
+          ...updatedWorldElements,
+          [nextParentId]: {
+            ...updatedWorldElements[nextParentId],
+            childrenIds: [
+              ...new Set([...updatedWorldElements[nextParentId].childrenIds, elementId]),
+            ],
+          },
+        };
+      }
 
       return {
         ...state,
-        world: {
-          ...state.world,
-          worldElements: state.world.worldElements.map((element) =>
-            element.id === payload.id ? { ...element, ...payload } : element,
-          ),
+        worldElements: updatedWorldElements,
+        currentWorldElement: {
+          ...state.currentWorldElement!,
+          ...payload,
         },
-        worldElements: {
-          ...state.worldElements,
-          [payload.id]: {
-            ...state.worldElements[payload.id],
-            ...payload,
-          },
-        },
-        currentWorldElement:
-          state.currentWorldElement?.id === payload.id
-            ? { ...state.currentWorldElement, ...payload }
-            : state.currentWorldElement,
       };
     });
 });

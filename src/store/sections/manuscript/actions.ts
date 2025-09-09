@@ -7,6 +7,6 @@ export const selectScene = createAction<Scene>("[Manuscript] Set current scene")
 
 export const addChapter = createAction<IChapter>("[Manuscript] Add Chapter to cart");
 
-export const updateChapter = createAction<IChapter>("[Manuscript] Update Chapter");
+export const addScene = createAction<Scene>("[Manuscript] Add new scene");
 
 export const removeChapter = createAction<string>("[Manuscript] Remove Chapter");

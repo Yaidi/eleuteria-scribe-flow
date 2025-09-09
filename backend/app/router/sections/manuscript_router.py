@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form
 
 from backend.app.domain.manuscript_manager import ManuscriptManager
-from backend.app.schemas.manuscript_schemas import SaveStartRequest
+from backend.app.schemas.sections.manuscript_schemas import SaveStartRequest
 
 manuscript_router = APIRouter(prefix="/manuscript", tags=["Plot"])
 manuscript_manager = ManuscriptManager()

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button.tsx";
-import { ESections, PriorityType } from "@/types/sections.ts";
+import { ESections, IChapter, PriorityType, Scene } from "@/types/sections.ts";
 import React, { useState } from "react";
 import { Book, ChevronDown, ChevronRight, FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import {
+  addChapter,
   selectChapter,
   selectScene,
   setCurrentCharacter,
@@ -26,6 +27,32 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
   const [expandedChapters, setExpandedChapters] = useState<string[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<number | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+
+  const createNewChapter = () => {
+    // Generar IDs únicos
+    const newChapterId = `chapter-${Date.now()}`;
+    const newSceneId = `scene-${Date.now()}`;
+
+    // Crear una nueva escena vacía
+    const newScene: Scene = {
+      id: newSceneId,
+      title: `Nueva Escena 1`,
+      content: "",
+      wordCount: 0,
+      wordGoal: 0,
+      characters: [],
+    };
+
+    // Crear el nuevo capítulo con la escena incluida
+    const newChapter: IChapter = {
+      id: newChapterId,
+      title: `Nuevo Capítulo ${manuscript.chapters.length + 1}`,
+      description: "",
+      scenes: [newScene],
+    };
+
+    dispatch(addChapter(newChapter));
+  };
 
   const toggleChapter = (chapterId: string) => {
     setExpandedChapters((prev) =>
@@ -115,7 +142,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
         <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r border-t rounded-br-md border-slate-200 dark:border-slate-700 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-sm text-gray-700">Structure</h3>
-            <Button size="sm" variant="ghost" className="h-6 w-6 p-0">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 w-6 p-0"
+              onClick={() => createNewChapter()}
+            >
               <Plus className="w-3 h-3" />
             </Button>
           </div>

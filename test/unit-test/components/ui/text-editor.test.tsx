@@ -7,6 +7,24 @@ import StarterKit from "@tiptap/starter-kit";
 // Mock fetch globally
 global.fetch = vi.fn();
 
+// Mock Redux hooks
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
+}));
+
+// Mock useSections hooks
+vi.mock("@/hooks/useSections.ts", () => ({
+  useManuscript: vi.fn(() => ({
+    isSaving: false,
+    currentScene: null,
+    currentChapter: null,
+  })),
+  useSections: vi.fn(),
+  useProjectId: vi.fn(() => 1),
+  useSaveScene: vi.fn(),
+}));
+
 // Mock the EditorProvider component
 vi.mock("@tiptap/react", () => ({
   EditorProvider: vi.fn(({ children, slotBefore, onUpdate, ...props }) => (
@@ -61,10 +79,10 @@ vi.mock("@/components/ui/button.tsx", () => ({
 }));
 
 describe("TextEditor", () => {
+  const mockOnSaveScene = vi.fn();
+
   const defaultProps = {
-    project_id: 1,
-    filename: "test-document.md",
-    relativePath: "test-folder",
+    onSaveScene: mockOnSaveScene,
     initialContent: "<p>Initial content</p>",
     autoSaveDelay: 1000,
   };
@@ -92,8 +110,8 @@ describe("TextEditor", () => {
       );
     });
 
-    it("renders with default props when minimal props provided", () => {
-      const minimalProps = { project_id: 1 };
+    it("renders with minimal props (only onSaveScene)", () => {
+      const minimalProps = { onSaveScene: mockOnSaveScene };
       render(<TextEditor {...minimalProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
@@ -105,18 +123,11 @@ describe("TextEditor", () => {
       );
     });
 
-    it("renders save status component", () => {
+    it("renders text editor menu bar", () => {
       render(<TextEditor {...defaultProps} />);
 
-      // Should show initial "Sin guardar" status
-      expect(screen.getByText("Sin guardar")).toBeDefined();
-    });
-
-    it("renders manual save button", () => {
-      render(<TextEditor {...defaultProps} />);
-
-      const saveButton = screen.getByText("Guardar");
-      expect(saveButton).toBeDefined();
+      const menuBar = screen.getByTestId("text-editor-menu-bar");
+      expect(menuBar).toBeDefined();
     });
   });
 
@@ -132,12 +143,23 @@ describe("TextEditor", () => {
       );
     });
 
-    it("initializes with empty content", () => {
+    it("initializes with provided initial content", () => {
       render(<TextEditor {...defaultProps} />);
 
       expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
         expect.objectContaining({
           content: "<p>Initial content</p>",
+        }),
+        expect.any(Object),
+      );
+    });
+
+    it("initializes with empty content when no initial content provided", () => {
+      render(<TextEditor onSaveScene={mockOnSaveScene} />);
+
+      expect(vi.mocked(EditorProvider)).toHaveBeenCalledWith(
+        expect.objectContaining({
+          content: "",
         }),
         expect.any(Object),
       );
@@ -254,6 +276,42 @@ describe("TextEditor", () => {
         }),
         expect.any(Object),
       );
+    });
+  });
+
+  describe("Auto-save functionality", () => {
+    it("calls onSaveScene when content updates after delay", async () => {
+      vi.useFakeTimers();
+
+      render(<TextEditor {...defaultProps} />);
+
+      // Simulate editor update
+      const updateButton = screen.getByTestId("mock-editor-update");
+      updateButton.click();
+
+      // Fast forward time to trigger auto-save
+      vi.advanceTimersByTime(1000);
+
+      expect(mockOnSaveScene).toHaveBeenCalledWith("<p>Updated content</p>");
+
+      vi.useRealTimers();
+    });
+
+    it("uses custom autoSaveDelay when provided", async () => {
+      vi.useFakeTimers();
+
+      render(<TextEditor {...defaultProps} autoSaveDelay={2000} />);
+
+      const updateButton = screen.getByTestId("mock-editor-update");
+      updateButton.click();
+
+      vi.advanceTimersByTime(1500);
+      expect(mockOnSaveScene).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(500);
+      expect(mockOnSaveScene).toHaveBeenCalledWith("<p>Updated content</p>");
+
+      vi.useRealTimers();
     });
   });
 });

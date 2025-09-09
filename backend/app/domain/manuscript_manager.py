@@ -6,7 +6,7 @@ import uuid
 import aiofiles
 
 from fastapi import HTTPException, UploadFile
-from backend.app.schemas.manuscript_schemas import SaveStartRequest
+from backend.app.schemas.sections.manuscript_schemas import SaveStartRequest
 
 
 class ManuscriptManager:

@@ -9,6 +9,9 @@ describe("ManuscriptReducer", () => {
     chapters: [],
     currentChapter: undefined,
     currentScene: undefined,
+    isSaving: false,
+    lastSavedDate: undefined,
+    error: undefined,
   };
 
   test("should handle initial state with unknown action", () => {

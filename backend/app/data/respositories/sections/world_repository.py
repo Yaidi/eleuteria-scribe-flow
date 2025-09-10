@@ -30,7 +30,7 @@ class WorldRepository:
 
     async def get_world_elements(self, world_id: int) -> Sequence[WorldElement]:
         world_elements_result = await self.session.execute(
-            select(WorldElement).where(WorldElement.worldID == world_id)
+            select(WorldElement).where(WorldElement.worldId == world_id)
         )
         return world_elements_result.scalars().all()
 
@@ -43,14 +43,16 @@ class WorldRepository:
         return result.scalars().all()
 
     async def create_world(self, project_id: int) -> World:
-        world = World(projectID=project_id)
+        world = World()
+        world.projectID = project_id
         self.session.add(world)
         await self.session.commit()
         await self.session.refresh(world)
         return world
 
     async def create_world_element(self, world_id: int) -> WorldElement:
-        new_element = WorldElement(worldID=world_id)
+        new_element = WorldElement()
+        new_element.worldId = world_id
         self.session.add(new_element)
         await self.session.commit()
         await self.session.refresh(new_element)

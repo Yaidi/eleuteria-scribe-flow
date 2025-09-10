@@ -39,7 +39,7 @@ def mock_world_element():
     element.description = "Test description"
     element.origin = "Test origin"
     element.conflictCause = "Test conflict"
-    element.worldElementID = None
+    element.parentId = None
     element.worldID = 1  # ✅ Asegurar que worldID sea un entero válido
     return element
 
@@ -116,8 +116,8 @@ class TestGetWorld:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert len(response_data["world_elements"]) == 1
-        assert response_data["world_elements"][0]["id"] == 1
+        assert len(response_data["worldElements"]) == 1
+        assert response_data["worldElements"][0]["id"] == 1
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -142,7 +142,7 @@ class TestGetWorld:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["world_elements"] == []
+        assert response_data["worldElements"] == []
         mock_repo.get_world.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -188,7 +188,7 @@ class TestGetWorldByProjectId:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert len(response_data["world_elements"]) == 1
+        assert len(response_data["worldElements"]) == 1
         mock_repo.get_world_by_project_id.assert_called_once_with(1)
         mock_repo.get_world_elements.assert_called_once_with(world_id=1)
 
@@ -318,7 +318,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element = AsyncMock(return_value=mock_world_element)
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -331,7 +331,8 @@ class TestCreateWorldElement:
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["worldID"] == 1
+        assert response_data["worldId"] == 1
+        assert response_data["parentId"] is None
         mock_repo.create_world_element.assert_called_once_with(world_id=1)
 
     @patch("backend.app.router.sections.world_router.WorldRepository")
@@ -343,7 +344,7 @@ class TestCreateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.create_world_element.side_effect = Exception("Database error")
 
-        request_data = {"worldID": 1}
+        request_data = {"worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -414,7 +415,7 @@ class TestGetWorldElementsByWorldId:
         mock_element_2.description = "Second description"
         mock_element_2.origin = "Second origin"
         mock_element_2.conflictCause = "Second conflict"
-        mock_element_2.worldElementID = None
+        mock_element_2.parentId = None
         mock_element_2.worldID = 1
 
         elements_list = [mock_world_element, mock_element_2]
@@ -473,7 +474,7 @@ class TestGetNestedWorldElements:
         mock_nested_element.description = "Nested description"
         mock_nested_element.origin = "Nested origin"
         mock_nested_element.conflictCause = "Nested conflict"
-        mock_nested_element.worldElementID = 1  # Child of element 1
+        mock_nested_element.parentId = 1  # Child of element 1
         mock_nested_element.worldID = 1
 
         nested_elements = [mock_nested_element]
@@ -491,7 +492,7 @@ class TestGetNestedWorldElements:
         response_data = response.json()
         assert len(response_data) == 1
         assert response_data[0]["id"] == 2
-        assert response_data[0]["worldElementID"] == 1
+        assert response_data[0]["parentId"] == 1
         mock_repo.get_nested_world_elements.assert_called_once_with(world_element_id=1)
 
     @patch("backend.app.router.sections.world_router.WorldRepository")
@@ -575,7 +576,7 @@ class TestUpdateWorldElement:
         type(mock_world_element).description = "Original description"
         type(mock_world_element).origin = "Original origin"
         type(mock_world_element).conflictCause = "Original conflict"
-        type(mock_world_element).worldElementID = None
+        type(mock_world_element).parentId = None
         type(mock_world_element).worldID = 1  # ✅ Este NO se sobrescribirá
 
         mock_repo = AsyncMock()
@@ -587,7 +588,7 @@ class TestUpdateWorldElement:
             "name": "Updated Element Name",
             "description": "Updated description",
             "origin": "Updated origin",
-            "worldID": 1,
+            "worldId": 1,
         }
 
         with patch(
@@ -622,8 +623,8 @@ class TestUpdateWorldElement:
         type(mock_world_element).description = "Original description"
         type(mock_world_element).origin = "Original origin"
         type(mock_world_element).conflictCause = "Original conflict"
-        type(mock_world_element).worldElementID = None
-        type(mock_world_element).worldID = 1  # ✅ Este NO se sobrescribirá
+        type(mock_world_element).parentId = None
+        type(mock_world_element).worldId = 1  # ✅ Este NO se sobrescribirá
 
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
@@ -632,7 +633,7 @@ class TestUpdateWorldElement:
 
         request_data = {
             "name": "Partially Updated Name",
-            "worldID": 1,
+            "worldId": 1,
             # Solo se actualiza name, otros campos deben permanecer sin cambios
         }
 
@@ -649,7 +650,7 @@ class TestUpdateWorldElement:
         # Verificar que solo el nombre fue actualizado
         assert mock_world_element.name == "Partially Updated Name"
         # ✅ worldID se mantiene sin cambios
-        assert mock_world_element.worldID == 1
+        assert mock_world_element.worldId == 1
 
         mock_repo.get_world_element.assert_called_once_with(element_id=1)
         mock_repo.update_world_element.assert_called_once_with(mock_world_element)
@@ -663,7 +664,7 @@ class TestUpdateWorldElement:
         mock_repo_class.return_value = mock_repo
         mock_repo.get_world_element = AsyncMock(return_value=None)
 
-        request_data = {"name": "Updated Name", "worldID": 1}
+        request_data = {"name": "Updated Name", "worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -689,8 +690,8 @@ class TestUpdateWorldElement:
         type(mock_world_element).description = "Original description"
         type(mock_world_element).origin = "Original origin"
         type(mock_world_element).conflictCause = "Original conflict"
-        type(mock_world_element).worldElementID = None
-        type(mock_world_element).worldID = 1
+        type(mock_world_element).parentId = None
+        type(mock_world_element).worldId = 1
 
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
@@ -702,8 +703,8 @@ class TestUpdateWorldElement:
             "description": "New description",
             "origin": "New origin",
             "conflictCause": "New conflict cause",
-            "worldElementID": 5,
-            "worldID": 2,
+            "parentId": 5,
+            "worldId": 2,
         }
 
         with patch(
@@ -721,8 +722,8 @@ class TestUpdateWorldElement:
         assert mock_world_element.description == "New description"
         assert mock_world_element.origin == "New origin"
         assert mock_world_element.conflictCause == "New conflict cause"
-        assert mock_world_element.worldElementID == 5
-        assert mock_world_element.worldID == 2
+        assert mock_world_element.parentId == 5
+        assert mock_world_element.worldId == 2
 
         mock_repo.get_world_element.assert_called_once_with(element_id=1)
         mock_repo.update_world_element.assert_called_once_with(mock_world_element)
@@ -814,15 +815,15 @@ class TestDatabaseErrors:
         type(mock_world_element).description = "Test description"
         type(mock_world_element).origin = "Test origin"
         type(mock_world_element).conflictCause = "Test conflict"
-        type(mock_world_element).worldElementID = None
-        type(mock_world_element).worldID = 1
+        type(mock_world_element).parentId = None
+        type(mock_world_element).worldId = 1
 
         mock_repo = AsyncMock()
         mock_repo_class.return_value = mock_repo
         mock_repo.get_world_element = AsyncMock(return_value=mock_world_element)
         mock_repo.update_world_element.side_effect = Exception("Database error")
 
-        request_data = {"name": "Updated Name", "worldID": 1}
+        request_data = {"name": "Updated Name", "worldId": 1}
 
         with patch(
             "backend.app.router.sections.world_router.get_session",
@@ -893,7 +894,7 @@ class TestSchemaValidation:
         type(mock_world_element).description = "Test description"
         type(mock_world_element).origin = "Test origin"
         type(mock_world_element).conflictCause = "Test conflict"
-        type(mock_world_element).worldElementID = None
+        type(mock_world_element).parentId = None
         type(mock_world_element).worldID = 1  # ✅ Campo requerido preservado
 
         mock_repo = AsyncMock()

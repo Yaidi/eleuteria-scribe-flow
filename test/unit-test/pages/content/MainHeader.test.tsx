@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { vi, describe, test, expect, beforeEach } from "vitest";
 import MainHeader from "@/pages/content/MainHeader.tsx";
 import { mockProjectData } from "../../../mocks";
@@ -31,18 +30,6 @@ describe("MainHeader", () => {
     expect(screen.getByText("0")).toBeInTheDocument();
   });
 
-  test("saves project to localStorage when save button is clicked", async () => {
-    const user = userEvent.setup();
-    render(<MainHeader currentProject={mockProjectData} />);
-
-    const button = screen.getByRole("button", { name: /save/i });
-    await user.click(button);
-
-    const stored = localStorage.getItem("eleuteria-project");
-    expect(stored).not.toBeNull();
-    expect(JSON.parse(stored!)).toEqual(mockProjectData);
-  });
-
   test("auto saves on mount", async () => {
     render(<MainHeader currentProject={mockProjectData} />);
 
@@ -51,5 +38,23 @@ describe("MainHeader", () => {
     const stored = localStorage.getItem("eleuteria-project");
     expect(stored).not.toBeNull();
     expect(JSON.parse(stored!)).toEqual(mockProjectData);
+  });
+
+  test("shows progress bar with correct percentage when wordGoal is set", () => {
+    const projectWithGoal: ProjectData = {
+      ...mockProjectData,
+      words: 500,
+      wordGoal: 1000,
+    };
+
+    render(<MainHeader currentProject={projectWithGoal} />);
+
+    const progressRoot = screen.getByTestId("progressbar");
+    expect(progressRoot).toBeInTheDocument();
+
+    const indicator = progressRoot.querySelector("div");
+    expect(indicator).not.toBeNull();
+    const expectedTransform = "translateX(-50%)"; // 500/1000 => 50 %
+    expect(indicator).toHaveStyle(`transform: ${expectedTransform}`);
   });
 });

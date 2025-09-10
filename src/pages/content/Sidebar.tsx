@@ -16,6 +16,7 @@ import { useSections } from "@/hooks/useSections.ts";
 import { useDispatch } from "react-redux";
 import { RequestUpdateCharacter } from "@/types/requests.ts";
 import { AppDispatch } from "@/store/config.ts";
+import WorldSidebar from "@/pages/content/sidebar/WorldSidebar.tsx";
 
 interface SidebarProps {
   activeSection: ESections;
@@ -71,6 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
     dispatch(updatePlot({ plot: { id: plotId, importance: importance } }));
   };
   const handleDragStart = (e: React.DragEvent<HTMLButtonElement>, characterId: number) => {
+    console.log(characterId, "drag start");
     e.dataTransfer.setData("text/plain", characterId.toString());
     setSelectedCharacter(characterId);
   };
@@ -263,6 +265,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection }) => {
           ))}
         </div>
       );
+    case ESections.world:
+      return <WorldSidebar></WorldSidebar>;
     default:
       return <div data-testid="default"></div>;
   }

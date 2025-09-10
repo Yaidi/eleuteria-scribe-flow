@@ -12,7 +12,7 @@ class WorldSchema(WorldCreate):
 
 
 class WorldElementCreate(BaseModel):
-    worldID: int
+    worldId: int
 
 
 class WorldElementSchema(WorldElementCreate):
@@ -21,7 +21,7 @@ class WorldElementSchema(WorldElementCreate):
     description: Optional[str] = None
     origin: Optional[str] = None
     conflictCause: Optional[str] = None
-    worldElementID: Optional[int] = None
+    parentId: Optional[int] = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -30,8 +30,8 @@ class WorldElementUpdateSchema(BaseModel):
     description: Optional[str] = None
     origin: Optional[str] = None
     conflictCause: Optional[str] = None
-    worldElementID: Optional[int] = None
-    worldID: int
+    parentId: Optional[int] = None
+    worldId: int
 
 
 """ For Get Project Response """
@@ -43,12 +43,12 @@ class WorldElementDetailedSchema(BaseModel):
     description: Optional[str] = ""
     origin: Optional[str] = ""
     conflictCause: Optional[str] = ""
-    worldElementID: Optional[int] = None
-    worldID: int
+    parentId: Optional[int] = None
+    worldId: int
     model_config = ConfigDict(from_attributes=True)
 
 
 class WorldWithElementsSchema(BaseModel):
     id: int
-    world_elements: Optional[List[WorldElementDetailedSchema]]
+    worldElements: Optional[List[WorldElementDetailedSchema]]
     model_config = ConfigDict(from_attributes=True)

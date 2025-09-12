@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Scene, IChapter } from "@/types/sections";
 import { addChapter } from "@/store";
 import { useProjectId } from "@/hooks/useSections.ts";
+import { host } from "@/https/fetch.ts";
 
 /**
  * Guarda la escena editada en el backend.
@@ -47,14 +48,14 @@ const saveChunkToServer = async (
   formData.append("file", blob, filename);
   formData.append("relative_path", relativePath);
 
-  await fetch(`http://localhost:8000/manuscript/save/chunk/${sessionId}`, {
+  await fetch(`${host}/manuscript/save/chunk/${sessionId}`, {
     method: "POST",
     body: formData,
   });
 };
 
 const startSaveSession = async (filename: string, relativePath: string, projectId: number) => {
-  const res = await fetch(`http://localhost:8000/manuscript/save/start`, {
+  const res = await fetch(`${host}/manuscript/save/start`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +72,7 @@ const startSaveSession = async (filename: string, relativePath: string, projectI
 };
 
 const finishSaveSession = async (sessionId: string) => {
-  const response = await fetch(`http://localhost:8000/manuscript/save/finish/${sessionId}`, {
+  const response = await fetch(`${host}/manuscript/save/finish/${sessionId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

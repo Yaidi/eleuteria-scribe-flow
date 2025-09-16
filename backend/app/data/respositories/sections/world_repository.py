@@ -38,7 +38,7 @@ class WorldRepository:
         self, world_element_id: int
     ) -> Sequence[WorldElement]:
         result = await self.session.execute(
-            select(WorldElement).where(WorldElement.worldElementID == world_element_id)
+            select(WorldElement).where(WorldElement.parentId == world_element_id)
         )
         return result.scalars().all()
 

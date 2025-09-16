@@ -9,6 +9,7 @@ from backend.app.data.helpers.json_list_encoder_helper import JSONEncodedList
 def type_decorator():
     return JSONEncodedList()
 
+
 @pytest.fixture
 def dialect():
     return default.DefaultDialect()
@@ -21,7 +22,9 @@ def test_process_bind_param_with_list(type_decorator, dialect):
     assert isinstance(result, str)
 
 
-def test_process_bind_param_with_none_returns_empty_list_string(type_decorator, dialect):
+def test_process_bind_param_with_none_returns_empty_list_string(
+    type_decorator, dialect
+):
     result = type_decorator.process_bind_param(None, dialect)
     assert result == "[]"
 

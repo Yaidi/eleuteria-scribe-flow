@@ -46,25 +46,25 @@ jobs:
           cd backend
           poetry run coverage run -m pytest
           
-          # Generate a nice coverage report
           echo "🧪 Running Python tests with coverage..."
           
-          # Get coverage percentage (extract from the TOTAL line)
           COVERAGE_PERCENT=$(poetry run coverage report | grep "TOTAL" | awk '{print $4}' | sed 's/%//')
           
-          # Get detailed report
           COVERAGE_REPORT=$(poetry run coverage report --show-missing)
           
-          # Create summary with emoji based on coverage
           if [ "$COVERAGE_PERCENT" -ge 90 ]; then
             COVERAGE_EMOJI="🟢"
             COVERAGE_STATUS="Right on the target!"
           elif [ "$COVERAGE_PERCENT" -ge 70 ]; then
             COVERAGE_EMOJI="🟡"
             COVERAGE_STATUS="Almost There"
+            echo "Coverage below 90%. Merge Blocked"
+            exit 1
           else
             COVERAGE_EMOJI="🔴"
             COVERAGE_STATUS="Needs Improvement"
+            echo "Coverage below 90%. Merge Blocked"
+            exit 1
           fi
           
           echo "COVERAGE_PERCENT=$COVERAGE_PERCENT" >> $GITHUB_OUTPUT

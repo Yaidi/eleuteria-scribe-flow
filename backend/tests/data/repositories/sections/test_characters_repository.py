@@ -1,6 +1,8 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock
-from backend.app.data.respositories.sections.character_repository import CharacterRepository
+from backend.app.data.respositories.sections.character_repository import (
+    CharacterRepository,
+)
 from backend.app.data.entities.sections.character_entities import Character
 
 

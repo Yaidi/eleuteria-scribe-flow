@@ -4,9 +4,7 @@ from datetime import datetime
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from backend.app.data.entities.project_entities import (
-    BaseProject
-)
+from backend.app.data.entities.project_entities import BaseProject
 from http.client import HTTPException
 
 from backend.app.data.respositories.project_repository import ProjectRepository
@@ -39,7 +37,6 @@ async def test_get_list():
     assert projects == ["project1", "project2"]
     mock_session.execute.assert_awaited_once()
     mock_result.scalars.return_value.all.assert_called_once()
-
 
 
 @pytest.mark.asyncio

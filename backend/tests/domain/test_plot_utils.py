@@ -2,8 +2,11 @@ import pytest
 from unittest.mock import AsyncMock
 from fastapi import HTTPException
 
-from backend.app.domain.plot_utils import delete_plot_steps_by_plot_id, plot_with_steps_factory, \
-    plot_list_with_steps_factory
+from backend.app.domain.plot_utils import (
+    delete_plot_steps_by_plot_id,
+    plot_with_steps_factory,
+    plot_list_with_steps_factory,
+)
 from backend.app.schemas.sections.character_schemas import CharacterSchema
 from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 
@@ -12,6 +15,7 @@ pytestmark = pytest.mark.asyncio
 
 class Dummy:
     """Objeto dummy para simular plot, step, character"""
+
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
@@ -35,7 +39,9 @@ async def test_plot_with_steps_factory_builds_schema():
     char_repo = AsyncMock()
 
     steps = [
-        Dummy(id=1, plotID=10, name="s1", goal="g1", nextStepID=None, previousStepID=None)
+        Dummy(
+            id=1, plotID=10, name="s1", goal="g1", nextStepID=None, previousStepID=None
+        )
     ]
     plot = Dummy(
         id=10,

@@ -8,6 +8,8 @@ omit =
     */.venv/*
     */migrations/*
     */env/*
+    *_entities.py
+    *__init__.py
     app/main.py
     app/run.py
 

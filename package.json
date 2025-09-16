@@ -15,7 +15,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev-backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
+    "dev:backend": "uvicorn backend.app.main:app --reload --host localhost --port 8000",
     "build": "npm run build:backend:rust && npm run build:backend:rebuild && tsc && vite build && electron-builder --config electron-builder.json5",
     "build:backend": "cd backend/scripts && ./backend-builder build",
     "build:backend:rust": "cd backend-rust && cargo build --release",
@@ -28,13 +28,13 @@
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"test/**/*.{ts,tsx,js,jsx,json}\"",
-    "format-backend": "black backend/ --line-length 88",
+    "format:backend": "black backend/ --line-length 88",
     "prepare": "husky",
     "test:unit": "vitest run --silent false test/unit-test -c vitest.config.ts --coverage.enabled true",
     "test:smoke": "vitest run --silent=false --reporter=verbose test/smoke-test -c vitest.smoke.config.ts",
-    "test-backend": "backend/.venv/bin/coverage run -m pytest && backend/.venv/bin/coverage report",
-    "test-coverage-backend": "backend/.venv/bin/coverage report",
-    "test-coverage-html-backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
+    "test:backend": "cd backend && .venv/bin/coverage run -m pytest && .venv/bin/coverage report",
+    "test:coverage:backend": "backend/.venv/bin/coverage report",
+    "test:coverage:html:backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
     "test:watch": "vitest --watch"
   },
   "lint-staged": {

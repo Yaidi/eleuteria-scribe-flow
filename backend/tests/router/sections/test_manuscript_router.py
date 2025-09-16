@@ -23,7 +23,7 @@ def sample_save_start_request():
         "project_id": 123,
         "relative_path": "documents/chapters",
         "filename": "chapter1.docx",
-        "title": "Chapter 1: The Beginning"
+        "title": "Chapter 1: The Beginning",
     }
 
 
@@ -32,12 +32,14 @@ def mock_upload_file():
     """Mock UploadFile for testing chunk uploads"""
     mock_file = MagicMock(spec=UploadFile)
     mock_file.filename = "test_chapter.docx"
-    mock_file.content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    mock_file.content_type = (
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
 
     # Mock the read method to return data in chunks
     async def mock_read(size=1024):
         # Simulate reading file data in chunks
-        if not hasattr(mock_read, 'call_count'):
+        if not hasattr(mock_read, "call_count"):
             mock_read.call_count = 0
 
         if mock_read.call_count == 0:
@@ -56,7 +58,7 @@ def mock_upload_file():
 class TestStartSave:
     """Test cases for the /save/start endpoint"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_start_save_success(self, mock_manager, client, sample_save_start_request):
         # Arrange
         expected_session_id = "test-session-id-123"
@@ -78,13 +80,13 @@ class TestStartSave:
         assert call_args.filename == "chapter1.docx"
         assert call_args.title == "Chapter 1: The Beginning"
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_start_save_minimal_data(self, mock_manager, client):
         # Arrange
         minimal_request = {
             "project_id": 456,
             "relative_path": "",
-            "filename": "simple_file.txt"
+            "filename": "simple_file.txt",
         }
         expected_session_id = "minimal-session-id"
         mock_manager.start_manuscript_save_session.return_value = expected_session_id
@@ -103,10 +105,14 @@ class TestStartSave:
         assert call_args.filename == "simple_file.txt"
         assert call_args.title is None
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
-    def test_start_save_manager_error(self, mock_manager, client, sample_save_start_request):
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_start_save_manager_error(
+        self, mock_manager, client, sample_save_start_request
+    ):
         # Arrange
-        mock_manager.start_manuscript_save_session.side_effect = OSError("Directory creation failed")
+        mock_manager.start_manuscript_save_session.side_effect = OSError(
+            "Directory creation failed"
+        )
 
         # Act & Assert
         with pytest.raises(OSError):
@@ -116,7 +122,7 @@ class TestStartSave:
         # Arrange
         invalid_request = {
             "project_id": "invalid_string",  # Should be int
-            "filename": "test.txt"
+            "filename": "test.txt",
             # Missing relative_path
         }
 
@@ -143,7 +149,7 @@ class TestStartSave:
 class TestSaveChunk:
     """Test cases for the /save/chunk/{session_id} endpoint"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_save_chunk_success(self, mock_manager, client):
         # Arrange
         session_id = "test-session-123"
@@ -151,11 +157,19 @@ class TestSaveChunk:
 
         # Create test file data
         file_content = b"This is test chunk data"
-        files = {"file": ("test_chunk.docx", BytesIO(file_content), "application/octet-stream")}
+        files = {
+            "file": (
+                "test_chunk.docx",
+                BytesIO(file_content),
+                "application/octet-stream",
+            )
+        }
         data = {"relative_path": "chapters/chapter1"}
 
         # Act
-        response = client.post(f"/manuscript/save/chunk/{session_id}", files=files, data=data)
+        response = client.post(
+            f"/manuscript/save/chunk/{session_id}", files=files, data=data
+        )
 
         # Assert
         assert response.status_code == 200
@@ -167,12 +181,13 @@ class TestSaveChunk:
         call_args = mock_manager.save_manuscript_chunk.call_args[0]
         assert call_args[0] == session_id
         # The second argument should be the UploadFile object
-        assert hasattr(call_args[1], 'filename')
+        assert hasattr(call_args[1], "filename")
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_save_chunk_invalid_session(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         session_id = "invalid-session"
         mock_manager.save_manuscript_chunk = AsyncMock(
             side_effect=HTTPException(status_code=404, detail="Invalid session ID")
@@ -183,19 +198,24 @@ class TestSaveChunk:
         data = {"relative_path": "test/path"}
 
         # Act & Assert
-        response = client.post(f"/manuscript/save/chunk/{session_id}", files=files, data=data)
+        response = client.post(
+            f"/manuscript/save/chunk/{session_id}", files=files, data=data
+        )
 
         # Assert
         assert response.status_code == 404
         assert response.json() == {"detail": "Invalid session ID"}
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_save_chunk_io_error(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         session_id = "test-session"
         mock_manager.save_manuscript_chunk = AsyncMock(
-            side_effect=HTTPException(status_code=500, detail="Error writing to temporary file: IO Error")
+            side_effect=HTTPException(
+                status_code=500, detail="Error writing to temporary file: IO Error"
+            )
         )
 
         file_content = b"Test data"
@@ -203,9 +223,13 @@ class TestSaveChunk:
         data = {"relative_path": "test/path"}
 
         # Act & Assert
-        response = client.post(f"/manuscript/save/chunk/{session_id}", files=files, data=data)
+        response = client.post(
+            f"/manuscript/save/chunk/{session_id}", files=files, data=data
+        )
         assert response.status_code == 500
-        assert response.json() == {"detail": "Error writing to temporary file: IO Error"}
+        assert response.json() == {
+            "detail": "Error writing to temporary file: IO Error"
+        }
 
     def test_save_chunk_missing_file(self, client):
         # Arrange
@@ -230,25 +254,26 @@ class TestSaveChunk:
         response = client.post(f"/manuscript/save/chunk/{session_id}", files=files)
 
         # Assert
-        assert response.status_code == 422  # Validation error due to missing relative_path
+        assert (
+            response.status_code == 422
+        )  # Validation error due to missing relative_path
 
 
 class TestFinishSave:
     """Test cases for the /save/finish/{session_id} endpoint"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_finish_save_success(self, mock_manager, client):
         # Arrange
         session_id = "test-session-123"
         expected_response = {
             "saved": "/manuscripts/123/documents/chapters/chapter1.docx",
-            "metadata": {
-                "created_at": 1640995200.0,
-                "modified_at": 1640995200.0
-            },
-            "metadata_location": "/manuscripts/123/documents/chapters/metadata.json"
+            "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
+            "metadata_location": "/manuscripts/123/documents/chapters/metadata.json",
         }
-        mock_manager.finish_manuscript_save_session = AsyncMock(return_value=expected_response)
+        mock_manager.finish_manuscript_save_session = AsyncMock(
+            return_value=expected_response
+        )
 
         # Act
         response = client.post(f"/manuscript/save/finish/{session_id}")
@@ -259,14 +284,17 @@ class TestFinishSave:
 
         assert response_data["saved"] == expected_response["saved"]
         assert response_data["metadata"] == expected_response["metadata"]
-        assert response_data["metadata_location"] == expected_response["metadata_location"]
+        assert (
+            response_data["metadata_location"] == expected_response["metadata_location"]
+        )
 
         mock_manager.finish_manuscript_save_session.assert_called_once_with(session_id)
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_finish_save_invalid_session(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         session_id = "invalid-session"
         mock_manager.finish_manuscript_save_session = AsyncMock(
             side_effect=HTTPException(status_code=404, detail="Invalid session ID")
@@ -278,35 +306,39 @@ class TestFinishSave:
         assert response.status_code == 404
         assert response.json() == {"detail": "Invalid session ID"}
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_finish_save_file_move_error(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         session_id = "test-session"
         mock_manager.finish_manuscript_save_session = AsyncMock(
-            side_effect=HTTPException(status_code=500,
-                                      detail="Error moving file to final destination: Permission denied")
+            side_effect=HTTPException(
+                status_code=500,
+                detail="Error moving file to final destination: Permission denied",
+            )
         )
 
         # Act & Assert
         response = client.post(f"/manuscript/save/finish/{session_id}")
 
         assert response.status_code == 500
-        assert response.json() == {"detail": "Error moving file to final destination: Permission denied"}
+        assert response.json() == {
+            "detail": "Error moving file to final destination: Permission denied"
+        }
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_finish_save_with_metadata_warning(self, mock_manager, client):
         # Arrange - Simulate successful file move but metadata write warning
         session_id = "test-session"
         expected_response = {
             "saved": "/manuscripts/123/test.txt",
-            "metadata": {
-                "created_at": 1640995200.0,
-                "modified_at": 1640995200.0
-            },
-            "metadata_location": "/manuscripts/123/metadata.json"
+            "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
+            "metadata_location": "/manuscripts/123/metadata.json",
         }
-        mock_manager.finish_manuscript_save_session = AsyncMock(return_value=expected_response)
+        mock_manager.finish_manuscript_save_session = AsyncMock(
+            return_value=expected_response
+        )
 
         # Act
         response = client.post(f"/manuscript/save/finish/{session_id}")
@@ -322,25 +354,27 @@ class TestFinishSave:
 class TestManuscriptRouterIntegration:
     """Integration tests for the complete workflow"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_complete_upload_workflow(self, mock_manager, client):
         # Arrange
         start_request = {
             "project_id": 123,
             "relative_path": "documents/chapters",
             "filename": "chapter1.docx",
-            "title": "Chapter 1"
+            "title": "Chapter 1",
         }
         session_id = "workflow-session-123"
 
         # Mock all manager methods
         mock_manager.start_manuscript_save_session.return_value = session_id
         mock_manager.save_manuscript_chunk = AsyncMock()
-        mock_manager.finish_manuscript_save_session = AsyncMock(return_value={
-            "saved": "/manuscripts/123/documents/chapters/chapter1.docx",
-            "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
-            "metadata_location": "/manuscripts/123/documents/chapters/metadata.json"
-        })
+        mock_manager.finish_manuscript_save_session = AsyncMock(
+            return_value={
+                "saved": "/manuscripts/123/documents/chapters/chapter1.docx",
+                "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
+                "metadata_location": "/manuscripts/123/documents/chapters/metadata.json",
+            }
+        )
 
         # Act 1: Start save session
         start_response = client.post("/manuscript/save/start", json=start_request)
@@ -352,7 +386,9 @@ class TestManuscriptRouterIntegration:
         files = {"file": ("chunk1.txt", BytesIO(file_content), "text/plain")}
         data = {"relative_path": "documents/chapters"}
 
-        chunk_response = client.post(f"/manuscript/save/chunk/{returned_session_id}", files=files, data=data)
+        chunk_response = client.post(
+            f"/manuscript/save/chunk/{returned_session_id}", files=files, data=data
+        )
         assert chunk_response.status_code == 200
         assert chunk_response.json()["ok"] is True
 
@@ -369,25 +405,29 @@ class TestManuscriptRouterIntegration:
         # Verify all manager methods were called in correct order
         mock_manager.start_manuscript_save_session.assert_called_once()
         mock_manager.save_manuscript_chunk.assert_called_once()
-        mock_manager.finish_manuscript_save_session.assert_called_once_with(returned_session_id)
+        mock_manager.finish_manuscript_save_session.assert_called_once_with(
+            returned_session_id
+        )
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_workflow_with_multiple_chunks(self, mock_manager, client):
         # Arrange
         start_request = {
             "project_id": 456,
             "relative_path": "drafts",
-            "filename": "large_document.pdf"
+            "filename": "large_document.pdf",
         }
         session_id = "multi-chunk-session"
 
         mock_manager.start_manuscript_save_session.return_value = session_id
         mock_manager.save_manuscript_chunk = AsyncMock()
-        mock_manager.finish_manuscript_save_session = AsyncMock(return_value={
-            "saved": "/manuscripts/456/drafts/large_document.pdf",
-            "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
-            "metadata_location": "/manuscripts/456/drafts/metadata.json"
-        })
+        mock_manager.finish_manuscript_save_session = AsyncMock(
+            return_value={
+                "saved": "/manuscripts/456/drafts/large_document.pdf",
+                "metadata": {"created_at": 1640995200.0, "modified_at": 1640995200.0},
+                "metadata_location": "/manuscripts/456/drafts/metadata.json",
+            }
+        )
 
         # Act: Start session
         start_response = client.post("/manuscript/save/start", json=start_request)
@@ -399,7 +439,9 @@ class TestManuscriptRouterIntegration:
             files = {"file": (f"chunk{i + 1}.txt", BytesIO(chunk_data), "text/plain")}
             data = {"relative_path": "drafts"}
 
-            chunk_response = client.post(f"/manuscript/save/chunk/{session_id}", files=files, data=data)
+            chunk_response = client.post(
+                f"/manuscript/save/chunk/{session_id}", files=files, data=data
+            )
             assert chunk_response.status_code == 200
 
         # Act: Finish session
@@ -413,10 +455,11 @@ class TestManuscriptRouterIntegration:
 class TestErrorHandling:
     """Test error handling scenarios"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_session_not_found_in_chunk_upload(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         mock_manager.save_manuscript_chunk = AsyncMock(
             side_effect=HTTPException(status_code=404, detail="Invalid session ID")
         )
@@ -426,15 +469,18 @@ class TestErrorHandling:
         data = {"relative_path": "test"}
 
         # Act & Assert
-        response = client.post("/manuscript/save/chunk/nonexistent-session", files=files, data=data)
+        response = client.post(
+            "/manuscript/save/chunk/nonexistent-session", files=files, data=data
+        )
 
         assert response.status_code == 404
         assert response.json() == {"detail": "Invalid session ID"}
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_session_not_found_in_finish(self, mock_manager, client):
         # Arrange
         from fastapi import HTTPException
+
         mock_manager.finish_manuscript_save_session = AsyncMock(
             side_effect=HTTPException(status_code=404, detail="Invalid session ID")
         )
@@ -456,15 +502,21 @@ class TestErrorHandling:
             data = {"relative_path": "test"}
 
             # The endpoint should still accept the invalid session ID but the manager should handle validation
-            response = client.post(f"/manuscript/save/chunk/{invalid_id}", files=files, data=data)
+            response = client.post(
+                f"/manuscript/save/chunk/{invalid_id}", files=files, data=data
+            )
             # The response depends on what the manager does with invalid session IDs
             # In a real scenario, this would likely result in a 404 from the manager
             assert response.status_code == 404
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
-    def test_manager_unexpected_error(self, mock_manager, client, sample_save_start_request):
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_manager_unexpected_error(
+        self, mock_manager, client, sample_save_start_request
+    ):
         # Arrange
-        mock_manager.start_manuscript_save_session.side_effect = Exception("Unexpected internal error")
+        mock_manager.start_manuscript_save_session.side_effect = Exception(
+            "Unexpected internal error"
+        )
 
         # Act & Assert
         with pytest.raises(Exception):
@@ -480,7 +532,9 @@ class TestRouterConfiguration:
 
         # Assert
         assert manuscript_router.prefix == "/manuscript"
-        assert "Plot" in manuscript_router.tags  # Note: This seems to be incorrect in the source, should be "Manuscript"
+        assert (
+            "Plot" in manuscript_router.tags
+        )  # Note: This seems to be incorrect in the source, should be "Manuscript"
 
     def test_available_endpoints(self, client):
         # This test verifies that all expected endpoints are available
@@ -498,18 +552,20 @@ class TestRouterConfiguration:
             expected_endpoints = [
                 "/manuscript/save/start",
                 "/manuscript/save/chunk/{session_id}",
-                "/manuscript/save/finish/{session_id}"
+                "/manuscript/save/finish/{session_id}",
             ]
 
             for endpoint in expected_endpoints:
-                assert endpoint in paths, f"Endpoint {endpoint} not found in OpenAPI schema"
+                assert (
+                    endpoint in paths
+                ), f"Endpoint {endpoint} not found in OpenAPI schema"
 
 
 # Test fixtures for edge cases
 class TestEdgeCases:
     """Test edge cases and boundary conditions"""
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_empty_file_upload(self, mock_manager, client):
         # Arrange
         session_id = "empty-file-session"
@@ -520,13 +576,15 @@ class TestEdgeCases:
         data = {"relative_path": "test"}
 
         # Act
-        response = client.post(f"/manuscript/save/chunk/{session_id}", files=files, data=data)
+        response = client.post(
+            f"/manuscript/save/chunk/{session_id}", files=files, data=data
+        )
 
         # Assert
         assert response.status_code == 200
         mock_manager.save_manuscript_chunk.assert_called_once()
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_very_long_session_id(self, mock_manager, client):
         # Arrange
         very_long_session_id = "a" * 1000  # 1000 character session ID
@@ -536,19 +594,21 @@ class TestEdgeCases:
         data = {"relative_path": "test"}
 
         # Act
-        response = client.post(f"/manuscript/save/chunk/{very_long_session_id}", files=files, data=data)
+        response = client.post(
+            f"/manuscript/save/chunk/{very_long_session_id}", files=files, data=data
+        )
 
         # Assert
         assert response.status_code == 200
         mock_manager.save_manuscript_chunk.assert_called_once()
 
-    @patch('backend.app.router.sections.manuscript_router.manuscript_manager')
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_special_characters_in_paths(self, mock_manager, client):
         # Arrange
         special_char_request = {
             "project_id": 123,
             "relative_path": "documents/with spaces/and-dashes/and_underscores",
-            "filename": "file with spaces & special chars.txt"
+            "filename": "file with spaces & special chars.txt",
         }
         mock_manager.start_manuscript_save_session.return_value = "special-session"
 

@@ -28,7 +28,7 @@
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write \"./*.{js,ts,json}\" \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\" \"test/**/*.{ts,tsx,js,jsx,json}\"",
-    "format-backend": "black backend/ --line-length 88",
+    "format:backend": "black backend/ --line-length 88",
     "prepare": "husky",
     "test:unit": "vitest run --silent false test/unit-test -c vitest.config.ts --coverage.enabled true",
     "test:smoke": "vitest run --silent=false --reporter=verbose test/smoke-test -c vitest.smoke.config.ts",

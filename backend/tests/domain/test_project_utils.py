@@ -3,8 +3,11 @@ from datetime import datetime, timezone
 import pytest
 
 from backend.app.data.entities.project_entities import BaseProject, FictionProject
-from backend.app.domain.project_utils import project_on_response_list, create_project_object_from_request, \
-    project_schema_factory
+from backend.app.domain.project_utils import (
+    project_on_response_list,
+    create_project_object_from_request,
+    project_schema_factory,
+)
 from backend.app.schemas.project_schemas import (
     CreateProjectRequest,
     ProjectType,
@@ -16,19 +19,21 @@ from backend.app.schemas.sections.plot_schemas import PlotSchemaWithSteps
 from backend.app.schemas.sections.character_schemas import CharacterSchema
 from backend.app.schemas.sections.world_schemas import WorldElementDetailedSchema
 
+
 def create_base_project():
     return BaseProject(
-        id = 1,
-        projectListID = 1,
-        project_name = "dummy",
-        type = ProjectType.novel,
-        word_goal = 1000,
-        words = 0,
-        status = "done",
+        id=1,
+        projectListID=1,
+        project_name="dummy",
+        type=ProjectType.novel,
+        word_goal=1000,
+        words=0,
+        status="done",
         description="desc",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
+
 
 def test_project_on_response_list_maps_fields():
     proj = create_base_project()
@@ -98,7 +103,9 @@ def test_project_schema_factory_with_world_and_elements():
     )
     schema = project_schema_factory(proj, world=world, world_elements=[element])
     assert schema.sections.world.id == 1
-    assert isinstance(schema.sections.world.worldElements[0], WorldElementDetailedSchema)
+    assert isinstance(
+        schema.sections.world.worldElements[0], WorldElementDetailedSchema
+    )
 
 
 def test_project_schema_factory_with_characters_and_plots():

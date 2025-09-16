@@ -1,3 +1,4 @@
+from backend.app.router.sections.manuscript_router import manuscript_router
 from backend.app.router.sections.plot_router import plot_router
 from backend.app.data.entities.project_entities import Base
 from backend.app.data.db.db import engine
@@ -59,6 +60,7 @@ app.include_router(projects_router)
 app.include_router(world_router)
 app.include_router(character_router)
 app.include_router(plot_router)
+app.include_router(manuscript_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -34,3 +34,6 @@ backend-rust/target
 
 # Coverage Reports
 coverage
+
+# User files
+manuscripts

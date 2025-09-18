@@ -533,7 +533,7 @@ class TestRouterConfiguration:
         # Assert
         assert manuscript_router.prefix == "/manuscript"
         assert (
-            "Plot" in manuscript_router.tags
+            "Manuscript API" in manuscript_router.tags
         )  # Note: This seems to be incorrect in the source, should be "Manuscript"
 
     def test_available_endpoints(self, client):
@@ -618,3 +618,77 @@ class TestEdgeCases:
         # Assert
         assert response.status_code == 200
         mock_manager.start_manuscript_save_session.assert_called_once()
+
+
+class TestDeleteFile:
+    """Test cases for the DELETE /manuscript/ endpoint"""
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_success(self, mock_manager, client):
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+        request_data = {"project_id": 123, "path": "docs/file.txt"}
+
+        # Act
+        response = client.request("DELETE", "/manuscript/", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "docs/file.txt"
+
+        mock_manager.delete_path.assert_awaited_once_with(123, "docs/file.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_not_found(self, mock_manager, client):
+        # Arrange
+        from fastapi import HTTPException
+
+        mock_manager.delete_path = AsyncMock(
+            side_effect=HTTPException(status_code=404, detail="File not found")
+        )
+        request_data = {"project_id": 123, "path": "missing.txt"}
+
+        # Act
+        response = client.request("DELETE", "/manuscript/", json=request_data)
+
+        # Assert
+        assert response.status_code == 404
+        assert response.json() == {"detail": "File not found"}
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_permission_denied(self, mock_manager, client):
+        # Arrange
+        from fastapi import HTTPException
+
+        mock_manager.delete_path = AsyncMock(
+            side_effect=HTTPException(status_code=403, detail="Permission denied")
+        )
+        request_data = {"project_id": 123, "path": "secure/file.txt"}
+
+        # Act
+        response = client.request("DELETE", "/manuscript/", json=request_data)
+
+        # Assert
+        assert response.status_code == 403
+        assert response.json() == {"detail": "Permission denied"}
+
+    def test_delete_file_invalid_request(self, client):
+        # Arrange
+        invalid_request = {"project_id": "invalid", "wrong_field": "docs/file.txt"}
+
+        # Act
+        response = client.request("DELETE", "/manuscript/", json=invalid_request)
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+
+    def test_delete_file_missing_required_fields(self, client):
+        # Arrange
+        incomplete_request = {"project_id": 123}  # Falta "path"
+
+        # Act
+        response = client.request("DELETE", "/manuscript/", json=incomplete_request)
+
+        # Assert
+        assert response.status_code == 422

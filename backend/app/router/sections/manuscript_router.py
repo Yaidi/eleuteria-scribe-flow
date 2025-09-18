@@ -1,9 +1,12 @@
 from fastapi import APIRouter, UploadFile, File, Form
 
 from backend.app.domain.manuscript_manager import ManuscriptManager
-from backend.app.schemas.sections.manuscript_schemas import SaveStartRequest
+from backend.app.schemas.sections.manuscript_schemas import (
+    SaveStartRequest,
+    DeleteManuscriptRequest,
+)
 
-manuscript_router = APIRouter(prefix="/manuscript", tags=["Plot"])
+manuscript_router = APIRouter(prefix="/manuscript", tags=["Manuscript API"])
 manuscript_manager = ManuscriptManager()
 
 
@@ -32,3 +35,9 @@ async def save_chunk(
 async def finish_save(session_id: str):
 
     return await manuscript_manager.finish_manuscript_save_session(session_id)
+
+
+@manuscript_router.delete("/")
+async def delete_file(request: DeleteManuscriptRequest):
+    await manuscript_manager.delete_path(request.project_id, request.path)
+    return {"path": request.path}

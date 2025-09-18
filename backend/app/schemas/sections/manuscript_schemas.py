@@ -6,3 +6,8 @@ class SaveStartRequest(BaseModel):
     relative_path: str
     filename: str
     title: str = None
+
+
+class DeleteManuscriptRequest(BaseModel):
+    project_id: int
+    path: str

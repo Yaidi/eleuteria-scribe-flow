@@ -10,12 +10,20 @@ import { getCurrentId } from "@/store/electron/actions.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
 import NavbarSections from "@/pages/content/NavbarSections.tsx";
 import { renderCurrentSection } from "@/pages/sections/SwitchSections.tsx";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n.ts";
 
 const MainContent = () => {
+  const { t } = useTranslation();
   const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  console.log(i18n.exists("welcome.selectTemplate"));
+
+  console.log(i18n.getResource("en", "translation", "welcome.selectTemplate"));
+
+  console.log(i18n.hasResourceBundle("en", "translation"));
 
   useEffect(() => {
     void getCurrentId().then((id: number) => {
@@ -38,6 +46,7 @@ const MainContent = () => {
           <header className="w-full flex items-center justify-start px-6 pb-8 pt-8">
             <Button
               data-testid="btn-back"
+              aria-label={t("buttons.back")}
               variant="ghost"
               size="sm"
               onClick={() => navigate("/")}

@@ -4,7 +4,7 @@
   "authors": [
     {
       "name": "Yaidi",
-      "email": ""
+      "email": "yaidi.garcia.lopez@gmail.com"
     },
     {
       "name": "Gabriel",
@@ -35,7 +35,8 @@
     "test:backend": "cd backend && .venv/bin/coverage run -m pytest && .venv/bin/coverage report",
     "test:coverage:backend": "backend/.venv/bin/coverage report",
     "test:coverage:html:backend": "backend/.venv/bin/coverage html && open htmlcov/index.html",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "i18n:extract": "i18next-cli extract"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -75,16 +76,17 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.56.2",
     "@tiptap/react": "^3.0.6",
     "@tiptap/starter-kit": "^3.0.6",
-    "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "electron-store": "^10.1.0",
     "embla-carousel-react": "^8.3.0",
+    "i18next": "^25.5.2",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
@@ -93,6 +95,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
+    "react-i18next": "^16.0.0",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^2.1.3",
     "react-router-dom": "^6.26.2",
@@ -120,7 +123,7 @@
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.2.0",
     "dotenv": "^17.0.1",
-    "electron": "^30.0.1",
+    "electron": "^38.1.2",
     "electron-builder": "^24.13.3",
     "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
@@ -129,6 +132,7 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "husky": "^9.1.7",
+    "i18next-cli": "^0.9.10",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
     "playwright": "^1.53.2",
@@ -137,7 +141,7 @@
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1",
+    "vite": "^7.1.7",
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vitest": "^3.2.4"

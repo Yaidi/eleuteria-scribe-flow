@@ -56,9 +56,14 @@ export interface IWorldElement {
   description: string;
   origin: string;
   conflictCause: string;
-  worldElementID: number;
-  worldID: number;
+  parentId: number | null;
+  worldId: number;
 }
+
+export interface IWorldElementWithChildren extends IWorldElement {
+  childrenIds: number[];
+}
+export type IWorldElementsObject = Record<number, IWorldElementWithChildren>;
 
 export interface IGeneral {
   author: string;

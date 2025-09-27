@@ -1,5 +1,5 @@
 import { IProject } from "@/types/project.ts";
-import React from "react";
+import React, { useState } from "react";
 import { CardContent, CardDescription, CardHeader } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import Sidebar from "@/components/Sidebar.tsx";
@@ -16,6 +16,17 @@ export interface SidebarProjectsProps {
 }
 const SidebarProjects: React.FC<SidebarProjectsProps> = ({ projects, handleProject }) => {
   const navigate = useNavigate();
+  const [search, setSearch] = useState<string>("");
+  const filteredProjects = projects.filter((project) => {
+    if (search === "") return true;
+    if (
+      project.type.toLowerCase().includes(search.toLowerCase()) ||
+      project.projectName.toLowerCase().includes(search.toLowerCase()) ||
+      project.status.toLowerCase().includes(search.toLowerCase())
+    ) {
+      return true;
+    }
+  });
 
   return (
     <Sidebar className="min-w-40">
@@ -25,10 +36,15 @@ const SidebarProjects: React.FC<SidebarProjectsProps> = ({ projects, handleProje
       </header>
       <div className="relative mb-3">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search projects..." className="pl-9" />
+        <Input
+          placeholder="Search projects..."
+          className="pl-9"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
       <ScrollArea className="flex-2 overflow-auto mb-4 h-auto">
-        {projects.map((project) => (
+        {filteredProjects.map((project) => (
           <CardProject
             key={project.id}
             projectType={project.type}

@@ -75,27 +75,36 @@ class TestGetProjectList:
 class TestCreateProject:
     @patch("backend.app.router.project_router.ProjectRepository")
     @patch("backend.app.router.project_router.create_project_object_from_request")
+    @patch("backend.app.router.project_router.WorldRepository")
     @patch("backend.app.router.project_router.project_schema_factory")
     def test_create_project_success(
         self,
         mock_schema_factory,
-        mock_create_obj,
-        mock_repo_class,
+        mock_world_repo_class,
+        mock_create_project_object_from_request,
+        mock_project_repo_class,
         client,
         mock_session,
     ):
         # Arrange
-        mock_repo = AsyncMock()
-        mock_repo_class.return_value = mock_repo
+        mock_project_repo = AsyncMock()
+        mock_world_repo = AsyncMock()
+        mock_project_repo_class.return_value = mock_project_repo
+        mock_world_repo_class.return_value = mock_world_repo
 
         mock_project = MagicMock()
-        mock_create_obj.return_value = mock_project
+        mock_project.id = 1
+        mock_new_world = MagicMock()
+        mock_new_world.id = 1
+
+        mock_create_project_object_from_request.return_value = mock_project
+        mock_project_repo.create_project = AsyncMock(return_value=mock_new_world)
+        mock_world_repo.create_world = AsyncMock(return_value=mock_new_world)
 
         # Mock que cumple con BaseProjectSchema
         valid_project_response = {
             "id": 1,
             "projectListID": 1,
-            "projectName": "New Project",
             "type": "novel",
             "sections": None,
         }
@@ -106,18 +115,19 @@ class TestCreateProject:
         with patch(
             "backend.app.router.project_router.get_session", return_value=mock_session
         ):
-            # Act
             response = client.post("/addProject", json=request_data)
 
         # Assert
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["id"] == 1
-        assert response_data["projectName"] == "New Project"
+        assert response_data["projectName"] == ""
         assert response_data["type"] == "novel"
-        mock_repo.create_project.assert_called_once_with(mock_project)
-        mock_create_obj.assert_called_once()
-        mock_schema_factory.assert_called_once_with(mock_project)
+
+        mock_create_project_object_from_request.assert_called_once()
+        mock_world_repo.create_world.assert_called_once_with(1)
+        mock_project_repo.create_project.assert_called_once_with(mock_project)
+        mock_schema_factory.assert_called_once_with(mock_project, world=mock_new_world)
 
 
 class TestGetProject:
@@ -516,7 +526,12 @@ class TestUpdateGeneralInfo:
         # Assert
         assert response.status_code == 200
         assert mock_project.title == "Updated Title"
-        assert response.json() == {'message': 'General info updated successfully', 'general': {'title': 'Updated Title'}, 'projectName': 'Updated Title', 'projectId': 1}
+        assert response.json() == {
+            "message": "General info updated successfully",
+            "general": {"title": "Updated Title"},
+            "projectName": "Updated Title",
+            "projectId": 1,
+        }
         mock_repo.update_project.assert_called_once_with(mock_project)
 
     @patch("backend.app.router.project_router.ProjectRepository")

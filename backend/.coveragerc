@@ -1,0 +1,29 @@
+[run]
+source = backend
+include = app/*
+omit =
+    */tests/*
+    */__pycache__/*
+    */venv/*
+    */.venv/*
+    */migrations/*
+    */env/*
+    *_entities.py
+    *__init__.py
+    app/main.py
+    app/run.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov

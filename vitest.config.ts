@@ -34,6 +34,10 @@ export default defineConfig({
         "src/store/**config.ts",
         "release/**",
         "src/components/ui", // Exclude UI components from coverage TODO: Add tests for these
+        "htmlcov/**",
+        "coverage/**",
+        "**/coverage_html_cb_*.js",
+        "**/*.coverage.*",
       ],
       thresholds: {
         lines: 90,

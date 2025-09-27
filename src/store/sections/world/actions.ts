@@ -1,10 +1,66 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { IWorldElement } from "@/types/sections.ts";
+import { host } from "@/https/fetch.ts";
+import { responseDelete } from "@/store";
 
-export const addWorldElement = createAction<Partial<IWorldElement>>("[World] Add Element to World");
-
-export const updateWorldElement = createAction<Partial<IWorldElement>>(
-  "[World] Update Element to World",
+export const removeWorldElement = createAsyncThunk<responseDelete, number>(
+  "[World] Remove Element of World",
+  async (id) => {
+    const response = await fetch(`${host}/world/element/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error removing world element");
+    }
+    return (await response.json()) as responseDelete;
+  },
 );
 
-export const removeWorldElement = createAction<number>("[World] Remove Element to World");
+export const updateWorldElement = createAsyncThunk<Partial<IWorldElement>, Partial<IWorldElement>>(
+  "[World] Update Element to World",
+  async (worldElement) => {
+    const response = await fetch(`${host}/world/element/${worldElement.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: worldElement.name,
+        description: worldElement.description,
+        origin: worldElement.origin,
+        conflictCause: worldElement.conflictCause,
+        parentId: worldElement.parentId,
+        worldId: worldElement.worldId,
+      }),
+    });
+    const responseData = await response.json();
+    return responseData as IWorldElement;
+  },
+);
+
+export const addWorldElement = createAsyncThunk<IWorldElement, number>(
+  "[World] Add Element to World",
+  async (worldId) => {
+    const response = await fetch(`${host}/world/element`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        worldId: worldId,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Error Add plot");
+    }
+    const responseData = await response.json();
+    return responseData as IWorldElement;
+  },
+);
+
+export const setCurrentWorldElement = createAction<IWorldElement>(
+  "[World] Set Current World Element",
+);

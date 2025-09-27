@@ -33,4 +33,23 @@ export const templateIllustraded: Template = {
   description: "Picture books and illustrated works with visual elements",
 };
 
+export const templateTrilogy: Template = {
+  type: ProjectType.trilogy,
+  sections: [
+    ESections.general,
+    ESections.characters,
+    ESections.world,
+    ESections.plots,
+    ESections.manuscript,
+    ESections.resources,
+  ],
+  description: "For epic stories spanning three interconnected books",
+};
+
+export const templateNonFiction: Template = {
+  type: ProjectType.non_fiction,
+  sections: [ESections.general, ESections.manuscript, ESections.references, ESections.resources],
+  description: "Informative works with factual content and references",
+};
+
 export const templates = [templateNovel, templateThesis];

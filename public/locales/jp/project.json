@@ -1,12 +1,11 @@
 {
-  "created": "",
-  "lastUpdated": "",
-  "open": "",
   "projectName": "",
-  "started": "",
-  "stats": {
-    "progressWriting": "",
-    "recentActivity": "",
-    "trackProgress": ""
+  "type": {
+    "illustrated": "",
+    "non_fiction": "",
+    "novel": "",
+    "poetry": "",
+    "thesis": "",
+    "trilogy": ""
   }
 }

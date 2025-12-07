@@ -1,12 +1,11 @@
 {
-  "created": "Created",
-  "lastUpdated": "Last Updated",
-  "open": "Open Project",
   "projectName": "Project: {{name}}",
-  "started": "Initiated",
-  "stats": {
-    "progressWriting": "Progress Writing",
-    "recentActivity": "Recent Activity",
-    "trackProgress": "Track your writing progress over time"
+  "type": {
+    "illustrated": "",
+    "non_fiction": "",
+    "novel": "",
+    "poetry": "",
+    "thesis": "",
+    "trilogy": ""
   }
 }

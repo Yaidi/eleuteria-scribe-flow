@@ -11,6 +11,8 @@ import enProjects from "../public/locales/en/projects.json";
 import esProjects from "../public/locales/es/projects.json";
 import enProject from "../public/locales/en/project.json";
 import esProject from "../public/locales/es/project.json";
+import enTemplates from "../public/locales/en/templates.json";
+import esTemplates from "../public/locales/es/templates.json";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -20,6 +22,7 @@ i18n.use(initReactI18next).init({
       characters: enCharacters,
       projects: enProjects,
       project: enProject,
+      templates: enTemplates,
     },
     es: {
       translation: esTranslation,
@@ -27,6 +30,7 @@ i18n.use(initReactI18next).init({
       characters: esCharacters,
       projects: esProjects,
       project: esProject,
+      templates: esTemplates,
     },
   },
   lng: "es",

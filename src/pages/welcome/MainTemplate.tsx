@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { useTranslation } from "react-i18next";
 
 export interface MainTemplateProps {
   templates: Template[];
@@ -30,6 +31,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
   handleCreateProject,
   selectedTemplate,
 }) => {
+  const { t } = useTranslation("");
   const getTemplate = templates.find((el) => el.type === selectedTemplate);
 
   return (
@@ -37,20 +39,22 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
       {selectedTemplate && getTemplate && (
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle data-testid="template-name" className="capitalize">
-              {selectedTemplate} Template
+            <CardTitle data-testid="template-name" className="">
+              {t("templates:title", { name: t(`project:type.${selectedTemplate}`) })}
             </CardTitle>
-            <CardDescription>{getTemplate.description}</CardDescription>
+            <CardDescription>
+              {t(`templates:types.${selectedTemplate}.description`)}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-3">Project Structure:</h3>
+                <h3 className="font-semibold mb-3">{t("templates:structureProject")}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {getTemplate.sections.map((section, index) => (
                     <div key={index} className="p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
                       <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                        {section}
+                        {t(`sections:${section.toLowerCase()}`)}
                       </span>
                     </div>
                   ))}
@@ -61,7 +65,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
                 onClick={() => void handleCreateProject(selectedTemplate)}
                 className="w-full"
               >
-                Choose This Template
+                {t("templates:chooseTemplate")}
               </Button>
             </div>
           </CardContent>

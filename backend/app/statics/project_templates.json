@@ -35,12 +35,10 @@
   {
     "type": "illustrated",
     "sections": [
-      "Legal and Credits",
       "General",
       "Manuscript",
       "Illustrations",
-      "Resources",
-      "Final page"
+      "Resources"
     ],
     "description": "Picture books and illustrated works with visual elements"
   }

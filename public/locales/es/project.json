@@ -1,27 +1,11 @@
 {
-  "created": "Creado",
-  "lastUpdated": "Ultima actualización",
-  "open": "Abrir proyecto",
   "projectName": "Proyecto: {{name}}",
-  "started": "Iniciado",
-  "stats": {
-    "progressWriting": "Progreso de escritura",
-    "recentActivity": "Actividad reciente",
-    "trackProgress": "Observa tu progreso de escritura a lo largo del tiempo"
-  },
-  "status": {
-    "planning": "planeado",
-    "writing": "escribiendo",
-    "editing": "editando",
-    "completed": "completado"
-  },
   "type": {
-    "novel": "novela",
-    "trilogy": "trilogia",
+    "illustrated": "ilustracion",
     "non_fiction": "No ficcion",
-    "thesis": "tesis",
-    "research": "investigacion",
+    "novel": "novela",
     "poetry": "poema",
-    "illustrated": "ilustrado"
+    "thesis": "tesis",
+    "trilogy": "trilogia"
   }
 }

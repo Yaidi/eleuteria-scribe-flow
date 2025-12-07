@@ -1,5 +1,6 @@
 {
-  "chooseTemplate": "chooseTemplate",
-  "selectTemplate": "selectTemplate",
-  "structure": "structure"
+  "chooseTemplate": "Eligir la plantilla",
+  "selectTemplate": "Selecciona una plantilla",
+  "structureProject": "Estructura del proyecto",
+  "title": "Plantilla de {{name}}"
 }

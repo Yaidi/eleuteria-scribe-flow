@@ -1,7 +1,13 @@
 {
   "characters": "Personajes",
-  "general": "General",
+  "general": "Información general",
   "plots": "Tramas",
   "settings": "Configuraciones",
-  "manuscript": "Manuscritos"
+  "manuscript": "Manuscritos",
+  "world": "Mundo",
+  "references": "Referencias",
+  "bibliography": "Bibliografía",
+  "illustrations": "Ilustraciones",
+  "resources": "Recursos",
+  "themes": "Ideación del tema"
 }

@@ -7,5 +7,6 @@ export default defineConfig({
     output: "public/locales/{{language}}/{{namespace}}.json",
     ignoredAttributes: ["data-testid"],
     primaryLanguage: "es",
+    preservePatterns: ["project:status.*", "status.*", "type.*"],
   },
 });

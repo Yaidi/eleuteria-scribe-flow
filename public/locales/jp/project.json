@@ -1,5 +1,4 @@
 {
-  "projectName": "",
   "type": {
     "illustrated": "",
     "non_fiction": "",
@@ -7,5 +6,6 @@
     "poetry": "",
     "thesis": "",
     "trilogy": ""
-  }
+  },
+  "projectName": ""
 }

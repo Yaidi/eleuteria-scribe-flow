@@ -1,11 +1,18 @@
 {
-  "projectName": "Proyecto: {{name}}",
+  "status": {
+    "_comment": "keep",
+    "planning": "planeado",
+    "writing": "escribiendo",
+    "editing": "editando",
+    "completed": "completado"
+  },
   "type": {
-    "illustrated": "ilustracion",
-    "non_fiction": "No ficcion",
+    "illustrated": "ilustración",
+    "non_fiction": "No ficción",
     "novel": "novela",
     "poetry": "poema",
-    "thesis": "tesis",
-    "trilogy": "trilogia"
-  }
+    "thesis": "tésis",
+    "trilogy": "trilogía"
+  },
+  "projectName": "Proyecto: {{name}}"
 }

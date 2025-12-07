@@ -1,5 +1,11 @@
 {
-  "projectName": "Project: {{name}}",
+  "status": {
+    "_comment": "keep",
+    "planning": "planeado",
+    "writing": "escribiendo",
+    "editing": "editando",
+    "completed": "completado"
+  },
   "type": {
     "illustrated": "",
     "non_fiction": "",
@@ -7,5 +13,6 @@
     "poetry": "",
     "thesis": "",
     "trilogy": ""
-  }
+  },
+  "projectName": "Project: {{name}}"
 }

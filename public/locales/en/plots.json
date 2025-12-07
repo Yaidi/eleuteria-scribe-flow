@@ -1,0 +1,17 @@
+{
+  "add": "Add Plot",
+  "noPlots": "No plots added to this story yet.",
+  "plot": {
+    "charactersInvolved": "Characters Involved",
+    "delete": "Delete Plot",
+    "description": {
+      "name": "Name",
+      "placeholder": "Plot Name"
+    },
+    "title": {
+      "name": "",
+      "placeholder": ""
+    }
+  },
+  "title": "Plots"
+}

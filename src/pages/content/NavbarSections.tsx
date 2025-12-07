@@ -5,12 +5,14 @@ import { useSections } from "@/hooks/useSections.ts";
 import { ESections } from "@/types/sections.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const getSection = (section: string): ESections => {
   return ESections[section as keyof typeof ESections];
 };
 
 const NavbarSections = () => {
+  const { t } = useTranslation("sections");
   const { currentSection } = useSelector((state: RootState) => state.projectInfo);
   const dispatch = useDispatch<AppDispatch>();
   const sections = useSections();
@@ -27,7 +29,7 @@ const NavbarSections = () => {
               : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
           }`}
         >
-          <span className="capitalize">{section}</span>
+          <span className="">{t(`${section}`)}</span>
         </button>
       ))}
       <Button
@@ -42,4 +44,5 @@ const NavbarSections = () => {
     </>
   );
 };
+
 export default NavbarSections;

@@ -1,0 +1,11 @@
+{
+  "createProject": "Create a new project",
+  "remove": {
+    "description": "{{name}} has been removed successfully.",
+    "success": ""
+  },
+  "search": {
+    "placeholder": "Search projects..."
+  },
+  "title": "Projects"
+}

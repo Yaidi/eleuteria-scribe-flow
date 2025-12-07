@@ -1,0 +1,16 @@
+{
+  "element": {
+    "add": "Add Element",
+    "delete": "Delete Element",
+    "description": {
+      "name": "Description",
+      "placeholder": "Element Description"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Put the element name"
+    },
+    "noElements": "No elements added to this world yet."
+  },
+  "title": "World"
+}

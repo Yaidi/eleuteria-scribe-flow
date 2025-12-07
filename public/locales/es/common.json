@@ -1,0 +1,11 @@
+{
+  "button": {
+    "back": "Regresar",
+    "open": "Abrir"
+  },
+  "progress": "Progreso",
+  "save": {
+    "description": "{{name}} se ha guardado correctamente.",
+    "success": "Se ha guardado correctamente"
+  }
+}

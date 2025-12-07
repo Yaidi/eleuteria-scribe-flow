@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "Author",
+    "placeholder": "Author's name"
+  },
+  "genre": {
+    "name": "Genre",
+    "placeholder": "Genre's Book"
+  },
+  "license": {
+    "name": "License",
+    "placeholder": ""
+  },
+  "series": {
+    "name": "Serie",
+    "placeholder": "Series's name"
+  },
+  "subtitle": {
+    "name": "Subtitle",
+    "placeholder": ""
+  },
+  "title": {
+    "name": "Title",
+    "placeholder": ""
+  },
+  "volume": {
+    "name": "Volume",
+    "placeholder": "Number of volume"
+  }
+}

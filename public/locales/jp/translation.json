@@ -1,0 +1,20 @@
+{
+  ",": "",
+  "common": {
+    "button": {
+      "delete": ""
+    }
+  },
+  "error": {
+    "backHome": ""
+  },
+  "project": {
+    "delete": ""
+  },
+  "projects": {
+    "loading": ""
+  },
+  "words": {
+    "wordCount": ""
+  }
+}

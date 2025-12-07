@@ -1,0 +1,11 @@
+{
+  "createProject": "Crear Proyecto",
+  "remove": {
+    "description": "{{name}} se ha eliminado correctamente.",
+    "success": "remove.success"
+  },
+  "search": {
+    "placeholder": "Buscar Proyectos..."
+  },
+  "title": "Proyectos"
+}

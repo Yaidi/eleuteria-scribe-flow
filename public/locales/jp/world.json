@@ -1,0 +1,16 @@
+{
+  "element": {
+    "add": "",
+    "delete": "",
+    "description": {
+      "name": "",
+      "placeholder": ""
+    },
+    "name": {
+      "label": "",
+      "placeholder": ""
+    },
+    "noElements": ""
+  },
+  "title": ""
+}

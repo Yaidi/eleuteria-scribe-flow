@@ -1,0 +1,11 @@
+{
+  "button": {
+    "back": "Go Back",
+    "open": "Open"
+  },
+  "progress": "Progress",
+  "save": {
+    "description": "{{name}} has been saved successfully.",
+    "success": "Saved successfully"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "add": "add",
+  "character": {
+    "delete": "Eliminar personaje",
+    "name": {
+      "label": "Nombre",
+      "placeholder": "Nombre del personaje"
+    }
+  },
+  "characteristics": {
+    "label": "Características",
+    "placeholder": "Apariencia, personalidad, historia..."
+  },
+  "importance": {
+    "label": "Importancia",
+    "main": "Protagonista",
+    "minor": "Personaje menor",
+    "secondary": "Personaje secundario"
+  },
+  "noCharacters": "noCharacters"
+}

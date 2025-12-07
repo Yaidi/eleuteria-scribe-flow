@@ -1,0 +1,30 @@
+{
+  "author": {
+    "name": "",
+    "placeholder": ""
+  },
+  "genre": {
+    "name": "",
+    "placeholder": ""
+  },
+  "license": {
+    "name": "",
+    "placeholder": ""
+  },
+  "series": {
+    "name": "",
+    "placeholder": ""
+  },
+  "subtitle": {
+    "name": "",
+    "placeholder": ""
+  },
+  "title": {
+    "name": "",
+    "placeholder": ""
+  },
+  "volume": {
+    "name": "",
+    "placeholder": ""
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "add": "",
+  "character": {
+    "delete": "",
+    "name": {
+      "label": "",
+      "placeholder": ""
+    }
+  },
+  "characteristics": {
+    "label": "",
+    "placeholder": ""
+  },
+  "importance": {
+    "label": "",
+    "main": "",
+    "minor": "",
+    "secondary": ""
+  },
+  "noCharacters": ""
+}

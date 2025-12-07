@@ -44,7 +44,6 @@ const SidebarProjects: React.FC<SidebarProjectsProps> = ({ projects, handleProje
         />
       </div>
       <ScrollAreaProjects filteredProjects={filteredProjects} handleProject={handleProject} />
-
       <Button className="mt-6" onClick={() => navigate("/template")}>
         {t("createProject")}
       </Button>

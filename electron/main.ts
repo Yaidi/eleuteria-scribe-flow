@@ -5,7 +5,7 @@ import path from "node:path";
 import { spawn, ChildProcess } from "node:child_process";
 import * as http from "node:http";
 import { killPort } from "./utils.ts";
-import "@/i18n.ts";
+import "@/localizations/i18n.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, "..");

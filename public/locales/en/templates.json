@@ -1,6 +1,12 @@
 {
-  "chooseTemplate": "",
-  "selectTemplate": "",
-  "structureProject": "",
-  "title": ""
+  "type": {
+    "novel": "Perfect for long-form fiction with complex characters and world-building",
+    "thesis": "Academic writing with proper citation and reference management",
+    "poetry": "Poetry collections with thematic organization",
+    "illustrated": "Picture books and illustrated works with visual elements"
+  },
+  "chooseTemplate": "Choose this template",
+  "selectTemplate": "Select a template",
+  "structureProject": "Project structure",
+  "title": "{{name}} template"
 }

@@ -42,9 +42,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({
             <CardTitle data-testid="template-name" className="">
               {t("templates:title", { name: t(`project:type.${selectedTemplate}`) })}
             </CardTitle>
-            <CardDescription>
-              {t(`templates:types.${selectedTemplate}.description`)}
-            </CardDescription>
+            <CardDescription>{t(`templates:type.${selectedTemplate}`)}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

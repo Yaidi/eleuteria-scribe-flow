@@ -1,18 +1,18 @@
 {
   "status": {
     "_comment": "keep",
-    "planning": "planeado",
-    "writing": "escribiendo",
-    "editing": "editando",
-    "completed": "completado"
+    "planning": "planning",
+    "writing": "writing",
+    "editing": "editing",
+    "completed": "completed"
   },
   "type": {
-    "illustrated": "",
-    "non_fiction": "",
-    "novel": "",
-    "poetry": "",
-    "thesis": "",
-    "trilogy": ""
+    "illustrated": "illustrated",
+    "non_fiction": "non fiction",
+    "novel": "novel",
+    "poetry": "poetry",
+    "thesis": "thesis",
+    "trilogy": "trilogy"
   },
   "projectName": "Project: {{name}}"
 }

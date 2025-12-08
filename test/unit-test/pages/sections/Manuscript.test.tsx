@@ -7,6 +7,6 @@ import { ESections } from "@/types/sections.ts";
 describe("<Manuscript />", () => {
   test("renders component", () => {
     render(<Manuscript section={ESections.manuscript}></Manuscript>);
-    expect(screen.getByText("Manuscript")).toBeTruthy();
+    expect(screen.getByText("manuscript")).toBeTruthy();
   });
 });

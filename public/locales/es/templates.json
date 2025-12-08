@@ -1,5 +1,12 @@
 {
-  "chooseTemplate": "chooseTemplate",
-  "selectTemplate": "selectTemplate",
-  "structure": "structure"
+  "type": {
+    "novel": "Perfecto para ficciones largas con personajes complejos y creación del mundo",
+    "thesis": "Escrito académico con citas y manejo de referencias",
+    "poetry": "Colección de poemas con planeación de la temática",
+    "illustrated": "Libro con elementos visuales"
+  },
+  "chooseTemplate": "Eligir la plantilla",
+  "selectTemplate": "Selecciona una plantilla",
+  "structureProject": "Estructura del proyecto",
+  "title": "Plantilla de {{name}}"
 }

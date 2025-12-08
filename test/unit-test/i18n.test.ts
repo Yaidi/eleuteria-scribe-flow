@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import i18n from "@/i18n";
+import i18n from "@/localizations/i18n.ts";
 
 vi.unmock("react-i18next");
 

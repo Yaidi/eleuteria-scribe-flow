@@ -2,8 +2,5 @@
   ",": ",",
   "buttons": {
     "back": "Go back"
-  },
-  "welcome": {
-    "selectTemplate": "Select a template"
   }
 }

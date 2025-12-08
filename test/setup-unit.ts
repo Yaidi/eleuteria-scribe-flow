@@ -1,22 +1,14 @@
 import { vi, beforeAll } from "vitest";
 import "@testing-library/jest-dom";
 import i18next from "i18next";
-import enTranslation from "../public/locales/en/translation.json";
-import enSections from "../public/locales/en/sections.json";
-import enCharacters from "../public/locales/en/characters.json";
-import enProjects from "../public/locales/en/projects.json";
-import enProject from "../public/locales/en/project.json";
+import { en } from "@/localizations/english.ts";
 
 i18next.init({
   lng: "en",
   fallbackLng: "en",
   resources: {
     en: {
-      translation: enTranslation,
-      sections: enSections,
-      characters: enCharacters,
-      projects: enProjects,
-      project: enProject,
+      ...en,
     },
   },
   interpolation: { escapeValue: false },
@@ -25,7 +17,11 @@ i18next.init({
 vi.mock("react-i18next", () => {
   return {
     useTranslation: (ns = "translation") => ({
-      t: (key: string, opts?: never) => i18next.t(`${ns}:${key}`, opts),
+      t: (key: string, opts?: never) => {
+        const hasNs = key.includes(":");
+        const finalKey = hasNs ? key : `${ns}:${key}`;
+        return i18next.t(finalKey, opts);
+      },
       i18n: i18next,
     }),
     Trans: ({ children }: never) => children,

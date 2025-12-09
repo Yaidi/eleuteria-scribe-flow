@@ -14,5 +14,18 @@
     "thesis": "thesis",
     "trilogy": "trilogy"
   },
-  "projectName": "Project: {{name}}"
+  "created": "Created",
+  "delete": "Delete",
+  "lastUpdated": "Last updated",
+  "openProject": "Open project",
+  "progress": "Progress",
+  "progressInfo": {
+    "current": "Current",
+    "remaining": "Remaining",
+    "target": "Target"
+  },
+  "projectName": "Project: {{name}}",
+  "trackProgress": "Track your progress toward your word count goal",
+  "wordCount": "Word Count",
+  "writtingProgress": "Writting Progress"
 }

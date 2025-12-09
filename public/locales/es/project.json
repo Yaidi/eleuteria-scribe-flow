@@ -8,11 +8,24 @@
   },
   "type": {
     "illustrated": "ilustración",
-    "non_fiction": "No ficción",
+    "non_fiction": "no ficción",
     "novel": "novela",
     "poetry": "poema",
     "thesis": "tésis",
     "trilogy": "trilogía"
   },
-  "projectName": "Proyecto: {{name}}"
+  "created": "Creado",
+  "delete": "Eliminar",
+  "lastUpdated": "Última actualización",
+  "openProject": "Abrir proyecto",
+  "progress": "Progreso",
+  "progressInfo": {
+    "current": "Actual",
+    "remaining": "Faltan",
+    "target": "Meta"
+  },
+  "projectName": "Proyecto: {{name}}",
+  "trackProgress": "Realiza un seguimiento de tu progreso con respecto a tu objetivo de número de palabras",
+  "wordCount": "Contador de palabras",
+  "writtingProgress": "Progreso de escritura"
 }

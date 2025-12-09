@@ -25,7 +25,7 @@ describe("<Project />", () => {
     expect(screen.getByText("A test project")).toBeInTheDocument();
     expect(screen.getByText("novel")).toBeInTheDocument();
     expect(screen.getByTestId("badge-status").textContent).eq("planning");
-    expect(screen.getByTestId("words-goal").textContent).eq("5000 of 10000 target");
+    expect(screen.getByTestId("words-goal").textContent).eq("5000");
   });
 
   test("calls handleProject when 'Open Project' is clicked", () => {
@@ -33,7 +33,7 @@ describe("<Project />", () => {
 
     render(<Project project={mockProject} handleRemove={vi.fn()} handleProject={handleProject} />);
 
-    fireEvent.click(screen.getByText("Open Project"));
+    fireEvent.click(screen.getByText("Open project"));
     expect(handleProject).toHaveBeenCalledWith(1);
   });
 

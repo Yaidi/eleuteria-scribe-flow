@@ -14,6 +14,7 @@ import {
 import { formatDate } from "date-fns";
 import { Progress } from "@/components/ui/progress.tsx";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { useTranslation } from "react-i18next";
 
 export interface ProjectProps {
   project: IProject | null;
@@ -21,6 +22,8 @@ export interface ProjectProps {
   handleProject: (id: number) => void;
 }
 const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject }) => {
+  const { t } = useTranslation("project");
+
   if (!project) return null;
   const progressPercentage = Math.round((project.words / project.wordGoal) * 100);
   return (
@@ -38,7 +41,7 @@ const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject 
             variant="secondary"
             className="text-xs mr-2 px-2 py-0.5 dark:text-slate-400 capitalize"
           >
-            {project.type}
+            {t(`type.${project.type}`)}
           </Badge>
           <Badge
             data-testid="badge-status"
@@ -46,7 +49,7 @@ const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject 
             status={project.status}
             className="text-xs px-2 py-0.5 capitalize"
           >
-            {project.status}
+            {t(`status.${project.status}`)}
           </Badge>
         </aside>
       </header>
@@ -54,49 +57,45 @@ const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject 
       <ScrollArea className="flex-2 flex-col space-y-6 overflow-auto mb-4 h-auto">
         <main className="flex flex-col md:flex-row gap-4">
           <Card className="bg-gradient-secondary flex-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Word Count</CardTitle>
+            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+              <CardTitle className="text-sm font-medium">{t("wordCount")}</CardTitle>
               <TrendingUp className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent data-testid="words-goal">
               <div className="text-2xl font-bold text-primary">{project.words}</div>
-              <p className="text-xs text-muted-foreground"> of {project.wordGoal} target</p>
             </CardContent>
           </Card>
           <Card className="bg-gradient-secondary flex-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Progress</CardTitle>
+            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+              <CardTitle className="text-sm font-medium">{t("progress")}</CardTitle>
               <Target className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-primary">{project.words}%</div>
-              <p className="text-xs text-muted-foreground">Target reached</p>
+              <div className="text-2xl font-bold text-primary">{progressPercentage}%</div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-secondary flex-1">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Created</CardTitle>
+            <CardHeader className="flex flex-row items-center space-y-0 gap-2 pb-2">
+              <CardTitle className="text-sm font-medium">{t("created")}</CardTitle>
               <Calendar className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-sm font-medium">
+              <div className="text-sm text-primary font-bold">
                 {formatDate(project.created, "do MMMM yyyy")}
               </div>
-              <p className="text-xs text-muted-foreground">Project started</p>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-secondary flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Last Updated</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("lastUpdated")}</CardTitle>
               <Clock className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-sm font-medium">
+              <div className="text-sm text-primary font-bold">
                 {formatDate(project.updated, "do MMMM yyyy")}
               </div>
-              <p className="text-xs text-muted-foreground">Recent activity</p>
             </CardContent>
           </Card>
         </main>
@@ -104,14 +103,14 @@ const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject 
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
-              Writing Progress
+              {t("writtingProgress")}
             </CardTitle>
-            <CardDescription>Track your progress towards your target word count</CardDescription>
+            <CardDescription>{t("trackProgress")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Progress</span>
+                <span>{t("progress")}</span>
                 <span>{progressPercentage}%</span>
               </div>
               <Progress value={progressPercentage} className="h-3" />
@@ -120,30 +119,30 @@ const Project: React.FC<ProjectProps> = ({ project, handleRemove, handleProject 
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-primary">{project.words}</p>
-                <p className="text-xs text-muted-foreground">Current</p>
+                <p className="text-xs text-muted-foreground">{t("progressInfo.current")}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-muted-foreground">{project.wordGoal}</p>
-                <p className="text-xs text-muted-foreground">Target</p>
+                <p className="text-xs text-muted-foreground">{t("progressInfo.target")}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-orange-500">
                   {project.wordGoal - project.words}
                 </p>
-                <p className="text-xs text-muted-foreground">Remaining</p>
+                <p className="text-xs text-muted-foreground">{t("progressInfo.remaining")}</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </ScrollArea>
       <section className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <Button onClick={() => handleProject(project.id)}>Open Project</Button>
+        <Button onClick={() => handleProject(project.id)}>{t("openProject")}</Button>
         <Button
           data-testid="btn-rm-project"
           onClick={() => handleRemove(project.id, project.projectName)}
         >
           <Trash></Trash>
-          Delete
+          {t("delete")}
         </Button>
       </section>
     </div>

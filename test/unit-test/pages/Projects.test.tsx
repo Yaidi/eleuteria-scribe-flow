@@ -96,7 +96,7 @@ describe("Projects component", () => {
     const selectButton = screen.getByText(/The Dark Streets/i);
     await userEvent.click(selectButton);
 
-    const goToMain = screen.getByText("Open Project");
+    const goToMain = screen.getByText("Open project");
     await userEvent.click(goToMain);
 
     await waitFor(() => {

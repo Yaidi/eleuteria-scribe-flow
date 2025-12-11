@@ -6,6 +6,9 @@ import esCharacters from "../../public/locales/es/characters.json";
 import esProjects from "../../public/locales/es/projects.json";
 import esProject from "../../public/locales/es/project.json";
 import esTemplates from "../../public/locales/es/templates.json";
+import esWorld from "../../public/locales/es/world.json";
+import esPlots from "../../public/locales/es/plots.json";
+import esManuscript from "../../public/locales/es/manuscript.json";
 import { en } from "@/localizations/english.ts";
 
 i18n.use(initReactI18next).init({
@@ -20,6 +23,9 @@ i18n.use(initReactI18next).init({
       projects: esProjects,
       project: esProject,
       templates: esTemplates,
+      world: esWorld,
+      plots: esPlots,
+      manuscript: esManuscript,
     },
   },
   lng: "es",

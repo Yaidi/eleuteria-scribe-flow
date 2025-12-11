@@ -6,8 +6,11 @@ import { useDispatch } from "react-redux";
 import { useSections } from "@/hooks/useSections.ts";
 import { IWorldElement, IWorldElementWithChildren } from "@/types/sections.ts";
 import WorldElementNode from "@/components/world/WorldElementNode.tsx";
+import { useTranslation } from "react-i18next";
 
 const WorldSidebar = () => {
+  const { t } = useTranslation("world");
+
   const { worldElements } = useSections().world;
   const dispatch = useDispatch<AppDispatch>();
   const [dragOverElement, setDragOverElement] = useState<number | null>(null);
@@ -63,7 +66,7 @@ const WorldSidebar = () => {
   return (
     <div className="space-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-r border-t rounded-br-md border-slate-200 dark:border-slate-700 p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">World Building</h3>
+        <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">{t("title")}</h3>
       </div>
       <div
         onDrop={(e) => handleDrop(e, null)}

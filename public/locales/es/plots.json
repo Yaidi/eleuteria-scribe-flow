@@ -9,9 +9,15 @@
       "placeholder": "Nombre de la trama"
     },
     "title": {
-      "name": "plot.title.name",
-      "placeholder": "plot.title.placeholder"
+      "name": "Nombre",
+      "placeholder": "Nombre de la trama"
     }
   },
-  "title": "Tramas"
+  "title": "Tramas",
+  "importance": {
+    "0": "Principal",
+    "1": "Secondaria",
+    "2": "Menor",
+    "label": "Importancia"
+  }
 }

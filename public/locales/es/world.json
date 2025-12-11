@@ -3,8 +3,7 @@
     "add": "Agregar elemento",
     "delete": "Eliminar elemento",
     "description": {
-      "name": "Descripción",
-      "placeholder": "Descripción del elemento"
+      "name": "Descripción"
     },
     "name": {
       "label": "Nombre",
@@ -12,5 +11,5 @@
     },
     "noElements": "No has agregado elementos a este mundo aún."
   },
-  "title": "Mundo"
+  "title": "Creación del mundo"
 }

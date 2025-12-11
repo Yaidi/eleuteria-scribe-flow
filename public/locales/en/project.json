@@ -27,5 +27,7 @@
   "projectName": "Project: {{name}}",
   "trackProgress": "Track your progress toward your word count goal",
   "wordCount": "Word Count",
+  "wordsComparison": "",
+  "wordsComparisonAy11": "",
   "writtingProgress": "Writting Progress"
 }

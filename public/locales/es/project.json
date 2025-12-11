@@ -27,5 +27,7 @@
   "projectName": "Proyecto: {{name}}",
   "trackProgress": "Realiza un seguimiento de tu progreso con respecto a tu objetivo de número de palabras",
   "wordCount": "Contador de palabras",
+  "wordsComparison": "{{words}} / {{wordGoal}} palabras",
+  "wordsComparisonAy11": "{{words}} de {{wordGoal}} palabras",
   "writtingProgress": "Progreso de escritura"
 }

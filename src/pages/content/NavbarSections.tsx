@@ -13,6 +13,7 @@ const getSection = (section: string): ESections => {
 
 const NavbarSections = () => {
   const { t } = useTranslation("sections");
+
   const { currentSection } = useSelector((state: RootState) => state.projectInfo);
   const dispatch = useDispatch<AppDispatch>();
   const sections = useSections();
@@ -39,7 +40,7 @@ const NavbarSections = () => {
         onClick={() => dispatch(setCurrentSection(ESections.settings))}
       >
         <Settings className="w-4 h-4 mr-2" />
-        Settings
+        {t("settings")}
       </Button>
     </>
   );

@@ -5,13 +5,19 @@
     "charactersInvolved": "Characters Involved",
     "delete": "Delete Plot",
     "description": {
-      "name": "Name",
-      "placeholder": "Plot Name"
+      "name": "Description",
+      "placeholder": "Describe what happens in this plot..."
     },
     "title": {
-      "name": "",
-      "placeholder": ""
+      "name": "Name",
+      "placeholder": "Plot name"
     }
   },
-  "title": "Plots"
+  "title": "Plots",
+  "importance": {
+    "0": "Main",
+    "1": "Secondary",
+    "2": "Minor",
+    "label": "Importance"
+  }
 }

@@ -77,7 +77,7 @@ describe("<Characters />", () => {
     });
     expect(screen.queryByTestId("form-character")).toBeNull();
 
-    const button = screen.getByRole("button", { name: "Add Character" });
+    const button = screen.getByRole("button", { name: "Add character" });
     act(() => {
       fireEvent.click(button);
     });

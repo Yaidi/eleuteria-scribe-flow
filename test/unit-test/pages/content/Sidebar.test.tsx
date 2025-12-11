@@ -52,7 +52,7 @@ describe("Sidebar component", () => {
         },
       });
 
-      const dropZone = screen.getByText("MAIN").closest("div")!;
+      const dropZone = screen.getByText("0").closest("div")!;
       const draggable = screen.getByText("The Main Mystery");
 
       const mockDataTransfer = {
@@ -152,7 +152,7 @@ describe("Sidebar component", () => {
       },
     });
 
-    const dropZone = screen.getByText("MAIN").closest("div")!;
+    const dropZone = screen.getByText("Main character").closest("div")!;
     const draggable = screen.getByText("Jane Smith");
 
     const mockDataTransfer = {

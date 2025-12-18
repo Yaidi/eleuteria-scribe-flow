@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { useProjectId } from "@/hooks/useSections.ts";
+import { useTranslation } from "react-i18next";
+import React from "react";
 
 const General = () => {
+  const { t } = useTranslation("general");
   const { general } = useSelector((state: RootState) => state.sections);
   const projectId = useProjectId();
   const dispatch = useDispatch<AppDispatch>();
@@ -30,102 +33,102 @@ const General = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>General Information {}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              name="title"
-              value={general.title}
-              onChange={update}
-              placeholder="Enter book title"
-            />
-          </div>
-          <div>
-            <Label htmlFor="author">Author</Label>
-            <Input
-              id="author"
-              name="author"
-              value={general.author}
-              onChange={update}
-              placeholder="Enter author name"
-            />
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="subtitle">Subtitle</Label>
+    <Card className="p-6">
+      <form className="flex flex-wrap gap-4 justify-start items-start text-start">
+        <article className="w-full gap-y-2">
+          <Label htmlFor="title">{t("title.name")}</Label>
+          <Input
+            id="title"
+            name="title"
+            value={general.title}
+            onChange={update}
+            placeholder={t("title.placeholder")}
+          />
+        </article>
+        <article className="gap-y-2">
+          <Label htmlFor="subtitle">{t("subtitle.name")}</Label>
           <Input
             id="subtitle"
             name="subtitle"
             value={general.subtitle}
             onChange={update}
-            placeholder="Enter subtitle (optional)"
+            placeholder={t("subtitle.placeholder")}
           />
-        </div>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="series">Series</Label>
-            <Input
-              id="series"
-              name="series"
-              value={general.series}
-              onChange={update}
-              placeholder="Series name"
-            />
-          </div>
-          <div>
-            <Label htmlFor="volume">Volume</Label>
-            <Input
-              id="volume"
-              type="number"
-              min="1"
-              max="999"
-              name="volume"
-              value={general.volume}
-              onChange={update}
-              placeholder="Volume number"
-            />
-          </div>
-          <div>
-            <Label id="genre">Genre</Label>
-            <Select value={general.genre} onValueChange={(value) => updateSelect("genre", value)}>
-              <SelectTrigger aria-labelledby="genre">
-                <SelectValue data-testid="select-genre" placeholder="Select genre" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="fiction">Fiction</SelectItem>
-                <SelectItem value="non-fiction">Non-Fiction</SelectItem>
-                <SelectItem value="fantasy">Fantasy</SelectItem>
-                <SelectItem value="sci-fi">Science Fiction</SelectItem>
-                <SelectItem value="mystery">Mystery</SelectItem>
-                <SelectItem value="romance">Romance</SelectItem>
-                <SelectItem value="thriller">Thriller</SelectItem>
-                <SelectItem value="biography">Biography</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div>
-          <Label id="license">License</Label>
-          <Select value={general.license} onValueChange={(value) => updateSelect("license", value)}>
-            <SelectTrigger aria-labelledby="license">
-              <SelectValue placeholder="Select license" />
+        </article>
+        <article className="gap-y-2">
+          <Label htmlFor="author">{t("author.name")}</Label>
+          <Input
+            id="author"
+            name="author"
+            value={general.author}
+            onChange={update}
+            placeholder={t("author.placeholder")}
+          />
+        </article>
+        <article className="gap-y-2">
+          <Label id="genre">{t("genre.name")}</Label>
+          <Select
+            value={general.genre ?? undefined}
+            onValueChange={(value) => updateSelect("genre", value)}
+          >
+            <SelectTrigger aria-labelledby="genre">
+              <SelectValue data-testid="select-genre" placeholder={t("genre.placeholder")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="copyright">All Rights Reserved</SelectItem>
-              <SelectItem value="cc-by">Creative Commons BY</SelectItem>
-              <SelectItem value="cc-by-sa">Creative Commons BY-SA</SelectItem>
-              <SelectItem value="cc-by-nc">Creative Commons BY-NC</SelectItem>
-              <SelectItem value="public-domain">Public Domain</SelectItem>
+              <SelectItem value="sci-fi">{t("genre.options.scienceFiction")}</SelectItem>
+              <SelectItem value="selfHelp">{t("genre.options.selfHelp")}</SelectItem>
+              <SelectItem value="non-fiction">{t("genre.options.nonFiction")}</SelectItem>
+              <SelectItem value="fantasy">{t("genre.options.fantasy")}</SelectItem>
+              <SelectItem value="mystery">{t("genre.options.mystery")}</SelectItem>
+              <SelectItem value="romance">{t("genre.options.romance")}</SelectItem>
+              <SelectItem value="thriller">{t("genre.options.thriller")}</SelectItem>
+              <SelectItem value="biography">{t("genre.options.biography")}</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-      </CardContent>
+        </article>
+        <article className="gap-y-2">
+          <Label htmlFor="series">{t("series.name")}</Label>
+          <Input
+            id="series"
+            name="series"
+            value={general.series}
+            onChange={update}
+            placeholder={t("series.placeholder")}
+          />
+        </article>
+        <article className="gap-y-2">
+          <Label htmlFor="volume">{t("volume.name")}</Label>
+          <Input
+            id="volume"
+            type="number"
+            min="1"
+            max="999"
+            name="volume"
+            value={general.volume}
+            onChange={update}
+            placeholder={t("volume.placeholder")}
+          />
+        </article>
+        <article className="w-full gap-y-2">
+          <Label id="license">{t("license.name")}</Label>
+          <Select
+            value={general.license ?? undefined}
+            onValueChange={(value) => updateSelect("license", value)}
+          >
+            <SelectTrigger aria-labelledby="license">
+              <SelectValue placeholder={t("license.placeholder")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="copyright">{t("license.options.allRightsReserved")}</SelectItem>
+              <SelectItem value="cc-by">{t("license.options.ccBy")}</SelectItem>
+              <SelectItem value="cc-by-sa">{t("license.options.ccBySa")}</SelectItem>
+              <SelectItem value="cc-by-nc">{t("license.options.ccByNc")}</SelectItem>
+              <SelectItem value="public-domain">{t("license.options.publicDomain")}</SelectItem>
+              <SelectItem value="withoutLicense">{t("license.options.withoutLicense")}</SelectItem>
+            </SelectContent>
+          </Select>
+        </article>
+      </form>
     </Card>
   );
 };

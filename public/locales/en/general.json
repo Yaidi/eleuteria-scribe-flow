@@ -5,11 +5,29 @@
   },
   "genre": {
     "name": "Genre",
+    "options": {
+      "biography": "Biography",
+      "fantasy": "Fantasy",
+      "mystery": "Mistery",
+      "nonFiction": "Non-Fiction",
+      "romance": "Romance",
+      "scienceFiction": "Science fiction",
+      "selfHelp": "Self-help",
+      "thriller": "Thriller"
+    },
     "placeholder": "Genre's Book"
   },
   "license": {
     "name": "License",
-    "placeholder": ""
+    "options": {
+      "allRightsReserved": "All rights reserved",
+      "ccBy": "Creative Commons Attribution (CC BY)",
+      "ccByNc": "Creative Commons Attribution-NonCommercial (CC BY-NC)",
+      "ccBySa": "Creative Commons Attribution-ShareAlike (CC BY-SA)",
+      "publicDomain": "Public domain",
+      "withoutLicense": "Without license"
+    },
+    "placeholder": "Choose a license"
   },
   "series": {
     "name": "Serie",
@@ -17,11 +35,11 @@
   },
   "subtitle": {
     "name": "Subtitle",
-    "placeholder": ""
+    "placeholder": "Add the book subtitle"
   },
   "title": {
     "name": "Title",
-    "placeholder": ""
+    "placeholder": "Add the book title"
   },
   "volume": {
     "name": "Volume",

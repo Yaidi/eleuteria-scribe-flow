@@ -5,11 +5,29 @@
   },
   "genre": {
     "name": "Género",
+    "options": {
+      "biography": "Biografía",
+      "fantasy": "Fantasía",
+      "mystery": "Misterio",
+      "nonFiction": "No Ficción",
+      "romance": "Romance",
+      "scienceFiction": "Ciencia Ficción",
+      "selfHelp": "Autoayuda",
+      "thriller": "Suspenso"
+    },
     "placeholder": "Género del libro"
   },
   "license": {
     "name": "Licencia",
-    "placeholder": "license.placeholder"
+    "options": {
+      "allRightsReserved": "Todos los derechos reservados",
+      "ccBy": "Creative Commons Attribution (CC BY)",
+      "ccByNc": "Creative Commons Attribution-NonCommercial (CC BY-NC)",
+      "ccBySa": "Creative Commons Attribution-ShareAlike (CC BY-SA)",
+      "publicDomain": "Dominio Público",
+      "withoutLicense": "Sin licencia"
+    },
+    "placeholder": "Elige una licencia"
   },
   "series": {
     "name": "Serie",
@@ -17,11 +35,11 @@
   },
   "subtitle": {
     "name": "Subtítulo",
-    "placeholder": "subtitle.placeholder"
+    "placeholder": "Agrega un subtítulo"
   },
   "title": {
     "name": "Título",
-    "placeholder": "title.placeholder"
+    "placeholder": "Título del libro"
   },
   "volume": {
     "name": "Volumen",

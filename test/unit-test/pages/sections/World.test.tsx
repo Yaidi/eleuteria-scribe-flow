@@ -29,7 +29,7 @@ describe("World component", () => {
   };
   test("calls addWorldElement when 'Add Element' button is clicked", () => {
     renderWithProviders(<World />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.world,
       },

@@ -86,6 +86,9 @@ describe("Sidebar component", () => {
           chapters: mockChapters,
           currentChapter: undefined,
           currentScene: undefined,
+          isSaving: false,
+          lastSavedDate: undefined,
+          error: undefined,
         },
       },
     });
@@ -106,6 +109,9 @@ describe("Sidebar component", () => {
           chapters: mockChapters,
           currentChapter: mockChapters[0],
           currentScene: undefined,
+          isSaving: false,
+          lastSavedDate: undefined,
+          error: undefined,
         },
       },
     });
@@ -129,6 +135,9 @@ describe("Sidebar component", () => {
           chapters: mockChapters,
           currentChapter: mockChapters[0],
           currentScene: undefined,
+          isSaving: false,
+          lastSavedDate: undefined,
+          error: undefined,
         },
       },
     });
@@ -148,6 +157,9 @@ describe("Sidebar component", () => {
           chapters: mockChapters,
           currentChapter: mockChapters[0],
           currentScene: undefined,
+          isSaving: false,
+          lastSavedDate: undefined,
+          error: undefined,
         },
       },
     });

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 const MainContent = () => {
   const { t } = useTranslation();
-  const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
+  const { currentProject, currentSection } = useSelector((state: RootState) => state.project);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

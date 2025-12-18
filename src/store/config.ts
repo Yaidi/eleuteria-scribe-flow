@@ -6,7 +6,7 @@ import { SectionsReducer } from "@/store/sections/sections-config.ts";
 export const rootReducer = combineReducers({
   sections: SectionsReducer,
   projects: ProjectsReducer,
-  projectInfo: ProjectReducer,
+  project: ProjectReducer,
 });
 
 export const store = configureStore({

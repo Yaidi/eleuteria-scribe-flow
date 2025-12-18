@@ -10,7 +10,7 @@ export const useSections = (): ISectionsReducer => {
 };
 
 export const useProjectId = (): number => {
-  return useSelector((state: RootState) => state.projectInfo.currentProject?.id || 0);
+  return useSelector((state: RootState) => state.project.currentProject?.id || 0);
 };
 
 export const useManuscript = (): IManuscriptReducer => {

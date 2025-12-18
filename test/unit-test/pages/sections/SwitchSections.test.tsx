@@ -17,7 +17,7 @@ vi.mock("@/pages/sections/World", () => ({
   default: () => <div>World Section</div>,
 }));
 vi.mock("@/pages/sections/Manuscript", () => ({
-  default: ({ section }: { section: ESections }) => <div>Manuscript Section - {section}</div>,
+  default: () => <div>Manuscript Section</div>,
 }));
 
 describe("renderCurrentSection", () => {
@@ -43,7 +43,7 @@ describe("renderCurrentSection", () => {
 
   test("Should render <Manuscript /> when currentSection doesn't match", () => {
     render(renderCurrentSection("somethingElse" as ESections));
-    expect(screen.getByText("Manuscript Section - somethingElse")).toBeInTheDocument();
+    expect(screen.getByText("Manuscript Section")).toBeInTheDocument();
   });
   test("Should render <Settings /> when currentSection is settings", () => {
     render(renderCurrentSection(ESections.settings));

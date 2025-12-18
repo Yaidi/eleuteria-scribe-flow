@@ -1,8 +1,8 @@
-import { describe, expect, test, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, test, vi, beforeEach } from "vitest";
+import { screen } from "@testing-library/react";
 import Manuscript from "@/pages/sections/Manuscript.tsx";
-import { ESections } from "@/types/sections.ts";
 import * as useSectionsHooks from "@/hooks/useSections.ts";
+import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
 
 // Mock the TextEditor component
 vi.mock("@/components/ui/text-editor.tsx", () => ({
@@ -23,6 +23,10 @@ vi.mock("@/hooks/useSections.ts", () => ({
   useSaveScene: vi.fn(() => {
     return vi.fn();
   }),
+  useManuscript: vi.fn(() => ({
+    currentChapter: { title: "Title Chapter" },
+    currentScene: null,
+  })),
 }));
 
 // Mock Card components
@@ -38,8 +42,25 @@ vi.mock("@/components/ui/card.tsx", () => ({
 }));
 
 describe("<Manuscript />", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test("renders component with correct section title", () => {
-    render(<Manuscript section={ESections.manuscript} />);
+    renderWithProviders(<Manuscript />);
+    vi.mocked(useSectionsHooks.useManuscript).mockReturnValue({
+      currentChapter: {
+        title: "Title Chapter",
+        id: "",
+        description: "",
+        scenes: [],
+      },
+      currentScene: undefined,
+      chapters: [],
+      isSaving: false,
+      lastSavedDate: undefined,
+      error: undefined,
+    });
 
     // Check that the card structure is rendered
     expect(screen.getByTestId("card")).toBeTruthy();
@@ -49,12 +70,12 @@ describe("<Manuscript />", () => {
     // Check that the section title is rendered correctly
     const title = screen.getByTestId("card-title");
     expect(title).toBeTruthy();
-    expect(title.textContent).toBe("Manuscript");
+    expect(title.textContent).toBe("Title Chapter");
     expect(title.className).toContain("capitalize");
   });
 
   test("renders TextEditor component", () => {
-    render(<Manuscript section={ESections.manuscript} />);
+    renderWithProviders(<Manuscript />);
 
     const textEditor = screen.getByTestId("text-editor");
     expect(textEditor).toBeTruthy();
@@ -65,7 +86,7 @@ describe("<Manuscript />", () => {
     const mockSaveFunction = vi.fn();
     vi.mocked(useSectionsHooks.useSaveScene).mockReturnValue(mockSaveFunction);
 
-    render(<Manuscript section={ESections.manuscript} />);
+    renderWithProviders(<Manuscript />);
 
     // Simulate triggering the save function
     const triggerSaveButton = screen.getByTestId("trigger-save");
@@ -74,12 +95,23 @@ describe("<Manuscript />", () => {
     expect(mockSaveFunction).toHaveBeenCalledWith("test content");
   });
 
-  test("renders with different section types", () => {
-    const { rerender } = render(<Manuscript section={ESections.manuscript} />);
-    expect(screen.getByTestId("card-title").textContent).toBe("Manuscript");
+  test("renders title scene", () => {
+    vi.mocked(useSectionsHooks.useManuscript).mockReturnValue({
+      chapters: [],
+      error: undefined,
+      isSaving: false,
+      lastSavedDate: undefined,
+      currentChapter: undefined,
+      currentScene: {
+        title: "Title Scene",
+        id: "",
+        content: "",
+        wordCount: 0,
+        wordGoal: 0,
+        characters: [],
+      },
+    });
 
-    // Test with a different section if available
-    rerender(<Manuscript section={ESections.manuscript} />);
-    expect(screen.getByTestId("card-title").textContent).toBe("Manuscript");
+    expect(screen.getByTestId("card-title").textContent).toBe("Title Scene");
   });
 });

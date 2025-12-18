@@ -14,7 +14,7 @@ const getSection = (section: string): ESections => {
 const NavbarSections = () => {
   const { t } = useTranslation("sections");
 
-  const { currentSection } = useSelector((state: RootState) => state.projectInfo);
+  const { currentSection } = useSelector((state: RootState) => state.project);
   const dispatch = useDispatch<AppDispatch>();
   const sections = useSections();
 

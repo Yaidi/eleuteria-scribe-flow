@@ -40,7 +40,7 @@ describe("<Characters />", () => {
 
   test("renders title and empty message when no characters", () => {
     renderWithProviders(<Characters />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },
@@ -52,7 +52,7 @@ describe("<Characters />", () => {
 
   test("renders FormsCharacters when currentCharacter exists", async () => {
     renderWithProviders(<Characters />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },
@@ -70,7 +70,7 @@ describe("<Characters />", () => {
 
   test("dispatches addCharacterFetch when button is clicked", () => {
     renderWithProviders(<Characters />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },

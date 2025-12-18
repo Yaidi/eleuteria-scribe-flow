@@ -27,7 +27,7 @@ describe("NavbarSections", () => {
     renderWithProviders(<NavbarSections />);
 
     const generalBtn = screen.getByText("General");
-    expect(generalBtn.parentElement).toHaveClass("bg-blue-100");
+    expect(generalBtn).toHaveClass("bg-blue-100");
   });
 
   test("dispatches setCurrentSection on button click", () => {

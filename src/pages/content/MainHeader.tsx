@@ -36,7 +36,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
       <h1 className="text-2xl font-bold dark:text-white text-gray-800">
         {currentProject.projectName ?? "Untitled"}
       </h1>
-      <div className="flex items-center space-x-4 mt-1">
+      <div data-testid="words" className="flex items-center space-x-4 mt-1">
         <div className="flex flex-col gap-y-2">
           <span
             className="text-sm text-gray-500"

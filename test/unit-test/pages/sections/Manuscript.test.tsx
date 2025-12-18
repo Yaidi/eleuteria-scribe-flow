@@ -111,7 +111,8 @@ describe("<Manuscript />", () => {
         characters: [],
       },
     });
+    renderWithProviders(<Manuscript />);
 
-    expect(screen.getByTestId("card-title").textContent).toBe("Title Scene");
+    expect(screen.getByText("Title Scene")).toBeInTheDocument();
   });
 });

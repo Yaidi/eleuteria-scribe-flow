@@ -7,6 +7,7 @@ import { Trash2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select.tsx";
 import { useTranslation } from "react-i18next";
+import { useSections } from "@/hooks/useSections.ts";
 
 export interface FormPlotsProps {
   currentPlot: IPlot;
@@ -16,6 +17,7 @@ export interface FormPlotsProps {
 
 const FormPlots: React.FC<FormPlotsProps> = ({ currentPlot, handleRemove, handleUpdate }) => {
   const { t } = useTranslation("plots");
+  const { characters } = useSections().characters;
 
   return (
     <div className="border rounded-lg p-4">
@@ -35,16 +37,8 @@ const FormPlots: React.FC<FormPlotsProps> = ({ currentPlot, handleRemove, handle
             placeholder={t("plot.title.placeholder")}
           />
         </div>
-        <Button
-          data-testid={`btn-remove-plot-${currentPlot.id}`}
-          variant="destructive"
-          size="sm"
-          onClick={() => handleRemove(currentPlot.id)}
-        >
-          <Trash2 className="w-4 h-4" />
-        </Button>
       </div>
-      <div className="space-y-4">
+      <div className="flex flex-col text-start space-y-4">
         <div>
           <Label>{t("plot.description.name")}</Label>
           <Textarea
@@ -79,17 +73,34 @@ const FormPlots: React.FC<FormPlotsProps> = ({ currentPlot, handleRemove, handle
                    */}
         <div>
           <Label>{t("plot.charactersInvolved")}</Label>
-          <Select name="characters" value="0" disabled={true}>
-            <SelectTrigger></SelectTrigger>
+          <Select name="characters" onValueChange={(e) => e}>
+            <SelectTrigger>Anade un personaje</SelectTrigger>
             <SelectContent>
-              {currentPlot.characters.map((character) => (
-                <SelectItem key={`${character.name}-${currentPlot.title}`} value="0">
+              {characters.map((character) => (
+                <SelectItem
+                  key={`${character.name}-${currentPlot.title}`}
+                  value={character.id.toString()}
+                >
                   {character.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          <section>
+            {currentPlot.characters.map((character) => (
+              <article key={`${character.name}-${currentPlot.title}`}>{character.name}</article>
+            ))}
+          </section>
         </div>
+        <Button
+          data-testid={`btn-remove-plot-${currentPlot.id}`}
+          variant="destructive"
+          size="sm"
+          onClick={() => handleRemove(currentPlot.id)}
+          className="w-1/3 self-end"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   );

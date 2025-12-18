@@ -9,6 +9,7 @@ import esTemplates from "../../public/locales/es/templates.json";
 import esWorld from "../../public/locales/es/world.json";
 import esPlots from "../../public/locales/es/plots.json";
 import esManuscript from "../../public/locales/es/manuscript.json";
+import esGeneral from "../../public/locales/es/general.json";
 import { en } from "@/localizations/english.ts";
 
 i18n.use(initReactI18next).init({
@@ -26,6 +27,7 @@ i18n.use(initReactI18next).init({
       world: esWorld,
       plots: esPlots,
       manuscript: esManuscript,
+      general: esGeneral,
     },
   },
   lng: "es",

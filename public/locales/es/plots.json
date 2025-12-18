@@ -5,8 +5,8 @@
     "charactersInvolved": "Personajes involucrados",
     "delete": "Eliminar trama",
     "description": {
-      "name": "Nombre",
-      "placeholder": "Nombre de la trama"
+      "name": "Descripción",
+      "placeholder": "De qué trata esta trama"
     },
     "title": {
       "name": "Nombre",

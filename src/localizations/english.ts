@@ -7,6 +7,7 @@ import enTemplates from "../../public/locales/en/templates.json";
 import enWorld from "../../public/locales/en/world.json";
 import enPlots from "../../public/locales/en/plots.json";
 import enManuscript from "../../public/locales/en/manuscript.json";
+import enGeneral from "../../public/locales/en/general.json";
 
 export const en = {
   translation: enTranslation,
@@ -18,4 +19,5 @@ export const en = {
   world: enWorld,
   plots: enPlots,
   manuscript: enManuscript,
+  general: enGeneral,
 };

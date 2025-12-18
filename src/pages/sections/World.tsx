@@ -22,6 +22,14 @@ const World = () => {
     dispatch(addWorldElement(id));
   };
 
+  const worldParentName = (current: IWorldElement) => {
+    if (current.parentId != null) {
+      return worldElements[current.parentId].name;
+    } else {
+      return current.name;
+    }
+  };
+
   const update = (worldElement: IWorldElement) => {
     dispatch(updateWorldElement(worldElement));
   };
@@ -33,7 +41,9 @@ const World = () => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>{t("title")}</CardTitle>
+        <CardTitle>
+          {currentWorldElement != null ? worldParentName(currentWorldElement) : t("title")}
+        </CardTitle>
         <Button onClick={() => add(world!.id)} size="sm">
           <Plus className="w-4 h-4 mr-2" />
           {t("element.add")}

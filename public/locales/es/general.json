@@ -5,11 +5,34 @@
   },
   "genre": {
     "name": "Género",
-    "placeholder": "Género del libro"
+    "placeholder": "Género del libro",
+    "options": {
+      "fantasy": "Fantasía",
+      "scienceFiction": "Ciencia Ficción",
+      "mystery": "Misterio",
+      "romance": "Romance",
+      "horror": "Terror",
+      "nonFiction": "No Ficción",
+      "historical": "Histórico",
+      "thriller": "Suspenso",
+      "biography": "Biografía",
+      "selfHelp": "Autoayuda"
+    }
   },
   "license": {
     "name": "Licencia",
-    "placeholder": "license.placeholder"
+    "placeholder": "Elige una licencia",
+    "options": {
+      "allRightsReserved": "Todos los derechos reservados",
+      "ccBy": "Creative Commons Attribution (CC BY)",
+      "ccBySa": "Creative Commons Attribution-ShareAlike (CC BY-SA)",
+      "ccByNc": "Creative Commons Attribution-NonCommercial (CC BY-NC)",
+      "ccByNcSa": "Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)",
+      "ccByNd": "Creative Commons Attribution-NoDerivs (CC BY-ND)",
+      "ccByNcNd": "Creative Commons Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)",
+      "publicDomain": "Dominio Público",
+      "withoutLicense": "Sin licencia"
+    }
   },
   "series": {
     "name": "Serie",
@@ -17,11 +40,11 @@
   },
   "subtitle": {
     "name": "Subtítulo",
-    "placeholder": "subtitle.placeholder"
+    "placeholder": "Agrega un subtítulo"
   },
   "title": {
     "name": "Título",
-    "placeholder": "title.placeholder"
+    "placeholder": "Título del libro"
   },
   "volume": {
     "name": "Volumen",

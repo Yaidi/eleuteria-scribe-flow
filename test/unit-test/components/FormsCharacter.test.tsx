@@ -26,7 +26,7 @@ describe("FormsCharacters", () => {
     renderWithStore(<FormsCharacters character={mockCharacters[0]} />);
     expect(screen.getByTestId("form-character")).toBeInTheDocument();
     expect(screen.getByTestId("input-character-name")).toHaveValue("John Doe");
-    expect(screen.getByText("Main Character")).toBeInTheDocument();
+    expect(screen.getByText("Main character")).toBeInTheDocument();
     expect(screen.getByTestId("textarea-characteristics")).toBeInTheDocument(); // characteristics
   });
 
@@ -53,7 +53,7 @@ describe("FormsCharacters", () => {
       name: "",
     });
     await userEvent.click(importanceTrigger); // abre select
-    await userEvent.click(screen.getByText("Secondary Character")); // selecciona
+    await userEvent.click(screen.getByText("Secondary character")); // selecciona
 
     expect(mockDispatch).toHaveBeenCalled();
     expect(updateCharacter).toHaveBeenCalledWith({

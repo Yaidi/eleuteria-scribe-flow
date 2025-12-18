@@ -1,0 +1,23 @@
+{
+  "add": "Agregar trama",
+  "noPlots": "Aún no has agregado tramas a esta historia.",
+  "plot": {
+    "charactersInvolved": "Personajes involucrados",
+    "delete": "Eliminar trama",
+    "description": {
+      "name": "Descripción",
+      "placeholder": "De qué trata esta trama"
+    },
+    "title": {
+      "name": "Nombre",
+      "placeholder": "Nombre de la trama"
+    }
+  },
+  "title": "Tramas",
+  "importance": {
+    "0": "Principal",
+    "1": "Secondaria",
+    "2": "Menor",
+    "label": "Importancia"
+  }
+}

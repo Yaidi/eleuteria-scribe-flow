@@ -2,6 +2,7 @@ import React from "react";
 import { Template } from "@/types/templates.ts";
 import { ProjectType } from "@/types/project.ts";
 import { BookOpen, GraduationCap, Heart, Image, Plus, PlusCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ButtonTemplateProps {
   template: Template;
@@ -13,6 +14,8 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
   handleTemplateSelect,
   selectedTemplate,
 }) => {
+  const { t } = useTranslation("project");
+
   switch (template.type) {
     case ProjectType.novel:
       return (
@@ -27,7 +30,9 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <BookOpen className="w-5 h-5 text-blue-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">Novel</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.novel")}
+            </span>
           </div>
         </button>
       );
@@ -44,7 +49,9 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <GraduationCap className="w-5 h-5 text-purple-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">Thesis</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.thesis")}
+            </span>
           </div>
         </button>
       );
@@ -61,7 +68,9 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <Heart className="w-5 h-5 text-pink-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">Poems</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.poetry")}
+            </span>
           </div>
         </button>
       );
@@ -78,7 +87,9 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <Image className="w-5 h-5 text-orange-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">Illustrated Book</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.illustrated")}
+            </span>
           </div>
         </button>
       );
@@ -95,8 +106,8 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <Plus className="w-5 h-5 text-indigo-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">
-              Create New Template
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.trilogy")}
             </span>
           </div>
         </button>
@@ -114,7 +125,9 @@ const ButtonTemplate: React.FC<ButtonTemplateProps> = ({
         >
           <div className="flex items-center space-x-3">
             <PlusCircle className="w-5 h-5 text-teal-600" />
-            <span className="font-medium text-slate-800 dark:text-slate-200">Create New Book</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200 capitalize">
+              {t("type.non_fiction")}
+            </span>
           </div>
         </button>
       );

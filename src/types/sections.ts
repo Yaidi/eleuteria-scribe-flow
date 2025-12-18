@@ -99,15 +99,15 @@ export interface Scene {
 }
 
 export enum ESections {
-  general = "General",
-  characters = "Characters",
-  plots = "Plots",
-  world = "World",
-  manuscript = "Manuscript",
-  illustrations = "Illustrations",
-  resources = "Resources",
-  references = "References",
-  bibliography = "Bibliography",
+  general = "general",
+  characters = "characters",
+  plots = "plots",
+  world = "world",
+  manuscript = "manuscript",
+  illustrations = "illustrations",
+  resources = "resources",
+  references = "references",
+  bibliography = "bibliography",
   Any = "Any",
-  settings = "Settings",
+  settings = "settings",
 }

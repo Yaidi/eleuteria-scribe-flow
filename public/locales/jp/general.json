@@ -1,0 +1,48 @@
+{
+  "author": {
+    "name": "",
+    "placeholder": ""
+  },
+  "genre": {
+    "name": "",
+    "options": {
+      "biography": "",
+      "fantasy": "",
+      "mystery": "",
+      "nonFiction": "",
+      "romance": "",
+      "scienceFiction": "",
+      "selfHelp": "",
+      "thriller": ""
+    },
+    "placeholder": ""
+  },
+  "license": {
+    "name": "",
+    "options": {
+      "allRightsReserved": "",
+      "ccBy": "",
+      "ccByNc": "",
+      "ccBySa": "",
+      "publicDomain": "",
+      "withoutLicense": ""
+    },
+    "placeholder": ""
+  },
+  "series": {
+    "name": "",
+    "placeholder": ""
+  },
+  "subtitle": {
+    "name": "",
+    "placeholder": ""
+  },
+  "title": {
+    "name": "",
+    "placeholder": ""
+  },
+  "volume": {
+    "name": "",
+    "placeholder": ""
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": {
+    "illustrated": "",
+    "non_fiction": "",
+    "novel": "",
+    "poetry": "",
+    "thesis": "",
+    "trilogy": ""
+  },
+  "created": "",
+  "delete": "",
+  "lastUpdated": "",
+  "openProject": "",
+  "progress": "",
+  "progressInfo": {
+    "current": "",
+    "remaining": "",
+    "target": ""
+  },
+  "projectName": "",
+  "trackProgress": "",
+  "wordCount": "",
+  "wordsComparison": "",
+  "wordsComparisonAy11": "",
+  "writtingProgress": ""
+}

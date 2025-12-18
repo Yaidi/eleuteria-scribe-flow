@@ -1,0 +1,33 @@
+{
+  "status": {
+    "_comment": "keep",
+    "planning": "planeado",
+    "writing": "escribiendo",
+    "editing": "editando",
+    "completed": "completado"
+  },
+  "type": {
+    "illustrated": "ilustración",
+    "non_fiction": "no ficción",
+    "novel": "novela",
+    "poetry": "poema",
+    "thesis": "tésis",
+    "trilogy": "trilogía"
+  },
+  "created": "Creado",
+  "delete": "Eliminar",
+  "lastUpdated": "Última actualización",
+  "openProject": "Abrir proyecto",
+  "progress": "Progreso",
+  "progressInfo": {
+    "current": "Actual",
+    "remaining": "Faltan",
+    "target": "Meta"
+  },
+  "projectName": "Proyecto: {{name}}",
+  "trackProgress": "Realiza un seguimiento de tu progreso con respecto a tu objetivo de número de palabras",
+  "wordCount": "Contador de palabras",
+  "wordsComparison": "{{words}} / {{wordGoal}} palabras",
+  "wordsComparisonAy11": "{{words}} de {{wordGoal}} palabras",
+  "writtingProgress": "Progreso de escritura"
+}

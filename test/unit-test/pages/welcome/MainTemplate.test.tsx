@@ -17,12 +17,12 @@ describe("MainTemplate", () => {
       />,
     );
 
-    expect(screen.getByTestId("template-name")).toHaveTextContent(/novel template/i);
+    expect(screen.getByTestId("template-name")).toHaveTextContent(/Novel template/i);
     expect(
       screen.getByText("Perfect for long-form fiction with complex characters and world-building"),
     ).toBeInTheDocument();
     templates[0].sections.forEach((section) => {
-      expect(screen.getByText(section)).toBeInTheDocument();
+      expect(screen.getByText(capitalize(section))).toBeInTheDocument();
     });
   });
 
@@ -93,3 +93,5 @@ describe("MainTemplate", () => {
     expect(mockHandleCreate).toHaveBeenCalledWith(ProjectType.non_fiction);
   });
 });
+
+const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1);

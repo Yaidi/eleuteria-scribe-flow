@@ -14,6 +14,8 @@ export default defineConfig({
       "sections:*",
       "sections:**",
       "sections.*",
+      "languages.*",
+      "settings:languages.*",
     ],
   },
 });

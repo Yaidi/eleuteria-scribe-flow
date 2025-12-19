@@ -10,6 +10,7 @@ import esWorld from "../../public/locales/es/world.json";
 import esPlots from "../../public/locales/es/plots.json";
 import esManuscript from "../../public/locales/es/manuscript.json";
 import esGeneral from "../../public/locales/es/general.json";
+import esSettings from "../../public/locales/es/settings.json";
 import { en } from "@/localizations/english.ts";
 
 i18n.use(initReactI18next).init({
@@ -28,10 +29,11 @@ i18n.use(initReactI18next).init({
       plots: esPlots,
       manuscript: esManuscript,
       general: esGeneral,
+      settings: esSettings,
     },
   },
   lng: "es",
-  fallbackLng: "es",
+  fallbackLng: ["es", "en"],
   ns: ["translation", "sections"],
   defaultNS: "translation",
   interpolation: { escapeValue: false },

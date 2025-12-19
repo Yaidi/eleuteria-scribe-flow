@@ -1,0 +1,11 @@
+{
+  "languages": {
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés",
+    "de": "Alemán",
+    "zh": "Chino",
+    "ja": "Japonés"
+  },
+  "changeLanguage": "Cambia de idioma"
+}

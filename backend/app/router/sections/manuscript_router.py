@@ -36,6 +36,7 @@ async def finish_save(session_id: str):
 
     return await manuscript_manager.finish_manuscript_save_session(session_id)
 
+
 @manuscript_router.delete("/")
 async def delete_file(request: DeleteManuscriptRequest):
     await manuscript_manager.delete_path(request.project_id, request.path)

@@ -45,36 +45,3 @@ export const useSaveScene = () => {
     [projectId, dispatch, manuscriptState],
   );
 };
-
-export const useManuscript = (): IManuscriptReducer => {
-  return useSelector((state: RootState) => state.sections.manuscript);
-};
-
-export const useSaveScene = () => {
-  const projectId = useProjectId();
-  const dispatch = useDispatch<AppDispatch>();
-  const manuscriptState = useManuscript();
-
-  return useCallback(
-    (newContent: string) => {
-      if (!manuscriptState.currentScene || !manuscriptState.currentChapter) {
-        console.warn("Chapter and scene not selected");
-        return;
-      }
-
-      const newScene = {
-        ...manuscriptState.currentScene,
-        content: newContent,
-      };
-
-      const args: SaveSceneArgs = {
-        scene: newScene,
-        chapter: manuscriptState.currentChapter,
-        projectId: projectId,
-      };
-
-      dispatch(saveSceneSession(args));
-    },
-    [projectId, dispatch, manuscriptState],
-  );
-};

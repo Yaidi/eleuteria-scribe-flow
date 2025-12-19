@@ -348,7 +348,7 @@ class ManuscriptManager:
               are stripped to avoid absolute path resolution.
         """
 
-        project_path = os.path.join(self.ROOT_DIR, str(project_id))
+        project_path = os.path.join(self.UPLOAD_DIR, str(project_id))
 
         # Make sure relative_path doesn't start with /
         relative_path = path.lstrip("/")

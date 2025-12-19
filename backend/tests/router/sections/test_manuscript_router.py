@@ -621,78 +621,302 @@ class TestEdgeCases:
         mock_manager.start_manuscript_save_session.assert_called_once()
 
 
-class TestDeleteFile:
-    """Test cases for the DELETE /manuscript/ endpoint"""
+class TestDeleteFileEndpoint:
+    """Tests for DELETE /manuscript/project/{project_id}/file/{path:path} endpoint"""
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_delete_file_success(self, mock_manager, client):
+        """Test successful file deletion"""
         # Arrange
         mock_manager.delete_path = AsyncMock()
-        request_data = {"project_id": 123, "path": "docs/file.txt"}
 
         # Act
-        response = client.request("DELETE", "/manuscript/", json=request_data)
+        response = client.delete("/manuscript/project/123/file/docs/file.txt")
 
         # Assert
         assert response.status_code == 200
         response_data = response.json()
         assert response_data["path"] == "docs/file.txt"
-
         mock_manager.delete_path.assert_awaited_once_with(123, "docs/file.txt")
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
-    def test_delete_file_not_found(self, mock_manager, client):
+    def test_delete_file_nested_path(self, mock_manager, client):
+        """Test deletion of file in nested directories"""
         # Arrange
-        from fastapi import HTTPException
-
-        mock_manager.delete_path = AsyncMock(
-            side_effect=HTTPException(status_code=404, detail="File not found")
-        )
-        request_data = {"project_id": 123, "path": "missing.txt"}
+        mock_manager.delete_path = AsyncMock()
 
         # Act
-        response = client.request("DELETE", "/manuscript/", json=request_data)
+        response = client.delete(
+            "/manuscript/project/456/file/level1/level2/deep_file.md"
+        )
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "level1/level2/deep_file.md"
+        mock_manager.delete_path.assert_awaited_once_with(
+            456, "level1/level2/deep_file.md"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_directory_success(self, mock_manager, client):
+        """Test successful directory deletion"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+
+        # Act
+        response = client.delete("/manuscript/project/789/file/old_drafts")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "old_drafts"
+        mock_manager.delete_path.assert_awaited_once_with(789, "old_drafts")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_with_spaces_in_path(self, mock_manager, client):
+        """Test deletion of file with spaces in name (URL encoded)"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+
+        # Act - URL will be automatically encoded by test client
+        response = client.delete(
+            "/manuscript/project/111/file/My Documents/Chapter 1.md"
+        )
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "My Documents/Chapter 1.md"
+        mock_manager.delete_path.assert_awaited_once_with(
+            111, "My Documents/Chapter 1.md"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_with_special_characters(self, mock_manager, client):
+        """Test deletion of file with special characters (accented characters)"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+
+        # Act
+        response = client.delete(
+            "/manuscript/project/222/file/Nuevo Capítulo 1/Nueva Escena 1.md"
+        )
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "Nuevo Capítulo 1/Nueva Escena 1.md"
+        mock_manager.delete_path.assert_awaited_once_with(
+            222, "Nuevo Capítulo 1/Nueva Escena 1.md"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_root_level(self, mock_manager, client):
+        """Test deletion of file at project root"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+
+        # Act
+        response = client.delete("/manuscript/project/333/file/readme.txt")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "readme.txt"
+        mock_manager.delete_path.assert_awaited_once_with(333, "readme.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_not_found(self, mock_manager, client):
+        """Test file not found error (404)"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock(
+            side_effect=HTTPException(
+                status_code=404, detail="File or Path not found: nonexistent/file.txt"
+            )
+        )
+
+        # Act
+        response = client.delete("/manuscript/project/444/file/nonexistent/file.txt")
 
         # Assert
         assert response.status_code == 404
-        assert response.json() == {"detail": "File not found"}
+        response_data = response.json()
+        assert response_data["detail"] == "File or Path not found: nonexistent/file.txt"
+        mock_manager.delete_path.assert_awaited_once_with(444, "nonexistent/file.txt")
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_delete_file_permission_denied(self, mock_manager, client):
+        """Test permission error (403)"""
         # Arrange
-        from fastapi import HTTPException
-
         mock_manager.delete_path = AsyncMock(
-            side_effect=HTTPException(status_code=403, detail="Permission denied")
+            side_effect=HTTPException(
+                status_code=403,
+                detail="Insufficient permission to delete: secure/file.txt",
+            )
         )
-        request_data = {"project_id": 123, "path": "secure/file.txt"}
 
         # Act
-        response = client.request("DELETE", "/manuscript/", json=request_data)
+        response = client.delete("/manuscript/project/555/file/secure/file.txt")
 
         # Assert
         assert response.status_code == 403
-        assert response.json() == {"detail": "Permission denied"}
+        response_data = response.json()
+        assert (
+            response_data["detail"]
+            == "Insufficient permission to delete: secure/file.txt"
+        )
+        mock_manager.delete_path.assert_awaited_once_with(555, "secure/file.txt")
 
-    def test_delete_file_invalid_request(self, client):
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_os_error(self, mock_manager, client):
+        """Test OS error (500)"""
         # Arrange
-        invalid_request = {"project_id": "invalid", "wrong_field": "docs/file.txt"}
+        mock_manager.delete_path = AsyncMock(
+            side_effect=HTTPException(
+                status_code=500, detail="Error deleting docs/file.txt: Disk I/O error"
+            )
+        )
 
         # Act
-        response = client.request("DELETE", "/manuscript/", json=invalid_request)
+        response = client.delete("/manuscript/project/666/file/docs/file.txt")
+
+        # Assert
+        assert response.status_code == 500
+        response_data = response.json()
+        assert response_data["detail"] == "Error deleting docs/file.txt: Disk I/O error"
+        mock_manager.delete_path.assert_awaited_once_with(666, "docs/file.txt")
+
+    def test_delete_file_invalid_project_id(self, client):
+        """Test with non-integer project_id"""
+        # Act
+        response = client.delete("/manuscript/project/invalid_id/file/test.txt")
 
         # Assert
         assert response.status_code == 422  # Validation error
 
-    def test_delete_file_missing_required_fields(self, client):
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_zero_project_id(self, mock_manager, client):
+        """Test with project_id = 0"""
         # Arrange
-        incomplete_request = {"project_id": 123}  # Falta "path"
+        mock_manager.delete_path = AsyncMock()
 
         # Act
-        response = client.request("DELETE", "/manuscript/", json=incomplete_request)
+        response = client.delete("/manuscript/project/0/file/test.txt")
 
         # Assert
-        assert response.status_code == 422
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "test.txt"
+        mock_manager.delete_path.assert_awaited_once_with(0, "test.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_negative_project_id(self, mock_manager, client):
+        """Test with negative project_id"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+
+        # Act
+        response = client.delete("/manuscript/project/-1/file/test.txt")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "test.txt"
+        mock_manager.delete_path.assert_awaited_once_with(-1, "test.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_large_project_id(self, mock_manager, client):
+        """Test with large project_id"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+        large_project_id = 999999999
+
+        # Act
+        response = client.delete(
+            f"/manuscript/project/{large_project_id}/file/test.txt"
+        )
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == "test.txt"
+        mock_manager.delete_path.assert_awaited_once_with(large_project_id, "test.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_complex_path_structure(self, mock_manager, client):
+        """Test with complex path structure"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+        complex_path = "manuscripts/drafts/2024/january/scenes/intro-scene-final-v2.md"
+
+        # Act
+        response = client.delete(f"/manuscript/project/777/file/{complex_path}")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == complex_path
+        mock_manager.delete_path.assert_awaited_once_with(777, complex_path)
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_path_with_dots(self, mock_manager, client):
+        """Test path with dots and special characters"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+        dotted_path = "docs/version.1.2.final.txt"
+
+        # Act
+        response = client.delete(f"/manuscript/project/888/file/{dotted_path}")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == dotted_path
+        mock_manager.delete_path.assert_awaited_once_with(888, dotted_path)
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_path_with_underscores_and_hyphens(self, mock_manager, client):
+        """Test path with underscores and hyphens"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock()
+        path_with_separators = "my_documents/draft-chapters/scene_1-final.md"
+
+        # Act
+        response = client.delete(f"/manuscript/project/999/file/{path_with_separators}")
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data["path"] == path_with_separators
+        mock_manager.delete_path.assert_awaited_once_with(999, path_with_separators)
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_delete_file_manager_exception_propagation(self, mock_manager, client):
+        """Test that manager exceptions are properly propagated"""
+        # Arrange
+        mock_manager.delete_path = AsyncMock(
+            side_effect=HTTPException(
+                status_code=418, detail="I'm a teapot"
+            )  # Custom error
+        )
+
+        # Act
+        response = client.delete("/manuscript/project/123/file/teapot.txt")
+
+        # Assert
+        assert response.status_code == 418
+        response_data = response.json()
+        assert response_data["detail"] == "I'm a teapot"
+        mock_manager.delete_path.assert_awaited_once_with(123, "teapot.txt")
+
+    def test_delete_file_empty_path_not_allowed(self, client):
+        """Test that empty path is not allowed by route"""
+        # This should result in 404 because the route structure requires a path
+        response = client.delete("/manuscript/project/123/file/")
+
+        # The endpoint expects a path parameter, so this should not match the route
+        assert response.status_code in [404, 405]  # Not Found or Method Not Allowed
 
 
 class TestGetFileContentEndpoint:

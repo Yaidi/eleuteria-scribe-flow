@@ -8,11 +8,6 @@ class SaveStartRequest(BaseModel):
     title: str = None
 
 
-class DeleteManuscriptRequest(BaseModel):
-    project_id: int
-    path: str
-
-
 class GetManuscriptContentRequest(BaseModel):
     project_id: int
     path: str

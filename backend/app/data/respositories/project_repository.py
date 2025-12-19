@@ -42,7 +42,7 @@ class ProjectRepository:
         except SQLAlchemyError as e:
             await self.session.rollback()
             print(e, "create_project")
-            raise HTTPException(status_code=500, detail="Error adding project")
+            raise HTTPException()
 
     async def get_project(self, project_id: int):
         project_polymorphic = with_polymorphic(

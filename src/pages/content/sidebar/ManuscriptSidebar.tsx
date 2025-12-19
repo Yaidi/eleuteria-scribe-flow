@@ -17,7 +17,6 @@ const ManuscriptSidebar = () => {
   const { manuscript } = useSections();
 
   const createNewChapter = () => {
-    // Generar IDs únicos
     const newChapterId = `chapter-${Date.now()}`;
     const newSceneId = `scene-${Date.now()}`;
 
@@ -53,6 +52,7 @@ const ManuscriptSidebar = () => {
           size="sm"
           variant="ghost"
           className="h-6 w-6 p-0"
+          aria-label={t("addChapter")}
           onClick={() => createNewChapter()}
         >
           <Plus className="w-3 h-3" />

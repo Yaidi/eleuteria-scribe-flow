@@ -2,5 +2,8 @@
   ",": "",
   "buttons": {
     "back": "Volver hacia atrás"
+  },
+  "loading": {
+    "loading_project": "Cargando proyecto..."
   }
 }

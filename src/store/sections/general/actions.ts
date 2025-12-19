@@ -13,7 +13,7 @@ export interface responseUpdateGeneral {
   projectId: number;
 }
 export const updateGeneral = createAsyncThunk<responseUpdateGeneral, requestGeneral>(
-  "[General] Update info",
+  "Section [General] Update info",
   async ({ projectId, general }) => {
     const response = await fetch(`${host}/projects/${projectId}/general`, {
       method: "PATCH",

@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/config.ts";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/config.ts";
 import { updateGeneral } from "@/store";
 import { IGeneral } from "@/types/sections.ts";
 import {
@@ -12,13 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { useProjectId } from "@/hooks/useSections.ts";
+import { useProjectId, useSections } from "@/hooks/useSections.ts";
 import { useTranslation } from "react-i18next";
 import React from "react";
 
 const General = () => {
   const { t } = useTranslation("general");
-  const { general } = useSelector((state: RootState) => state.sections);
+  const { general } = useSections();
   const projectId = useProjectId();
   const dispatch = useDispatch<AppDispatch>();
 

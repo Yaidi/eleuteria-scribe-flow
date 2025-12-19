@@ -1,21 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { IWorldElement } from "@/types/sections.ts";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/config.ts";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/config.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store";
 import FormWorld from "@/components/forms/FormWorld.tsx";
 import { util } from "zod";
 import objectKeys = util.objectKeys;
 import { useTranslation } from "react-i18next";
+import { useSections } from "@/hooks/useSections.ts";
 
 const World = () => {
   const { t } = useTranslation("world");
 
-  const { world, currentWorldElement, worldElements } = useSelector(
-    (state: RootState) => state.sections.world,
-  );
+  const { world, currentWorldElement, worldElements } = useSections().world;
   const dispatch = useDispatch<AppDispatch>();
 
   const add = (id: number) => {

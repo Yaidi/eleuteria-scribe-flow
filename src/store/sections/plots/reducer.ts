@@ -8,12 +8,12 @@ export interface IPlotsReducer {
   currentPlot: IPlot | null;
 }
 
-const initialState: IPlotsReducer = {
+export const initialStatePlots: IPlotsReducer = {
   plots: [],
   currentPlot: null,
 };
 
-export const plotsReducer = createReducer(initialState, (builder) => {
+export const plotsReducer = createReducer(initialStatePlots, (builder) => {
   builder
     .addCase(getProjectFetch.fulfilled, (_state, { payload }) => {
       return {

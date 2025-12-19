@@ -1,4 +1,5 @@
 import { IChapter, ICharacter, IGeneral, IPlot, IWorld } from "@/types/sections.ts";
+import { ISectionsReducer } from "@/store/sections/sections-config.ts";
 
 export enum State {
   LOADING = "loading",
@@ -25,6 +26,10 @@ export interface ProjectSections {
 
 export interface ProjectData extends IProject {
   sections: ProjectSections;
+}
+
+export interface ProjectState extends IProject {
+  sections: ISectionsReducer;
 }
 
 export interface IProject {

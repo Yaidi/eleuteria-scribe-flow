@@ -4,7 +4,7 @@ import { host } from "@/https/fetch.ts";
 import { responseDelete } from "@/store";
 
 export const removeWorldElement = createAsyncThunk<responseDelete, number>(
-  "[World] Remove Element of World",
+  "Section [World] Remove Element of World",
   async (id) => {
     const response = await fetch(`${host}/world/element/${id}`, {
       method: "DELETE",
@@ -20,7 +20,7 @@ export const removeWorldElement = createAsyncThunk<responseDelete, number>(
 );
 
 export const updateWorldElement = createAsyncThunk<Partial<IWorldElement>, Partial<IWorldElement>>(
-  "[World] Update Element to World",
+  "Section [World] Update Element to World",
   async (worldElement) => {
     const response = await fetch(`${host}/world/element/${worldElement.id}`, {
       method: "PUT",
@@ -42,7 +42,7 @@ export const updateWorldElement = createAsyncThunk<Partial<IWorldElement>, Parti
 );
 
 export const addWorldElement = createAsyncThunk<IWorldElement, number>(
-  "[World] Add Element to World",
+  "Section [World] Add Element to World",
   async (worldId) => {
     const response = await fetch(`${host}/world/element`, {
       method: "POST",
@@ -62,5 +62,5 @@ export const addWorldElement = createAsyncThunk<IWorldElement, number>(
 );
 
 export const setCurrentWorldElement = createAction<IWorldElement>(
-  "[World] Set Current World Element",
+  "Section [World] Set Current World Element",
 );

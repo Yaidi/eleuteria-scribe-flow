@@ -40,12 +40,12 @@ describe("Plot Component", () => {
       project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
-      },
-      sections: {
-        ...store.getState().sections,
-        plots: {
-          plots: mockPlots,
-          currentPlot: mockPlots[0],
+        sections: {
+          ...store.getState().project.sections,
+          plots: {
+            plots: mockPlots,
+            currentPlot: mockPlots[0],
+          },
         },
       },
     });
@@ -61,12 +61,12 @@ describe("Plot Component", () => {
       project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
-      },
-      sections: {
-        ...store.getState().sections,
-        plots: {
-          plots: mockPlots,
-          currentPlot: mockPlots[0],
+        sections: {
+          ...store.getState().project.sections,
+          plots: {
+            plots: mockPlots,
+            currentPlot: mockPlots[0],
+          },
         },
       },
     });
@@ -82,12 +82,12 @@ describe("Plot Component", () => {
       project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
-      },
-      sections: {
-        ...store.getState().sections,
-        plots: {
-          plots: mockPlots,
-          currentPlot: mockPlots[0],
+        sections: {
+          ...store.getState().project.sections,
+          plots: {
+            plots: mockPlots,
+            currentPlot: mockPlots[0],
+          },
         },
       },
     });

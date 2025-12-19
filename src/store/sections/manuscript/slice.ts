@@ -21,7 +21,7 @@ export const saveSceneSession = createAsyncThunk<
   { lastSaved: Date }, // payload de éxito
   SaveSceneArgs, // argumento recibido
   { rejectValue: string }
->("[Manuscript] Save Scene", async ({ scene, chapter, projectId }, { rejectWithValue }) => {
+>("Section [Manuscript] Save Scene", async ({ scene, chapter, projectId }, { rejectWithValue }) => {
   try {
     const filename = `${scene.title}.md`;
     const relativePath = chapter.title;
@@ -87,7 +87,7 @@ const finishSaveSession = async (sessionId: string) => {
 };
 
 export const addChapterAndSaveScene = createAsyncThunk(
-  "[Manuscript] Add Chapter and Save Scene",
+  "Section [Manuscript] Add Chapter and Save Scene",
   async (chapter: IChapter, { dispatch }) => {
     // Primero agregar el capítulo
     dispatch(addChapter(chapter));

@@ -100,7 +100,7 @@ describe("World API Actions", () => {
 
   test("setCurrentWorldElement - creates correct action", () => {
     const action = setCurrentWorldElement(mockWorldElements[0]);
-    expect(action.type).toBe("[World] Set Current World Element");
+    expect(action.type).toBe("Section [World] Set Current World Element");
     expect(action.payload).toEqual(mockWorldElements[0]);
   });
 });

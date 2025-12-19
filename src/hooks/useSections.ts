@@ -6,7 +6,7 @@ import { SaveSceneArgs, saveSceneSession } from "@/store";
 import { useCallback } from "react";
 
 export const useSections = (): ISectionsReducer => {
-  return useSelector((state: RootState) => state.sections);
+  return useSelector((state: RootState) => state.project.sections);
 };
 
 export const useProjectId = (): number => {
@@ -14,7 +14,7 @@ export const useProjectId = (): number => {
 };
 
 export const useManuscript = (): IManuscriptReducer => {
-  return useSelector((state: RootState) => state.sections.manuscript);
+  return useSelector((state: RootState) => state.project.sections.manuscript);
 };
 
 export const useSaveScene = () => {

@@ -12,7 +12,7 @@ export interface IManuscriptReducer {
   error: string | undefined;
 }
 
-const initialState: IManuscriptReducer = {
+export const initialStateManuscript: IManuscriptReducer = {
   chapters: [],
   currentChapter: undefined,
   currentScene: undefined,
@@ -21,7 +21,7 @@ const initialState: IManuscriptReducer = {
   error: undefined,
 };
 
-export const manuscriptReducer = createReducer(initialState, (builder) => {
+export const manuscriptReducer = createReducer(initialStateManuscript, (builder) => {
   builder
     .addCase(addChapter, (state, { payload }) => {
       return {

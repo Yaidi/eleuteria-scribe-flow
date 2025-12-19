@@ -35,11 +35,12 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, test, expect } from "vitest";
 import { renderWithProviders } from "../../utils/renderWithProviders.tsx";
 import MainContent from "@/pages/MainContent.tsx";
-import { mockProjectData } from "../../mocks";
+import { mockProject, mockProjectData } from "../../mocks";
 import { getProjectFetch } from "@/store/projects/slice";
 import { ESections } from "@/types/sections.ts";
 import * as asyncActions from "@/store/projects/slice";
-import { ProjectData } from "@/types/project.ts";
+import { ProjectData, State } from "@/types/project.ts";
+import { store } from "@/store/config.ts";
 
 // Test suite
 describe("MainContent", () => {
@@ -54,8 +55,10 @@ describe("MainContent", () => {
   test("navigates to / when back button is clicked", () => {
     renderWithProviders(<MainContent />, {
       project: {
+        ...store.getState().project,
         currentProject: mockProjectData,
         currentSection: ESections.characters,
+        status: State.SUCCESS,
       },
     });
     const backButton = screen.getByTestId("btn-back");
@@ -66,8 +69,10 @@ describe("MainContent", () => {
   test("toggles dark mode", async () => {
     renderWithProviders(<MainContent />, {
       project: {
+        ...store.getState().project,
         currentProject: mockProjectData,
         currentSection: ESections.characters,
+        status: State.SUCCESS,
       },
     });
     const toggleButton = screen.getByTestId("btn-dark-mode");
@@ -80,8 +85,10 @@ describe("MainContent", () => {
   test("renders Main Content", () => {
     renderWithProviders(<MainContent />, {
       project: {
-        currentProject: mockProjectData,
+        ...store.getState().project,
+        currentProject: mockProject,
         currentSection: ESections.characters,
+        status: State.SUCCESS,
       },
     });
     expect(screen.getByText("The Dark Streets")).toBeInTheDocument();

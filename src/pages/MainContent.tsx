@@ -11,10 +11,13 @@ import { getProjectFetch } from "@/store/projects/slice.ts";
 import NavbarSections from "@/pages/content/NavbarSections.tsx";
 import { renderCurrentSection } from "@/pages/sections/SwitchSections.tsx";
 import { useTranslation } from "react-i18next";
+import { State } from "@/types/project.ts";
 
 const MainContent = () => {
   const { t } = useTranslation();
-  const { currentProject, currentSection } = useSelector((state: RootState) => state.project);
+  const { currentProject, currentSection, status } = useSelector(
+    (state: RootState) => state.project,
+  );
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -32,7 +35,17 @@ const MainContent = () => {
     document.documentElement.classList.toggle("dark");
   };
 
-  if (currentProject != undefined)
+  if (status == State.LOADING) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
+          {t("loading.loading_project")}
+        </p>
+      </div>
+    );
+  }
+
+  if (currentProject != undefined && status == State.SUCCESS)
     return (
       <div className={`h-screen flex ${darkMode ? "dark" : ""}`}>
         {/* Columna izquierda */}

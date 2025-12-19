@@ -37,7 +37,7 @@ describe("updateGeneral thunk", () => {
       }),
     );
 
-    expect(result.type).toBe("[General] Update info/fulfilled");
+    expect(result.type).toBe("Section [General] Update info/fulfilled");
     expect(result.payload).toEqual({
       projectName: mockGeneral.title,
       projectId: 42,
@@ -50,7 +50,7 @@ describe("updateGeneral thunk", () => {
 
     const result = await updateGeneral(request)(vi.fn(), vi.fn(), undefined);
 
-    expect(result.type).toBe("[General] Update info/rejected");
+    expect(result.type).toBe("Section [General] Update info/rejected");
   });
 
   test("dispatches rejected action on fetch throw", async () => {
@@ -58,6 +58,6 @@ describe("updateGeneral thunk", () => {
 
     const result = await updateGeneral(request)(vi.fn(), vi.fn(), undefined);
 
-    expect(result.type).toBe("[General] Update info/rejected");
+    expect(result.type).toBe("Section [General] Update info/rejected");
   });
 });

@@ -1,5 +1,5 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { IPlot } from "@/types/sections.ts";
+import { ICharacter, IPlot } from "@/types/sections.ts";
 import { host } from "@/https/fetch.ts";
 
 export interface requestPlot {
@@ -63,3 +63,21 @@ export const addPlot = createAsyncThunk<IPlot, number>("[Plot] Add Plot", async 
 });
 
 export const setCurrentPlot = createAction<IPlot>("[Plot] Set Current Plot");
+
+export const getAllCharacters = createAsyncThunk<ICharacter[], number>(
+  "[Characters] Get Characters",
+  async (projectId) => {
+    const response = await fetch(`${host}/characters/from_project/${projectId}/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response) {
+      throw new Error("Error getting all the characters");
+    }
+
+    const responseData = await response.json();
+    return responseData as ICharacter[];
+  },
+);

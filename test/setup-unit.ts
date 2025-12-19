@@ -1,5 +1,32 @@
 import { vi, beforeAll } from "vitest";
 import "@testing-library/jest-dom";
+import i18next from "i18next";
+import { en } from "@/localizations/english.ts";
+
+i18next.init({
+  lng: "en",
+  fallbackLng: "en",
+  resources: {
+    en: {
+      ...en,
+    },
+  },
+  interpolation: { escapeValue: false },
+});
+
+vi.mock("react-i18next", () => {
+  return {
+    useTranslation: (ns = "translation") => ({
+      t: (key: string, opts?: never) => {
+        const hasNs = key.includes(":");
+        const finalKey = hasNs ? key : `${ns}:${key}`;
+        return i18next.t(finalKey, opts);
+      },
+      i18n: i18next,
+    }),
+    Trans: ({ children }: never) => children,
+  };
+});
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,

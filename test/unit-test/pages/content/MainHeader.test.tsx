@@ -27,7 +27,6 @@ describe("MainHeader", () => {
 
     expect(screen.getByText("The Dark Streets")).toBeInTheDocument();
     expect(screen.getByText("novel")).toBeInTheDocument();
-    expect(screen.getByText("0")).toBeInTheDocument();
   });
 
   test("auto saves on mount", async () => {

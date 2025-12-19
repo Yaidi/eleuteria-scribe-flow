@@ -1,0 +1,23 @@
+{
+  "add": "Add Plot",
+  "noPlots": "No plots added to this story yet.",
+  "plot": {
+    "charactersInvolved": "Characters Involved",
+    "delete": "Delete Plot",
+    "description": {
+      "name": "Description",
+      "placeholder": "Describe what happens in this plot..."
+    },
+    "title": {
+      "name": "Name",
+      "placeholder": "Plot name"
+    }
+  },
+  "title": "Plots",
+  "importance": {
+    "0": "Main",
+    "1": "Secondary",
+    "2": "Minor",
+    "label": "Importance"
+  }
+}

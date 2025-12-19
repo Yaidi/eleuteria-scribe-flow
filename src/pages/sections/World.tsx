@@ -8,8 +8,11 @@ import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store
 import FormWorld from "@/components/forms/FormWorld.tsx";
 import { util } from "zod";
 import objectKeys = util.objectKeys;
+import { useTranslation } from "react-i18next";
 
 const World = () => {
+  const { t } = useTranslation("world");
+
   const { world, currentWorldElement, worldElements } = useSelector(
     (state: RootState) => state.sections.world,
   );
@@ -17,6 +20,14 @@ const World = () => {
 
   const add = (id: number) => {
     dispatch(addWorldElement(id));
+  };
+
+  const worldParentName = (current: IWorldElement) => {
+    if (current.parentId != null) {
+      return worldElements[current.parentId].name;
+    } else {
+      return current.name;
+    }
   };
 
   const update = (worldElement: IWorldElement) => {
@@ -30,10 +41,12 @@ const World = () => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>World Building</CardTitle>
+        <CardTitle>
+          {currentWorldElement != null ? worldParentName(currentWorldElement) : t("title")}
+        </CardTitle>
         <Button onClick={() => add(world!.id)} size="sm">
           <Plus className="w-4 h-4 mr-2" />
-          Add Element
+          {t("element.add")}
         </Button>
       </CardHeader>
       <CardContent>
@@ -46,9 +59,7 @@ const World = () => {
         )}
       </CardContent>
       {objectKeys(worldElements).length === 0 && (
-        <div className="text-center py-8 text-slate-500">
-          No world elements added yet. Click "Add Element" to get started.
-        </div>
+        <div className="text-center py-8 text-slate-500">{t("element.noElements")}</div>
       )}
     </Card>
   );

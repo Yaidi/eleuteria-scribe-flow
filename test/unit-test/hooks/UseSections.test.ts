@@ -123,7 +123,7 @@ describe("useSections hooks", () => {
   describe("useProjectId hook", () => {
     it("should return current project ID", () => {
       const mockState = {
-        projectInfo: {
+        project: {
           currentProject: mockProjectData,
         },
       };
@@ -137,7 +137,7 @@ describe("useSections hooks", () => {
 
     it("should return 0 when no current project", () => {
       const mockState = {
-        projectInfo: {
+        project: {
           currentProject: null,
         },
       };
@@ -151,7 +151,7 @@ describe("useSections hooks", () => {
 
     it("should return 0 when current project has no ID", () => {
       const mockState = {
-        projectInfo: {
+        project: {
           currentProject: {
             ...mockProjectData,
             id: undefined,
@@ -168,7 +168,7 @@ describe("useSections hooks", () => {
 
     it("should handle null project gracefully", () => {
       const mockState = {
-        projectInfo: {
+        project: {
           currentProject: null,
         },
       };
@@ -263,7 +263,7 @@ describe("useSections hooks", () => {
       // Setup default mock states
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: mockProjectData,
           },
           sections: {
@@ -317,7 +317,7 @@ describe("useSections hooks", () => {
     it("should warn and return early when no current scene", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: mockProjectData,
           },
           sections: {
@@ -345,7 +345,7 @@ describe("useSections hooks", () => {
     it("should warn and return early when no current chapter", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: mockProjectData,
           },
           sections: {
@@ -377,7 +377,7 @@ describe("useSections hooks", () => {
     it("should warn when both chapter and scene are missing", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: mockProjectData,
           },
           sections: {
@@ -432,7 +432,7 @@ describe("useSections hooks", () => {
 
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: {
               ...mockProjectData,
               id: customProjectId,
@@ -471,7 +471,7 @@ describe("useSections hooks", () => {
     it("should handle zero project ID", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
-          projectInfo: {
+          project: {
             currentProject: null,
           },
           sections: {
@@ -526,7 +526,7 @@ describe("useSections hooks", () => {
             error: undefined,
           },
         },
-        projectInfo: {
+        project: {
           currentProject: mockProjectData,
         },
       };
@@ -560,7 +560,7 @@ describe("useSections hooks", () => {
             error: undefined,
           },
         },
-        projectInfo: {
+        project: {
           currentProject: null,
         },
         projects: [],
@@ -603,7 +603,7 @@ describe("useSections hooks", () => {
           world: { worldElements: [] },
           manuscript: manuscriptState,
         },
-        projectInfo: {
+        project: {
           currentProject: mockProjectData,
         },
       };

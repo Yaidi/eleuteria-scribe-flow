@@ -15,8 +15,8 @@ from backend.app.schemas.sections.manuscript_schemas import SaveStartRequest
 
 @pytest_asyncio.fixture
 async def manager(tmp_path, monkeypatch):
-    monkeypatch.setattr(ManuscriptManager, "ROOT_DIR", str(tmp_path))
-    os.makedirs(ManuscriptManager.ROOT_DIR, exist_ok=True)
+    monkeypatch.setattr(ManuscriptManager, "UPLOAD_DIR", str(tmp_path))
+    os.makedirs(ManuscriptManager.UPLOAD_DIR, exist_ok=True)
     m = ManuscriptManager()
     yield m
     m.sessions.clear()

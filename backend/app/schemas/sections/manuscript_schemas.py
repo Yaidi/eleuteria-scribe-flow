@@ -7,7 +7,6 @@ class SaveStartRequest(BaseModel):
     filename: str
     title: str = None
 
-
 class DeleteManuscriptRequest(BaseModel):
     project_id: int
     path: str

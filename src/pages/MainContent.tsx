@@ -10,9 +10,11 @@ import { getCurrentId } from "@/store/electron/actions.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
 import NavbarSections from "@/pages/content/NavbarSections.tsx";
 import { renderCurrentSection } from "@/pages/sections/SwitchSections.tsx";
+import { useTranslation } from "react-i18next";
 
 const MainContent = () => {
-  const { currentProject, currentSection } = useSelector((state: RootState) => state.projectInfo);
+  const { t } = useTranslation();
+  const { currentProject, currentSection } = useSelector((state: RootState) => state.project);
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ const MainContent = () => {
           <header className="w-full flex items-center justify-start px-6 pb-8 pt-8">
             <Button
               data-testid="btn-back"
+              aria-label={t("buttons.back")}
               variant="ghost"
               size="sm"
               onClick={() => navigate("/")}

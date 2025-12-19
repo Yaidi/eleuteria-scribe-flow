@@ -53,7 +53,7 @@ describe("MainContent", () => {
 
   test("navigates to / when back button is clicked", () => {
     renderWithProviders(<MainContent />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },
@@ -65,7 +65,7 @@ describe("MainContent", () => {
 
   test("toggles dark mode", async () => {
     renderWithProviders(<MainContent />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },
@@ -79,7 +79,7 @@ describe("MainContent", () => {
 
   test("renders Main Content", () => {
     renderWithProviders(<MainContent />, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.characters,
       },

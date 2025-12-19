@@ -18,22 +18,22 @@ describe("NavbarSections", () => {
   test("renders all section buttons", () => {
     renderWithProviders(<NavbarSections />);
 
-    expect(screen.getByText("general")).toBeInTheDocument();
-    expect(screen.getByText("characters")).toBeInTheDocument();
-    expect(screen.getByText("plots")).toBeInTheDocument();
+    expect(screen.getByText("General")).toBeInTheDocument();
+    expect(screen.getByText("Characters")).toBeInTheDocument();
+    expect(screen.getByText("Plots")).toBeInTheDocument();
   });
 
   test("highlights current section button", () => {
     renderWithProviders(<NavbarSections />);
 
-    const generalBtn = screen.getByText("general");
-    expect(generalBtn.parentElement).toHaveClass("bg-blue-100");
+    const generalBtn = screen.getByText("General");
+    expect(generalBtn).toHaveClass("bg-blue-100");
   });
 
   test("dispatches setCurrentSection on button click", () => {
     renderWithProviders(<NavbarSections />);
 
-    const charactersBtn = screen.getByText("characters");
+    const charactersBtn = screen.getByText("Characters");
     fireEvent.click(charactersBtn);
 
     expect(mockDispatch).toHaveBeenCalledWith(setCurrentSection(ESections.characters));

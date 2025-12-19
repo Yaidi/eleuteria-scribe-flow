@@ -10,8 +10,8 @@ from backend.app.schemas.sections.manuscript_schemas import SaveStartRequest
 
 
 class ManuscriptManager:
-    ROOT_DIR = "manuscripts/"
-    os.makedirs(ROOT_DIR, exist_ok=True)
+    UPLOAD_DIR = "manuscripts/"
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
     sessions = {}
 
     def __init__(self):
@@ -67,7 +67,7 @@ class ManuscriptManager:
             # session_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
             ```
         """
-        project_path = os.path.join(self.ROOT_DIR, str(request.project_id))
+        project_path = os.path.join(self.UPLOAD_DIR, str(request.project_id))
         session_id = str(uuid.uuid4())
 
         # Make sure relative_path doesn't start with /

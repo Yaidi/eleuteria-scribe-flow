@@ -37,7 +37,7 @@ describe("Plot Component", () => {
 
   test("dispatches updatePlot title", () => {
     renderWithProviders(<Plot></Plot>, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
       },
@@ -58,7 +58,7 @@ describe("Plot Component", () => {
 
   test("dispatches updatePlot when editing the description", () => {
     renderWithProviders(<Plot></Plot>, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
       },
@@ -79,7 +79,7 @@ describe("Plot Component", () => {
 
   test("dispatches removePlot when clicking trash button", async () => {
     renderWithProviders(<Plot></Plot>, {
-      projectInfo: {
+      project: {
         currentProject: mockProjectData,
         currentSection: ESections.plots,
       },

@@ -1,20 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
-import { ESections } from "@/types/sections.ts";
-import React from "react";
 import TextEditor from "@/components/ui/text-editor.tsx";
-import { useSaveScene } from "@/hooks/useSections.ts";
+import { useManuscript, useSaveScene } from "@/hooks/useSections.ts";
 
-interface ManuscriptProps {
-  section: ESections;
-}
-
-const Manuscript: React.FC<ManuscriptProps> = ({ section }) => {
+const Manuscript = () => {
   const saveScene = useSaveScene();
+  const manuscript = useManuscript();
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="capitalize">{section.toString()}</CardTitle>
+        <CardTitle className="capitalize">
+          {manuscript.currentChapter?.title || manuscript.currentScene?.title}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <TextEditor onSaveScene={saveScene} />

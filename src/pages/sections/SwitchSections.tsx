@@ -19,6 +19,6 @@ export const renderCurrentSection = (currentSection: ESections) => {
     case ESections.settings:
       return <Settings />;
     default:
-      return <Manuscript section={currentSection} />;
+      return <Manuscript />;
   }
 };

@@ -18,7 +18,7 @@ describe("General Component", () => {
     expect(screen.getByLabelText("Title")).toHaveValue("");
     expect(screen.getByLabelText("Subtitle")).toHaveValue("");
     expect(screen.getByLabelText(/Author/i)).toHaveValue("");
-    expect(screen.getByLabelText(/Series/i)).toHaveValue("");
+    expect(screen.getByLabelText(/Serie/i)).toHaveValue("");
     expect(screen.getByLabelText("Volume")).toHaveValue(0);
     expect(screen.getByLabelText(/Genre/i)).toHaveValue("");
     expect(screen.getByLabelText(/License/i)).toHaveValue("");
@@ -40,10 +40,11 @@ describe("General Component", () => {
     renderWithProviders(<General />);
     const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
 
-    // Select genre
     const genreTrigger = screen.getByRole("combobox", { name: "Genre" });
     await user.click(genreTrigger);
-    const genreOption = screen.getByText("Fantasy");
+    const genreOption = await screen.findByRole("option", {
+      name: "Fantasy",
+    });
     await user.click(genreOption);
 
     expect(updateGeneral).toHaveBeenCalledWith({
@@ -52,9 +53,9 @@ describe("General Component", () => {
     });
 
     // Select license
-    const licenseTrigger = screen.getByText(/Select license/i);
+    const licenseTrigger = screen.getByText(/Choose a license/i);
     await user.click(licenseTrigger);
-    const licenseOption = screen.getByText("Public Domain");
+    const licenseOption = await screen.findByRole("option", { name: "Public domain" });
     await user.click(licenseOption);
 
     expect(updateGeneral).toHaveBeenCalledWith({

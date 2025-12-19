@@ -1,0 +1,15 @@
+{
+  "element": {
+    "add": "Agregar elemento",
+    "delete": "Eliminar elemento",
+    "description": {
+      "name": "Descripción"
+    },
+    "name": {
+      "label": "Nombre",
+      "placeholder": "Pon el nombre del elemento"
+    },
+    "noElements": "No has agregado elementos a este mundo aún."
+  },
+  "title": "Creación del mundo"
+}

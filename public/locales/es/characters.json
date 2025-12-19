@@ -1,0 +1,22 @@
+{
+  "addCharacter": "Anadir personaje",
+  "character": {
+    "delete": "Eliminar personaje",
+    "name": {
+      "label": "Nombre",
+      "placeholder": "Nombre del personaje"
+    }
+  },
+  "characteristics": {
+    "label": "Características",
+    "placeholder": "Apariencia, personalidad, historia..."
+  },
+  "importance": {
+    "0": "Protagonista",
+    "1": "Personaje secundario",
+    "2": "Personaje menor",
+    "label": "Importancia"
+  },
+  "noCharacters": "Aún no hay personajes haz click en 'Anadir personaje' para comenzar",
+  "title": "Personajes"
+}

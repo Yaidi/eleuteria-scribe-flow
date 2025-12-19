@@ -115,13 +115,13 @@ describe("Welcome Page", () => {
       });
     });
 
-    expect(screen.getByText("novel Template")).toBeTruthy();
+    expect(screen.getByText("novel template")).toBeTruthy();
 
     screen.getByTestId("btn-thesis").click();
 
     await vi.waitFor(() => {
-      expect(screen.getByText("thesis Template")).toBeTruthy();
-      expect(screen.queryByText("novel Template")).toBeNull();
+      expect(screen.getByText("thesis template")).toBeTruthy();
+      expect(screen.queryByText("novel template")).toBeNull();
     });
   });
 });

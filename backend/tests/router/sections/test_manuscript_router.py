@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi.testclient import TestClient
 from fastapi import UploadFile
+from fastapi import HTTPException
 from io import BytesIO
 
 from backend.app.router.sections.manuscript_router import manuscript_router
@@ -692,3 +693,336 @@ class TestDeleteFile:
 
         # Assert
         assert response.status_code == 422
+
+
+class TestGetFileContentEndpoint:
+    """Tests for POST /manuscript/content endpoint"""
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_success(self, mock_manager, client):
+        """Test successful file content retrieval"""
+        # Arrange
+        expected_content = (
+            "This is the content of the manuscript file\nWith multiple lines"
+        )
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            return_value=expected_content
+        )
+
+        request_data = {"project_id": 1, "path": "docs/chapter1.md"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": expected_content}
+
+        # Verify manager method was called with correct parameters
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            1, "docs/chapter1.md"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_empty_file(self, mock_manager, client):
+        """Test retrieving empty file content"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(return_value="")
+
+        request_data = {"project_id": 2, "path": "empty.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": ""}
+        mock_manager.get_manuscript_file_content.assert_called_once_with(2, "empty.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_large_file(self, mock_manager, client):
+        """Test retrieving large manuscript file"""
+        # Arrange
+        large_content = "word " * 20000  # ~20k words
+        mock_manager.get_manuscript_file_content = AsyncMock(return_value=large_content)
+
+        request_data = {"project_id": 3, "path": "manuscripts/large_novel.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": large_content}
+        assert len(response_data["content"].split()) == 20000
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            3, "manuscripts/large_novel.txt"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_nested_path(self, mock_manager, client):
+        """Test deeply nested file path"""
+        # Arrange
+        expected_content = "Deeply nested file content"
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            return_value=expected_content
+        )
+
+        request_data = {"project_id": 6, "path": "level1/level2/level3/deep_file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": expected_content}
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            6, "level1/level2/level3/deep_file.txt"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_file_not_found(self, mock_manager, client):
+        """Test file not found error (404)"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            side_effect=HTTPException(
+                status_code=404, detail="File not found: nonexistent/file.txt"
+            )
+        )
+
+        request_data = {"project_id": 7, "path": "nonexistent/file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 404
+        response_data = response.json()
+        assert response_data["detail"] == "File not found: nonexistent/file.txt"
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            7, "nonexistent/file.txt"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_path_is_directory(self, mock_manager, client):
+        """Test error when path points to directory (404)"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            side_effect=HTTPException(
+                status_code=404, detail="Path is not a file: docs"
+            )
+        )
+
+        request_data = {"project_id": 8, "path": "docs"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 404
+        response_data = response.json()
+        assert response_data["detail"] == "Path is not a file: docs"
+        mock_manager.get_manuscript_file_content.assert_called_once_with(8, "docs")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_permission_error(self, mock_manager, client):
+        """Test permission error (403)"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            side_effect=HTTPException(
+                status_code=403,
+                detail="Insufficient permission to read: protected/file.txt",
+            )
+        )
+
+        request_data = {"project_id": 9, "path": "protected/file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 403
+        response_data = response.json()
+        assert (
+            response_data["detail"]
+            == "Insufficient permission to read: protected/file.txt"
+        )
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            9, "protected/file.txt"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_binary_file_error(self, mock_manager, client):
+        """Test binary file error (500)"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            side_effect=HTTPException(
+                status_code=500, detail="File is not a valid text file: binary_file.exe"
+            )
+        )
+
+        request_data = {"project_id": 10, "path": "binary_file.exe"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 500
+        response_data = response.json()
+        assert (
+            response_data["detail"] == "File is not a valid text file: binary_file.exe"
+        )
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            10, "binary_file.exe"
+        )
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_os_error(self, mock_manager, client):
+        """Test OS error (500)"""
+        # Arrange
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            side_effect=HTTPException(
+                status_code=500,
+                detail="Error reading file docs/file.txt: Disk I/O error",
+            )
+        )
+
+        request_data = {"project_id": 11, "path": "docs/file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 500
+        response_data = response.json()
+        assert (
+            response_data["detail"]
+            == "Error reading file docs/file.txt: Disk I/O error"
+        )
+        mock_manager.get_manuscript_file_content.assert_called_once_with(
+            11, "docs/file.txt"
+        )
+
+    def test_get_file_content_missing_project_id(self, client):
+        """Test request with missing project_id field"""
+        # Arrange
+        request_data = {
+            "path": "docs/file.txt"
+            # Missing project_id
+        }
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+        response_data = response.json()
+        assert "detail" in response_data
+        # Check that validation error mentions missing field
+        assert any("project_id" in str(error) for error in response_data["detail"])
+
+    def test_get_file_content_missing_path(self, client):
+        """Test request with missing path field"""
+        # Arrange
+        request_data = {
+            "project_id": 12
+            # Missing path
+        }
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+        response_data = response.json()
+        assert "detail" in response_data
+        # Check that validation error mentions missing field
+        assert any("path" in str(error) for error in response_data["detail"])
+
+    def test_get_file_content_invalid_project_id_type(self, client):
+        """Test request with invalid project_id type"""
+        # Arrange
+        request_data = {"project_id": "not_an_integer", "path": "docs/file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+        response_data = response.json()
+        assert "detail" in response_data
+
+    def test_get_file_content_invalid_path_type(self, client):
+        """Test request with invalid path type"""
+        # Arrange
+        request_data = {"project_id": 13, "path": 123}  # Should be string
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+        response_data = response.json()
+        assert "detail" in response_data
+
+    def test_get_file_content_empty_request_body(self, client):
+        """Test request with empty body"""
+        # Act
+        response = client.post("/manuscript/content", json={})
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+        response_data = response.json()
+        assert "detail" in response_data
+
+    def test_get_file_content_no_json_body(self, client):
+        """Test request without JSON body"""
+        # Act
+        response = client.post("/manuscript/content")
+
+        # Assert
+        assert response.status_code == 422  # Validation error
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_zero_project_id(self, mock_manager, client):
+        """Test with project_id = 0"""
+        # Arrange
+        expected_content = "Content from project zero"
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            return_value=expected_content
+        )
+
+        request_data = {"project_id": 0, "path": "file.txt"}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": expected_content}
+        mock_manager.get_manuscript_file_content.assert_called_once_with(0, "file.txt")
+
+    @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
+    def test_get_file_content_empty_path_string(self, mock_manager, client):
+        """Test with empty path string"""
+        # Arrange
+        expected_content = "Content from empty path"
+        mock_manager.get_manuscript_file_content = AsyncMock(
+            return_value=expected_content
+        )
+
+        request_data = {"project_id": 14, "path": ""}
+
+        # Act
+        response = client.post("/manuscript/content", json=request_data)
+
+        # Assert
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data == {"content": expected_content}
+        mock_manager.get_manuscript_file_content.assert_called_once_with(14, "")

@@ -374,3 +374,79 @@ class ManuscriptManager:
             raise HTTPException(
                 status_code=500, detail=f"Error deleting {path}: {e.strerror}"
             )
+
+    async def get_manuscript_file_content(self, project_id: int, path: str) -> str:
+        """
+        Retrieve the text content of a file from the project storage.
+
+        This method resolves the absolute path for a given `project_id` and `path`,
+        then attempts to read and return the file content as a string.
+        Similar to delete_path, it constructs the absolute path by combining
+        the project directory with the relative path.
+
+        Args:
+            project_id (int): Unique identifier of the project. Used to determine
+                the root directory of the project inside `UPLOAD_DIR`.
+            path (str): Relative path (from the project root) to the file
+                to be read. Leading slashes (`/`) are stripped.
+                If an empty string or `/` is provided, it resolves to the project root.
+
+        Returns:
+            str: The content of the file as a text string.
+
+        Raises:
+            HTTPException (404): If the given path does not exist or points to a directory.
+            HTTPException (403): If the process lacks permissions to read the specified file.
+            HTTPException (500): If an unexpected `OSError` or `UnicodeDecodeError` occurs during reading.
+
+        Examples:
+            - content = await manager.get_file_content(1, "docs/readme.md")
+            # Returns the text content of "readme.md" inside project 1's docs folder.
+
+            - content = await manager.get_file_content(2, "config/settings.json")
+            # Returns the text content of "settings.json" inside project 2's config folder.
+
+        Notes:
+            - Paths are resolved relative to the project's root directory.
+            - The method ensures that leading slashes in the provided path
+              are stripped to avoid absolute path resolution.
+            - Only works with text files - binary files will raise an encoding error.
+            - Uses async file operations with aiofiles for better performance.
+        """
+
+        project_path = os.path.join(self.UPLOAD_DIR, str(project_id))
+
+        # Make sure relative_path doesn't start with /
+        relative_path = path.lstrip("/")
+        if not relative_path:
+            relative_path = "."
+
+        full_path = os.path.join(project_path, relative_path)
+
+        try:
+            # Check if path exists and is a file
+            if not os.path.exists(full_path):
+                raise HTTPException(status_code=404, detail=f"File not found: {path}")
+
+            if not os.path.isfile(full_path):
+                raise HTTPException(
+                    status_code=404, detail=f"Path is not a file: {path}"
+                )
+
+            # Read file content asynchronously
+            async with aiofiles.open(full_path, "r", encoding="utf-8") as f:
+                content = await f.read()
+                return content
+
+        except PermissionError:
+            raise HTTPException(
+                status_code=403, detail=f"Insufficient permission to read: {path}"
+            )
+        except UnicodeDecodeError:
+            raise HTTPException(
+                status_code=500, detail=f"File is not a valid text file: {path}"
+            )
+        except OSError as e:
+            raise HTTPException(
+                status_code=500, detail=f"Error reading file {path}: {e.strerror}"
+            )

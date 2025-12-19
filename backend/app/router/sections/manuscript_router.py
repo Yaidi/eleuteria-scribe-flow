@@ -6,6 +6,7 @@ from backend.app.domain.manuscript_manager import ManuscriptManager
 from backend.app.schemas.sections.manuscript_schemas import (
     SaveStartRequest,
     GetManuscriptContentRequest,
+    ListManuscriptDirectoryRequest,
 )
 
 manuscript_router = APIRouter(prefix="/manuscript", tags=["Manuscript API"])
@@ -73,3 +74,78 @@ async def get_file_content(request: GetManuscriptContentRequest):
         request.project_id, request.path
     )
     return {"content": content}
+
+
+@manuscript_router.post(
+    "/list",
+    responses={
+        200: {
+            "description": "Directory listing successful",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "path": "docs",
+                        "entries": [
+                            {
+                                "name": "chapters",
+                                "path": "docs/chapters",
+                                "type": "directory",
+                                "hasChildren": True,
+                            },
+                            {
+                                "name": "README.md",
+                                "path": "docs/README.md",
+                                "type": "file",
+                                "size": 1024,
+                            },
+                        ],
+                    }
+                }
+            },
+        },
+        404: {
+            "description": "Directory not found",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "Directory not found: nonexistent"}
+                }
+            },
+        },
+        403: {
+            "description": "Permission denied",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Insufficient permission to read directory: protected"
+                    }
+                }
+            },
+        },
+    },
+)
+async def list_directory(request: ListManuscriptDirectoryRequest):
+    """
+    List the contents of a directory in the manuscript storage.
+
+    Args:
+        request: Contains project_id and path
+
+    Returns:
+        dict: Directory listing with path and entries
+
+    Examples:
+        POST /manuscript/list
+        {
+            "project_id": 123,
+            "path": ""  // Lists project root
+        }
+
+        POST /manuscript/list
+        {
+            "project_id": 123,
+            "path": "docs/chapters"  // Lists specific folder
+        }
+    """
+    return await manuscript_manager.list_directory_contents(
+        request.project_id, request.path
+    )

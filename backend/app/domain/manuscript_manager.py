@@ -450,3 +450,169 @@ class ManuscriptManager:
             raise HTTPException(
                 status_code=500, detail=f"Error reading file {path}: {e.strerror}"
             )
+
+    async def list_directory_contents(self, project_id: int, path: str = "") -> dict:
+        """
+        List the contents of a directory in the project storage.
+
+        This method returns a structured representation of files and directories
+        within the specified path, including metadata about each entry such as
+        type, size, and whether directories have children.
+
+        Args:
+            project_id (int): Unique identifier of the project
+            path (str): Relative path from the project root to list.
+                       Empty string or "/" lists the project root.
+                       Leading slashes are stripped automatically.
+
+        Returns:
+            dict: A dictionary containing:
+                - path (str): The normalized path that was listed
+                - entries (list): List of directory entries, each containing:
+                    - name (str): Name of the file or directory
+                    - path (str): Relative path from project root
+                    - type (str): "file" or "directory"
+                    - size (int): File size in bytes (only for files)
+                    - hasChildren (bool): Whether directory has contents (only for directories)
+
+        Raises:
+            HTTPException (404): If the specified path doesn't exist
+            HTTPException (403): If insufficient permissions to read the directory
+            HTTPException (500): If an unexpected OSError occurs
+
+        Example Response:
+            ```json
+            {
+                "path": "docs",
+                "entries": [
+                    {
+                        "name": "chapters",
+                        "path": "docs/chapters",
+                        "type": "directory",
+                        "hasChildren": true
+                    },
+                    {
+                        "name": "README.md",
+                        "path": "docs/README.md",
+                        "type": "file",
+                        "size": 1024
+                    }
+                ]
+            }
+            ```
+
+        Examples:
+            - await manager.list_directory_contents(1, "")
+            # Lists project root
+
+            - await manager.list_directory_contents(1, "docs")
+            # Lists contents of docs folder
+
+            - await manager.list_directory_contents(1, "docs/chapters")
+            # Lists contents of docs/chapters folder
+        """
+
+        project_path = os.path.join(self.UPLOAD_DIR, str(project_id))
+
+        # Normalize the path
+        relative_path = path.lstrip("/")
+        if not relative_path:
+            relative_path = ""
+
+        # Construct the full directory path
+        if relative_path:
+            full_path = os.path.join(project_path, relative_path)
+        else:
+            full_path = project_path
+
+        try:
+            # Check if path exists
+            if not os.path.exists(full_path):
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Directory not found: {path if path else '(project root)'}",
+                )
+
+            # Check if it's a directory
+            if not os.path.isdir(full_path):
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Path is not a directory: {path if path else '(project root)'}",
+                )
+
+            entries = []
+
+            # List directory contents
+            try:
+                dir_contents = os.listdir(full_path)
+                dir_contents.sort()  # Sort alphabetically
+
+                for item_name in dir_contents:
+                    # Skip hidden files and metadata files
+                    if item_name.startswith(".") or item_name == "metadata.json":
+                        continue
+
+                    item_full_path = os.path.join(full_path, item_name)
+
+                    # Construct relative path from project root
+                    if relative_path:
+                        item_relative_path = f"{relative_path}/{item_name}"
+                    else:
+                        item_relative_path = item_name
+
+                    if os.path.isdir(item_full_path):
+                        # Check if directory has children (excluding hidden files and metadata)
+                        try:
+                            children = [
+                                child
+                                for child in os.listdir(item_full_path)
+                                if not child.startswith(".")
+                                and child != "metadata.json"
+                            ]
+                            has_children = len(children) > 0
+                        except (OSError, PermissionError):
+                            has_children = False
+
+                        entries.append(
+                            {
+                                "name": item_name,
+                                "path": item_relative_path,
+                                "type": "directory",
+                                "hasChildren": has_children,
+                            }
+                        )
+
+                    elif os.path.isfile(item_full_path):
+                        # Get file size
+                        try:
+                            file_size = os.path.getsize(item_full_path)
+                        except OSError:
+                            file_size = 0
+
+                        entries.append(
+                            {
+                                "name": item_name,
+                                "path": item_relative_path,
+                                "type": "file",
+                                "size": file_size,
+                            }
+                        )
+
+            except OSError as e:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Error reading directory {path if path else '(project root)'}: {e.strerror}",
+                )
+
+            return {"path": relative_path, "entries": entries}
+
+        except PermissionError:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Insufficient permission to read directory: {path if path else '(project root)'}",
+            )
+        except OSError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error accessing directory {path if path else '(project root)'}: {e.strerror}",
+            )

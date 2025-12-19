@@ -4,6 +4,7 @@ from backend.app.domain.manuscript_manager import ManuscriptManager
 from backend.app.schemas.sections.manuscript_schemas import (
     SaveStartRequest,
     DeleteManuscriptRequest,
+    GetManuscriptContentRequest,
 )
 
 manuscript_router = APIRouter(prefix="/manuscript", tags=["Manuscript API"])
@@ -41,3 +42,11 @@ async def finish_save(session_id: str):
 async def delete_file(request: DeleteManuscriptRequest):
     await manuscript_manager.delete_path(request.project_id, request.path)
     return {"path": request.path}
+
+
+@manuscript_router.post("/content")
+async def get_file_content(request: GetManuscriptContentRequest):
+    content = await manuscript_manager.get_manuscript_file_content(
+        request.project_id, request.path
+    )
+    return {"content": content}

@@ -1,15 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
-import { mockProjectData } from "../../../mocks";
+import { mockProject, mockProjectData } from "../../../mocks";
 import { IProjectReducer, ProjectReducer } from "@/store/project/reducer.tsx";
 import { ESections } from "@/types/sections.ts";
 import { setCurrentSection, updateGeneral } from "@/store";
+import { initialSectionsState } from "@/store/sections/sections-config.ts";
 
 describe("ProjectReducer", () => {
   const initialState: IProjectReducer = {
     currentSection: ESections.general,
     currentProject: undefined,
+    sections: initialSectionsState,
   };
 
   it("should return the initial state when passed an undefined state", () => {
@@ -24,7 +26,7 @@ describe("ProjectReducer", () => {
       payload: mockProjectData,
     };
     const result = ProjectReducer(initialState, action);
-    expect(result.currentProject).toEqual(mockProjectData);
+    expect(result.currentProject).toEqual(mockProject);
   });
 
   it("should add project and set current project", () => {
@@ -33,7 +35,7 @@ describe("ProjectReducer", () => {
       payload: mockProjectData,
     };
     const result = ProjectReducer(initialState, action);
-    expect(result.currentProject).toEqual(mockProjectData);
+    expect(result.currentProject).toEqual(mockProject);
   });
   it("should set current section", () => {
     const action: UnknownAction = {

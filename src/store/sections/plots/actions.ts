@@ -1,5 +1,5 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { ICharacter, IPlot } from "@/types/sections.ts";
+import { IPlot } from "@/types/sections.ts";
 import { host } from "@/https/fetch.ts";
 
 export interface requestPlot {
@@ -30,7 +30,7 @@ export const updatePlot = createAsyncThunk<IPlot, requestPlot>(
 );
 
 export const removePlot = createAsyncThunk<responseDelete, number>(
-  "[Plot] Remove Plot",
+  "Section [Plot] Remove Plot",
   async (id) => {
     const response = await fetch(`${host}/plot/${id}`, {
       method: "DELETE",
@@ -45,39 +45,24 @@ export const removePlot = createAsyncThunk<responseDelete, number>(
   },
 );
 
-export const addPlot = createAsyncThunk<IPlot, number>("[Plot] Add Plot", async (projectId) => {
-  const response = await fetch(`${host}/plot/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      projectID: projectId,
-    }),
-  });
-  if (!response.ok) {
-    throw new Error("Error update plot");
-  }
-  const responseData = await response.json();
-  return responseData as IPlot;
-});
-
-export const setCurrentPlot = createAction<IPlot>("[Plot] Set Current Plot");
-
-export const getAllCharacters = createAsyncThunk<ICharacter[], number>(
-  "[Characters] Get Characters",
+export const addPlot = createAsyncThunk<IPlot, number>(
+  "Section [Plot] Add Plot",
   async (projectId) => {
-    const response = await fetch(`${host}/characters/from_project/${projectId}/`, {
-      method: "GET",
+    const response = await fetch(`${host}/plot/`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        projectID: projectId,
+      }),
     });
-    if (!response) {
-      throw new Error("Error getting all the characters");
+    if (!response.ok) {
+      throw new Error("Error update plot");
     }
-
     const responseData = await response.json();
-    return responseData as ICharacter[];
+    return responseData as IPlot;
   },
 );
+
+export const setCurrentPlot = createAction<IPlot>("Section [Plot] Set Current Plot");

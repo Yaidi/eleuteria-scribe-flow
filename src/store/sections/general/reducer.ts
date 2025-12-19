@@ -3,7 +3,7 @@ import { updateGeneral } from "@/store/sections";
 import { GenreType, IGeneral } from "@/types/sections";
 import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
 
-const initialState: IGeneral = {
+export const initialStateGeneral: IGeneral = {
   title: "",
   author: "",
   subtitle: "",
@@ -17,7 +17,7 @@ const initialState: IGeneral = {
   resumePage: "",
 };
 
-export const generalReducer = createReducer(initialState, (builder) => {
+export const generalReducer = createReducer(initialStateGeneral, (builder) => {
   builder.addCase(updateGeneral.fulfilled, (state, { payload }) => {
     return { ...state, ...payload.general };
   });

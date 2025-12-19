@@ -289,7 +289,7 @@ describe("ManuscriptSlice", () => {
       const thunkAction = addChapterAndSaveScene(arg);
       const result = await thunkAction(dispatch, getState, undefined);
 
-      expect(result.type).toBe("[Manuscript] Add Chapter and Save Scene/fulfilled");
+      expect(result.type).toBe("Section [Manuscript] Add Chapter and Save Scene/fulfilled");
       expect(result.meta.arg).toEqual(arg);
     });
   });

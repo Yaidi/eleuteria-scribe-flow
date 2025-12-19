@@ -13,12 +13,12 @@ export interface ICharactersState {
   currentCharacter: ICharacter | null;
 }
 
-const initialState: ICharactersState = {
+export const initialStateCharacters: ICharactersState = {
   characters: [],
   currentCharacter: null,
 };
 
-export const charactersReducer = createReducer(initialState, (builder) => {
+export const charactersReducer = createReducer(initialStateCharacters, (builder) => {
   builder
     .addCase(getProjectFetch.fulfilled, (_state, { payload }) => {
       return {

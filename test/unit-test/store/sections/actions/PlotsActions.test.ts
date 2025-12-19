@@ -62,7 +62,7 @@ describe("Plot async actions", () => {
       global.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
 
       const result = await removePlot(1)(vi.fn(), vi.fn(), undefined);
-      expect(result.type).eq("[Plot] Remove Plot/rejected");
+      expect(result.type).eq("Section [Plot] Remove Plot/rejected");
     });
   });
 
@@ -89,7 +89,7 @@ describe("Plot async actions", () => {
       global.fetch = vi.fn().mockResolvedValueOnce({ ok: false });
 
       const result = await addPlot(10)(vi.fn(), vi.fn(), undefined);
-      expect(result.type).eq("[Plot] Add Plot/rejected");
+      expect(result.type).eq("Section [Plot] Add Plot/rejected");
     });
   });
 });

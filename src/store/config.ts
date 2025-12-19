@@ -1,10 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { ProjectsReducer } from "@/store/projects/reducer.ts";
 import { ProjectReducer } from "@/store/project/reducer.tsx";
-import { SectionsReducer } from "@/store/sections/sections-config.ts";
 
 export const rootReducer = combineReducers({
-  sections: SectionsReducer,
   projects: ProjectsReducer,
   project: ProjectReducer,
 });

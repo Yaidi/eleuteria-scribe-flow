@@ -4,7 +4,7 @@ import { ICharacter } from "@/types/sections.ts";
 import { host } from "@/https/fetch.ts";
 
 export const updateCharacter = createAsyncThunk<ICharacter, RequestUpdateCharacter>(
-  "[Character] Update Character",
+  "Section [Character] Update Character",
   async ({ id, info }) => {
     const response = await fetch(`${host}/characters/${id}`, {
       method: "PATCH",
@@ -23,7 +23,7 @@ export const updateCharacter = createAsyncThunk<ICharacter, RequestUpdateCharact
 );
 
 export const addCharacterFetch = createAsyncThunk<ICharacter, number | undefined>(
-  "[Character] Add Character",
+  "Section [Character] Add Character",
   async (projectId) => {
     const response = await fetch(`${host}/characters`, {
       method: "POST",
@@ -40,7 +40,7 @@ export const addCharacterFetch = createAsyncThunk<ICharacter, number | undefined
 );
 
 export const deleteCharacterFetch = createAsyncThunk<number, number>(
-  "[Character] Remove Character",
+  "Section [Character] Remove Character",
   async (id) => {
     const response = await fetch(`${host}/characters/${id}`, {
       method: "DELETE",

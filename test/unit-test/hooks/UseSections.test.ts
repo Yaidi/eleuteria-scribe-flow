@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useSections, useProjectId, useManuscript, useSaveScene } from "@/hooks/useSections";
-import { saveSceneSession } from "@/store/sections/manuscript/slice";
-import { mockChapters, mockProjectData } from "../../mocks";
+import { SaveSceneArgs, saveSceneSession } from "@/store/sections/manuscript/slice";
+import { mockChapters, mockProject, mockProjectData } from "../../mocks";
+import { RootState } from "@/store/config.ts";
+import { initialSectionsState } from "@/store/sections/sections-config.ts";
+import { ESections } from "@/types/sections.ts";
+import { State } from "@/types/project.ts";
+import { IManuscriptReducer } from "@/store/sections/manuscript/reducer.ts";
 
 const { mockUseSelector, mockUseDispatch } = vi.hoisted(() => {
   return {
@@ -16,12 +21,27 @@ vi.mock("react-redux", () => ({
   useDispatch: () => mockUseDispatch,
 }));
 
-// Mock saveSceneSession
-vi.mock("@/store/sections/manuscript/slice", () => ({
-  saveSceneSession: vi.fn().mockReturnValue({
-    type: "saveSceneSession/pending",
-  }),
-}));
+type MockThunk<Arg> = {
+  (arg: Arg): { type: string; payload: Arg };
+  pending: { type: string };
+  fulfilled: { type: string };
+  rejected: { type: string };
+};
+vi.mock("@/store/sections/manuscript/slice", () => {
+  const saveSceneSession: MockThunk<SaveSceneArgs> = Object.assign(
+    (args: SaveSceneArgs) => ({
+      type: "Section [Manuscript] Save Scene",
+      payload: args,
+    }),
+    {
+      pending: { type: "Section [Manuscript] Save Scene/pending" },
+      fulfilled: { type: "Section [Manuscript] Save Scene/fulfilled" },
+      rejected: { type: "Section [Manuscript] Save Scene/rejected" },
+    },
+  );
+
+  return { saveSceneSession };
+});
 
 // Mock useCallback
 vi.mock("react", async () => {
@@ -32,11 +52,10 @@ vi.mock("react", async () => {
   };
 });
 
-describe("useSections hooks", () => {
+describe("hooks", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
   describe("useSections hook", () => {
     it("should return sections state from Redux store", () => {
       const mockSectionsState = {
@@ -64,18 +83,20 @@ describe("useSections hooks", () => {
 
     it("should call useSelector with correct state selector", () => {
       const mockState = {
-        sections: {
-          general: mockProjectData.sections.general,
-          characters: [],
-          plots: [],
-          world: { worldElements: [] },
-          manuscript: {
-            chapters: [],
-            currentChapter: undefined,
-            currentScene: undefined,
-            isSaving: false,
-            lastSavedDate: undefined,
-            error: undefined,
+        project: {
+          sections: {
+            general: mockProjectData.sections.general,
+            characters: [],
+            plots: [],
+            world: { worldElements: [] },
+            manuscript: {
+              chapters: [],
+              currentChapter: undefined,
+              currentScene: undefined,
+              isSaving: false,
+              lastSavedDate: undefined,
+              error: undefined,
+            },
           },
         },
       };
@@ -84,7 +105,7 @@ describe("useSections hooks", () => {
 
       const { result } = renderHook(() => useSections());
 
-      expect(result.current).toEqual(mockState.sections);
+      expect(result.current).toEqual(mockState.project.sections);
     });
 
     it("should update when sections state changes", () => {
@@ -124,7 +145,7 @@ describe("useSections hooks", () => {
     it("should return current project ID", () => {
       const mockState = {
         project: {
-          currentProject: mockProjectData,
+          currentProject: mockProject,
         },
       };
 
@@ -132,7 +153,7 @@ describe("useSections hooks", () => {
 
       const { result } = renderHook(() => useProjectId());
 
-      expect(result.current).toBe(mockProjectData.id);
+      expect(result.current).toBe(mockProject.id);
     });
 
     it("should return 0 when no current project", () => {
@@ -153,7 +174,7 @@ describe("useSections hooks", () => {
       const mockState = {
         project: {
           currentProject: {
-            ...mockProjectData,
+            ...mockProject,
             id: undefined,
           },
         },
@@ -198,8 +219,10 @@ describe("useSections hooks", () => {
       };
 
       const mockState = {
-        sections: {
-          manuscript: mockManuscriptState,
+        project: {
+          sections: {
+            manuscript: mockManuscriptState,
+          },
         },
       };
 
@@ -221,8 +244,10 @@ describe("useSections hooks", () => {
       };
 
       const mockState = {
-        sections: {
-          manuscript: mockManuscriptState,
+        project: {
+          sections: {
+            manuscript: mockManuscriptState,
+          },
         },
       };
 
@@ -245,8 +270,10 @@ describe("useSections hooks", () => {
       };
 
       const mockState = {
-        sections: {
-          manuscript: mockManuscriptState,
+        project: {
+          sections: {
+            manuscript: mockManuscriptState,
+          },
         },
       };
 
@@ -265,19 +292,19 @@ describe("useSections hooks", () => {
         const mockState = {
           project: {
             currentProject: mockProjectData,
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: mockChapters[0],
-              currentScene: {
-                id: "scene-1",
-                title: "Opening Scene",
-                content: "Original content",
+            sections: {
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: mockChapters[0],
+                currentScene: {
+                  id: "scene-1",
+                  title: "Opening Scene",
+                  content: "Original content",
+                },
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
               },
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
             },
           },
         };
@@ -299,18 +326,17 @@ describe("useSections hooks", () => {
       saveSceneFunction(newContent);
 
       expect(mockUseDispatch).toHaveBeenCalledWith(
-        saveSceneSession({
-          scene: {
-            id: "scene-1",
-            title: "Opening Scene",
-            content: newContent,
-            wordCount: 0,
-            wordGoal: 0,
-            characters: [],
-          },
-          chapter: mockChapters[0],
-          projectId: mockProjectData.id,
-        }),
+        saveSceneSession(
+          expect.objectContaining({
+            scene: expect.objectContaining({
+              id: "scene-1",
+              title: "Opening Scene",
+              content: newContent,
+            }),
+            chapter: mockChapters[0],
+            projectId: mockProjectData.id,
+          }),
+        ),
       );
     });
 
@@ -319,15 +345,15 @@ describe("useSections hooks", () => {
         const mockState = {
           project: {
             currentProject: mockProjectData,
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: mockChapters[0],
-              currentScene: undefined,
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
+            sections: {
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: mockChapters[0],
+                currentScene: undefined,
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
+              },
             },
           },
         };
@@ -346,20 +372,20 @@ describe("useSections hooks", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
           project: {
-            currentProject: mockProjectData,
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: undefined,
-              currentScene: {
-                id: "scene-1",
-                title: "Opening Scene",
-                content: "Original content",
+            currentProject: mockProject,
+            sections: {
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: undefined,
+                currentScene: {
+                  id: "scene-1",
+                  title: "Opening Scene",
+                  content: "Original content",
+                },
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
               },
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
             },
           },
         };
@@ -378,16 +404,16 @@ describe("useSections hooks", () => {
       mockUseSelector.mockImplementation((selector) => {
         const mockState = {
           project: {
-            currentProject: mockProjectData,
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: undefined,
-              currentScene: undefined,
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
+            currentProject: mockProject,
+            sections: {
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: undefined,
+                currentScene: undefined,
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
+              },
             },
           },
         };
@@ -431,25 +457,34 @@ describe("useSections hooks", () => {
       const customProjectId = 999;
 
       mockUseSelector.mockImplementation((selector) => {
-        const mockState = {
+        const mockState: RootState = {
+          projects: {
+            projects: [],
+            status: State.LOADING,
+          },
           project: {
+            currentSection: ESections.general,
             currentProject: {
-              ...mockProjectData,
+              ...mockProject,
               id: customProjectId,
             },
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: mockChapters[0],
-              currentScene: {
-                id: "scene-1",
-                title: "Opening Scene",
-                content: "Original content",
+            sections: {
+              ...initialSectionsState,
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: mockChapters[0],
+                currentScene: {
+                  id: "scene-1",
+                  title: "Opening Scene",
+                  content: "Original content",
+                  wordCount: 0,
+                  wordGoal: 0,
+                  characters: [],
+                },
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
               },
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
             },
           },
         };
@@ -461,11 +496,13 @@ describe("useSections hooks", () => {
 
       saveSceneFunction("Content");
 
-      expect(saveSceneSession).toHaveBeenCalledWith({
-        scene: expect.any(Object),
-        chapter: expect.any(Object),
-        projectId: customProjectId,
-      });
+      expect(mockUseDispatch).toHaveBeenCalledWith(
+        saveSceneSession({
+          scene: expect.any(Object),
+          chapter: expect.any(Object),
+          projectId: customProjectId,
+        }),
+      );
     });
 
     it("should handle zero project ID", () => {
@@ -473,19 +510,19 @@ describe("useSections hooks", () => {
         const mockState = {
           project: {
             currentProject: null,
-          },
-          sections: {
-            manuscript: {
-              chapters: mockChapters,
-              currentChapter: mockChapters[0],
-              currentScene: {
-                id: "scene-1",
-                title: "Opening Scene",
-                content: "Original content",
+            sections: {
+              manuscript: {
+                chapters: mockChapters,
+                currentChapter: mockChapters[0],
+                currentScene: {
+                  id: "scene-1",
+                  title: "Opening Scene",
+                  content: "Original content",
+                },
+                isSaving: false,
+                lastSavedDate: undefined,
+                error: undefined,
               },
-              isSaving: false,
-              lastSavedDate: undefined,
-              error: undefined,
             },
           },
         };
@@ -497,37 +534,39 @@ describe("useSections hooks", () => {
 
       saveSceneFunction("Content");
 
-      expect(saveSceneSession).toHaveBeenCalledWith({
-        scene: expect.any(Object),
-        chapter: expect.any(Object),
-        projectId: 0,
-      });
+      expect(mockUseDispatch).toHaveBeenCalledWith(
+        saveSceneSession({
+          scene: expect.any(Object),
+          chapter: expect.any(Object),
+          projectId: 0,
+        }),
+      );
     });
   });
 
   describe("Integration tests", () => {
     it("should work together - all hooks with consistent state", () => {
       const mockState = {
-        sections: {
-          general: mockProjectData.sections.general,
-          characters: mockProjectData.sections.characters,
-          plots: mockProjectData.sections.plots,
-          world: mockProjectData.sections.world,
-          manuscript: {
-            chapters: mockChapters,
-            currentChapter: mockChapters[0],
-            currentScene: {
-              id: "scene-1",
-              title: "Opening Scene",
-              content: "Scene content",
-            },
-            isSaving: false,
-            lastSavedDate: undefined,
-            error: undefined,
-          },
-        },
         project: {
           currentProject: mockProjectData,
+          sections: {
+            general: mockProjectData.sections.general,
+            characters: mockProjectData.sections.characters,
+            plots: mockProjectData.sections.plots,
+            world: mockProjectData.sections.world,
+            manuscript: {
+              chapters: mockChapters,
+              currentChapter: mockChapters[0],
+              currentScene: {
+                id: "scene-1",
+                title: "Opening Scene",
+                content: "Scene content",
+              },
+              isSaving: false,
+              lastSavedDate: undefined,
+              error: undefined,
+            },
+          },
         },
       };
 
@@ -546,22 +585,22 @@ describe("useSections hooks", () => {
 
     it("should handle empty/null states gracefully", () => {
       const emptyState = {
-        sections: {
-          general: {},
-          characters: [],
-          plots: [],
-          world: { worldElements: [] },
-          manuscript: {
-            chapters: [],
-            currentChapter: undefined,
-            currentScene: undefined,
-            isSaving: false,
-            lastSavedDate: undefined,
-            error: undefined,
-          },
-        },
         project: {
           currentProject: null,
+          sections: {
+            general: {},
+            characters: [],
+            plots: [],
+            world: { worldElements: [] },
+            manuscript: {
+              chapters: [],
+              currentChapter: undefined,
+              currentScene: undefined,
+              isSaving: false,
+              lastSavedDate: undefined,
+              error: undefined,
+            },
+          },
         },
         projects: [],
       };
@@ -582,13 +621,16 @@ describe("useSections hooks", () => {
     });
 
     it("should maintain consistency between useManuscript and useSections", () => {
-      const manuscriptState = {
+      const manuscriptState: IManuscriptReducer = {
         chapters: mockChapters,
         currentChapter: mockChapters[0],
         currentScene: {
           id: "scene-1",
           title: "Opening Scene",
           content: "Scene content",
+          wordCount: 0,
+          wordGoal: 0,
+          characters: [],
         },
         isSaving: true,
         lastSavedDate: new Date(),
@@ -596,15 +638,15 @@ describe("useSections hooks", () => {
       };
 
       const mockState = {
-        sections: {
-          general: {},
-          characters: [],
-          plots: [],
-          world: { worldElements: [] },
-          manuscript: manuscriptState,
-        },
         project: {
-          currentProject: mockProjectData,
+          currentProject: mockProject,
+          sections: {
+            general: {},
+            characters: [],
+            plots: [],
+            world: { worldElements: [] },
+            manuscript: manuscriptState,
+          },
         },
       };
 

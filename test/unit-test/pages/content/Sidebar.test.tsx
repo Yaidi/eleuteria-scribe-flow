@@ -3,7 +3,7 @@ import { ESections, ICharacter, IPlot, PriorityType } from "@/types/sections";
 import { vi, expect, describe, test } from "vitest";
 import { setCurrentCharacter, setCurrentPlot, updateCharacter, updatePlot } from "@/store";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
-import { mockChapters, mockCharacters, mockPlots } from "../../../mocks";
+import { mockChapters, mockCharacters, mockPlots, mockProjectData } from "../../../mocks";
 import Sidebar from "@/pages/content/Sidebar.tsx";
 import { store } from "@/store/config.ts";
 import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
@@ -29,11 +29,14 @@ describe("Sidebar component", () => {
   describe("Sidebar Plots", () => {
     test("set current Plot", () => {
       renderWithProviders(<Sidebar activeSection={ESections.plots} />, {
-        sections: {
-          ...store.getState().sections,
-          plots: {
-            plots: mockPlots,
-            currentPlot: null,
+        project: {
+          ...store.getState().project,
+          sections: {
+            ...store.getState().project.sections,
+            plots: {
+              plots: mockPlots,
+              currentPlot: null,
+            },
           },
         },
       });
@@ -43,11 +46,14 @@ describe("Sidebar component", () => {
 
     test("dispatches updatePlot on drop", () => {
       renderWithProviders(<Sidebar activeSection={ESections.plots} />, {
-        sections: {
-          ...store.getState().sections,
-          plots: {
-            plots: mockPlots,
-            currentPlot: null,
+        project: {
+          ...store.getState().project,
+          sections: {
+            ...store.getState().project.sections,
+            plots: {
+              plots: mockPlots,
+              currentPlot: null,
+            },
           },
         },
       });
@@ -76,19 +82,22 @@ describe("Sidebar component", () => {
   });
   test("renders character section and allows drag start", () => {
     renderWithProviders(<Sidebar activeSection={ESections.characters} />, {
-      sections: {
-        ...store.getState().sections,
-        characters: {
-          characters: mockCharacters,
-          currentCharacter: mockCharacters[0],
-        },
-        manuscript: {
-          chapters: mockChapters,
-          currentChapter: undefined,
-          currentScene: undefined,
-          isSaving: false,
-          lastSavedDate: undefined,
-          error: undefined,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          characters: {
+            characters: mockCharacters,
+            currentCharacter: mockCharacters[0],
+          },
+          manuscript: {
+            chapters: mockChapters,
+            currentChapter: undefined,
+            currentScene: undefined,
+            isSaving: false,
+            lastSavedDate: undefined,
+            error: undefined,
+          },
         },
       },
     });
@@ -99,19 +108,22 @@ describe("Sidebar component", () => {
 
   test("renders manuscript section with chapters and toggles scenes", () => {
     renderWithProviders(<Sidebar activeSection={ESections.manuscript} />, {
-      sections: {
-        ...store.getState().sections,
-        characters: {
-          characters: mockCharacters,
-          currentCharacter: null,
-        },
-        manuscript: {
-          chapters: mockChapters,
-          currentChapter: mockChapters[0],
-          currentScene: undefined,
-          isSaving: false,
-          lastSavedDate: undefined,
-          error: undefined,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          characters: {
+            characters: mockCharacters,
+            currentCharacter: null,
+          },
+          manuscript: {
+            chapters: mockChapters,
+            currentChapter: mockChapters[0],
+            currentScene: undefined,
+            isSaving: false,
+            lastSavedDate: undefined,
+            error: undefined,
+          },
         },
       },
     });
@@ -125,19 +137,22 @@ describe("Sidebar component", () => {
 
   test("dispatches setCurrentCharacter on character click", () => {
     renderWithProviders(<Sidebar activeSection={ESections.characters} />, {
-      sections: {
-        ...store.getState().sections,
-        characters: {
-          characters: mockCharacters,
-          currentCharacter: null,
-        },
-        manuscript: {
-          chapters: mockChapters,
-          currentChapter: mockChapters[0],
-          currentScene: undefined,
-          isSaving: false,
-          lastSavedDate: undefined,
-          error: undefined,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          characters: {
+            characters: mockCharacters,
+            currentCharacter: null,
+          },
+          manuscript: {
+            chapters: mockChapters,
+            currentChapter: mockChapters[0],
+            currentScene: undefined,
+            isSaving: false,
+            lastSavedDate: undefined,
+            error: undefined,
+          },
         },
       },
     });
@@ -147,19 +162,22 @@ describe("Sidebar component", () => {
 
   test("dispatches updateCharacter on drop", () => {
     renderWithProviders(<Sidebar activeSection={ESections.characters} />, {
-      sections: {
-        ...store.getState().sections,
-        characters: {
-          characters: mockCharacters,
-          currentCharacter: null,
-        },
-        manuscript: {
-          chapters: mockChapters,
-          currentChapter: mockChapters[0],
-          currentScene: undefined,
-          isSaving: false,
-          lastSavedDate: undefined,
-          error: undefined,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          characters: {
+            characters: mockCharacters,
+            currentCharacter: null,
+          },
+          manuscript: {
+            chapters: mockChapters,
+            currentChapter: mockChapters[0],
+            currentScene: undefined,
+            isSaving: false,
+            lastSavedDate: undefined,
+            error: undefined,
+          },
         },
       },
     });
@@ -182,5 +200,22 @@ describe("Sidebar component", () => {
       id: 2,
       info: { importance: PriorityType.MAIN },
     });
+  });
+
+  test("set current World", () => {
+    renderWithProviders(<Sidebar activeSection={ESections.world} />, {
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          world: {
+            world: mockProjectData.sections.world,
+            worldElements: {},
+            currentWorldElement: null,
+          },
+        },
+      },
+    });
+    expect(screen.getByText("World Building")).toBeInTheDocument();
   });
 });

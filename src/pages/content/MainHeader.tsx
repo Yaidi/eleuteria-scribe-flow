@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge.tsx";
 import { Progress } from "@/components/ui/progress.tsx";
 import React, { useEffect, useState } from "react";
-import { ProjectData } from "@/types/project.ts";
+import { IProject } from "@/types/project.ts";
 import { useTranslation } from "react-i18next";
 
 export interface MainHeaderProps {
-  currentProject: ProjectData;
+  currentProject: IProject;
 }
 
 const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {

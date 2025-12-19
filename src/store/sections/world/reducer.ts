@@ -19,13 +19,13 @@ export interface WorldState {
   currentWorldElement: IWorldElement | null;
 }
 
-const initialState: WorldState = {
+export const initialStateWorld: WorldState = {
   world: null,
   worldElements: {},
   currentWorldElement: null,
 };
 
-export const worldReducer = createReducer(initialState, (builder) => {
+export const worldReducer = createReducer(initialStateWorld, (builder) => {
   builder
     .addCase(getProjectFetch.fulfilled, (state, { payload }) => {
       const worlds = normalizeWorld(payload.sections.world);

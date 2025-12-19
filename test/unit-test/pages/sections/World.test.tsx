@@ -32,13 +32,13 @@ describe("World component", () => {
       project: {
         currentProject: mockProjectData,
         currentSection: ESections.world,
-      },
-      sections: {
-        ...store.getState().sections,
-        world: {
-          world: mockWorld,
-          worldElements: {},
-          currentWorldElement: null,
+        sections: {
+          ...store.getState().project.sections,
+          world: {
+            world: mockWorld,
+            worldElements: {},
+            currentWorldElement: null,
+          },
         },
       },
     });
@@ -52,14 +52,17 @@ describe("World component", () => {
 
   test("calls updateWorldElement when input is changed", () => {
     renderWithProviders(<World />, {
-      sections: {
-        ...store.getState().sections,
-        world: {
-          world: mockWorld,
-          worldElements: {
-            1: mockCurrentWorldElement,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project?.sections,
+          world: {
+            world: mockWorld,
+            worldElements: {
+              1: mockCurrentWorldElement,
+            },
+            currentWorldElement: mockCurrentWorldElement,
           },
-          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });
@@ -76,14 +79,17 @@ describe("World component", () => {
 
   test("calls updateWorldElement when textarea is changed", () => {
     renderWithProviders(<World />, {
-      sections: {
-        ...store.getState().sections,
-        world: {
-          world: mockWorld,
-          worldElements: {
-            1: mockCurrentWorldElement,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project?.sections,
+          world: {
+            world: mockWorld,
+            worldElements: {
+              1: mockCurrentWorldElement,
+            },
+            currentWorldElement: mockCurrentWorldElement,
           },
-          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });
@@ -102,14 +108,17 @@ describe("World component", () => {
 
   test("calls removeWorldElement when delete button is clicked", () => {
     renderWithProviders(<World />, {
-      sections: {
-        ...store.getState().sections,
-        world: {
-          world: mockWorld,
-          worldElements: {
-            1: mockCurrentWorldElement,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          world: {
+            world: mockWorld,
+            worldElements: {
+              1: mockCurrentWorldElement,
+            },
+            currentWorldElement: mockCurrentWorldElement,
           },
-          currentWorldElement: mockCurrentWorldElement,
         },
       },
     });
@@ -121,12 +130,15 @@ describe("World component", () => {
   });
   test("shows empty state message when there are no world elements", () => {
     renderWithProviders(<World />, {
-      sections: {
-        ...store.getState().sections,
-        world: {
-          world: { ...mockWorld, worldElements: [] },
-          worldElements: {},
-          currentWorldElement: null,
+      project: {
+        ...store.getState().project,
+        sections: {
+          ...store.getState().project.sections,
+          world: {
+            world: { ...mockWorld, worldElements: [] },
+            worldElements: {},
+            currentWorldElement: null,
+          },
         },
       },
     });

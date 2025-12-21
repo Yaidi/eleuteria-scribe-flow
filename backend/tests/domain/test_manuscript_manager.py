@@ -555,428 +555,186 @@ class TestListDirectoryContents:
         project_dir.mkdir(parents=True)
 
         # Act
-        result = await manager.list_directory_contents(project_id, "")
+        result = await manager.list_directory_contents(project_id)
 
         # Assert
         assert result["path"] == ""
-        assert result["entries"] == []
+        assert result["chapters"] == []
 
     @pytest.mark.asyncio
-    async def test_list_project_root_with_files_and_directories(
-        self, manager, tmp_path
-    ):
-        """Test listing project root with mixed content"""
+    async def test_list_project_with_chapters_and_scenes(self, manager, tmp_path):
+        """Test listing project with chapters and scenes"""
         # Arrange
         project_id = 1
         project_dir = tmp_path / str(project_id)
         project_dir.mkdir(parents=True)
 
-        # Create files and directories
-        (project_dir / "README.md").write_text("# Project README")
-        (project_dir / "chapter1.md").write_text("Chapter 1 content")
-        (project_dir / "docs").mkdir()
-        (project_dir / "scenes").mkdir()
+        # Create chapter directories with scene files
+        chapters_dir = project_dir / "Chapter 1"
+        chapters_dir.mkdir()
+        (chapters_dir / "scene1.md").write_text("Scene 1 content")
+        (chapters_dir / "scene2.md").write_text("Scene 2 content")
 
-        # Create some content in subdirectories
-        (project_dir / "docs" / "notes.txt").write_text("Notes")
+        scenes_dir = project_dir / "Chapter 2"
+        scenes_dir.mkdir()
+        (scenes_dir / "opening.md").write_text("Opening scene")
 
         # Act
-        result = await manager.list_directory_contents(project_id, "")
+        result = await manager.list_directory_contents(project_id)
 
         # Assert
         assert result["path"] == ""
-        assert len(result["entries"]) == 4
+        assert len(result["chapters"]) == 2
 
-        # Check entries are sorted alphabetically
-        entry_names = [entry["name"] for entry in result["entries"]]
-        assert entry_names == ["README.md", "chapter1.md", "docs", "scenes"]
+        # Check chapters are sorted alphabetically
+        chapter_titles = [chapter["title"] for chapter in result["chapters"]]
+        assert chapter_titles == ["Chapter 1", "Chapter 2"]
 
-        # Check file entries
-        readme_entry = next(e for e in result["entries"] if e["name"] == "README.md")
-        assert readme_entry == {
-            "name": "README.md",
-            "path": "README.md",
-            "type": "file",
-            "size": len("# Project README"),
-        }
+        # Check first chapter structure
+        chapter1 = next(c for c in result["chapters"] if c["title"] == "Chapter 1")
+        assert chapter1["path"] == "Chapter 1"
+        assert len(chapter1["scenes"]) == 2
 
-        # Check directory entries
-        docs_entry = next(e for e in result["entries"] if e["name"] == "docs")
-        assert docs_entry == {
-            "name": "docs",
-            "path": "docs",
-            "type": "directory",
-            "hasChildren": True,
-        }
+        # Check scene structure
+        scene_titles = [scene["title"] for scene in chapter1["scenes"]]
+        assert "scene1.md" in scene_titles
+        assert "scene2.md" in scene_titles
 
-        scenes_entry = next(e for e in result["entries"] if e["name"] == "scenes")
-        assert scenes_entry == {
-            "name": "scenes",
-            "path": "scenes",
-            "type": "directory",
-            "hasChildren": False,
-        }
+        # Check scene paths
+        scene1 = next(s for s in chapter1["scenes"] if s["title"] == "scene1.md")
+        assert scene1["path"] == "Chapter 1/scene1.md"
+        assert scene1["content"] == ""
 
     @pytest.mark.asyncio
-    async def test_list_subdirectory(self, manager, tmp_path):
-        """Test listing contents of subdirectory"""
+    async def test_list_project_with_nested_scenes(self, manager, tmp_path):
+        """Test listing project with scenes in subdirectories"""
         # Arrange
         project_id = 2
         project_dir = tmp_path / str(project_id)
         project_dir.mkdir(parents=True)
 
-        # Create subdirectory structure
-        docs_dir = project_dir / "docs"
-        docs_dir.mkdir()
-        (docs_dir / "file1.txt").write_text("Content 1")
-        (docs_dir / "file2.md").write_text("Content 2")
-        (docs_dir / "subfolder").mkdir()
+        # Create chapter with nested subdirectories
+        chapter_dir = project_dir / "Chapter 1"
+        chapter_dir.mkdir()
+
+        # Scene in chapter root
+        (chapter_dir / "intro.md").write_text("Intro content")
 
         # Act
-        result = await manager.list_directory_contents(project_id, "docs")
+        result = await manager.list_directory_contents(project_id)
 
         # Assert
-        assert result["path"] == "docs"
-        assert len(result["entries"]) == 3
+        assert len(result["chapters"]) == 1
+        chapter = result["chapters"][0]
+        assert chapter["title"] == "Chapter 1"
 
-        # Check paths are relative to project root
-        file1_entry = next(e for e in result["entries"] if e["name"] == "file1.txt")
-        assert file1_entry["path"] == "docs/file1.txt"
-
-        subfolder_entry = next(e for e in result["entries"] if e["name"] == "subfolder")
-        assert subfolder_entry["path"] == "docs/subfolder"
+        # Should include both direct and nested scenes
+        scene_paths = [scene["path"] for scene in chapter["scenes"]]
+        assert "Chapter 1/intro.md" in scene_paths
 
     @pytest.mark.asyncio
-    async def test_list_deeply_nested_directory(self, manager, tmp_path):
-        """Test listing deeply nested directory"""
+    async def test_list_project_filters_hidden_and_metadata_files(
+        self, manager, tmp_path
+    ):
+        """Test that hidden files and metadata.json are filtered out"""
         # Arrange
         project_id = 3
         project_dir = tmp_path / str(project_id)
-        nested_path = project_dir / "level1" / "level2" / "level3"
-        nested_path.mkdir(parents=True)
+        project_dir.mkdir(parents=True)
 
-        (nested_path / "deep_file.txt").write_text("Deep content")
+        # Create chapter directory
+        chapter_dir = project_dir / "Chapter 1"
+        chapter_dir.mkdir()
+
+        # Create various files
+        (chapter_dir / "scene.md").write_text("Scene content")
+        (chapter_dir / ".hidden_file").write_text("Hidden")
+        (chapter_dir / "metadata.json").write_text('{"test": true}')
+        (chapter_dir / ".DS_Store").write_text("System file")
+
+        # Create hidden directory (should be filtered)
+        hidden_dir = project_dir / ".hidden_chapter"
+        hidden_dir.mkdir()
+        (hidden_dir / "scene.md").write_text("Hidden scene")
 
         # Act
-        result = await manager.list_directory_contents(
-            project_id, "level1/level2/level3"
-        )
+        result = await manager.list_directory_contents(project_id)
 
         # Assert
-        assert result["path"] == "level1/level2/level3"
-        assert len(result["entries"]) == 1
-        assert result["entries"][0] == {
-            "name": "deep_file.txt",
-            "path": "level1/level2/level3/deep_file.txt",
-            "type": "file",
-            "size": len("Deep content"),
-        }
+        assert len(result["chapters"]) == 1  # Only visible chapter
+        chapter = result["chapters"][0]
+        assert chapter["title"] == "Chapter 1"
+
+        # Only visible scene should be included
+        scene_titles = [scene["title"] for scene in chapter["scenes"]]
+        assert scene_titles == ["scene.md"]
 
     @pytest.mark.asyncio
-    async def test_list_directory_with_leading_slash(self, manager, tmp_path):
-        """Test listing with leading slash in path"""
+    async def test_list_project_alphabetical_sorting(self, manager, tmp_path):
+        """Test that chapters and scenes are sorted alphabetically"""
         # Arrange
         project_id = 4
         project_dir = tmp_path / str(project_id)
-        docs_dir = project_dir / "docs"
-        docs_dir.mkdir(parents=True)
-        (docs_dir / "test.txt").write_text("Test")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "/docs")
-
-        # Assert
-        assert result["path"] == "docs"
-        assert len(result["entries"]) == 1
-        assert result["entries"][0]["path"] == "docs/test.txt"
-
-    @pytest.mark.asyncio
-    async def test_list_directory_filters_hidden_files(self, manager, tmp_path):
-        """Test that hidden files are filtered out"""
-        # Arrange
-        project_id = 5
-        project_dir = tmp_path / str(project_id)
         project_dir.mkdir(parents=True)
 
-        # Create visible and hidden files
-        (project_dir / "visible.txt").write_text("Visible")
-        (project_dir / ".hidden").write_text("Hidden")
-        (project_dir / ".DS_Store").write_text("System file")
-        (project_dir / "metadata.json").write_text('{"test": true}')
-        (project_dir / "normal_file.md").write_text("Normal")
+        # Create chapters in non-alphabetical order
+        for chapter_name in ["Zebra Chapter", "Apple Chapter", "Banana Chapter"]:
+            chapter_dir = project_dir / chapter_name
+            chapter_dir.mkdir()
+            (chapter_dir / f"{chapter_name.lower()}.md").write_text("Content")
 
         # Act
-        result = await manager.list_directory_contents(project_id, "")
+        result = await manager.list_directory_contents(project_id)
 
         # Assert
-        entry_names = [entry["name"] for entry in result["entries"]]
-        assert ".hidden" not in entry_names
-        assert ".DS_Store" not in entry_names
-        assert "metadata.json" not in entry_names
-        assert "visible.txt" in entry_names
-        assert "normal_file.md" in entry_names
+        chapter_titles = [chapter["title"] for chapter in result["chapters"]]
+        expected_order = ["Apple Chapter", "Banana Chapter", "Zebra Chapter"]
+        assert chapter_titles == expected_order
 
     @pytest.mark.asyncio
-    async def test_list_directory_has_children_detection(self, manager, tmp_path):
-        """Test hasChildren detection for directories"""
-        # Arrange
-        project_id = 6
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Directory with visible children
-        dir_with_children = project_dir / "with_children"
-        dir_with_children.mkdir()
-        (dir_with_children / "child.txt").write_text("Child")
-
-        # Directory with only hidden children
-        dir_hidden_only = project_dir / "hidden_only"
-        dir_hidden_only.mkdir()
-        (dir_hidden_only / ".hidden").write_text("Hidden")
-        (dir_hidden_only / "metadata.json").write_text("{}")
-
-        # Empty directory
-        empty_dir = project_dir / "empty"
-        empty_dir.mkdir()
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        entries_by_name = {e["name"]: e for e in result["entries"]}
-
-        assert entries_by_name["with_children"]["hasChildren"] is True
-        assert (
-            entries_by_name["hidden_only"]["hasChildren"] is False
-        )  # Only hidden files
-        assert entries_by_name["empty"]["hasChildren"] is False
-
-    @pytest.mark.asyncio
-    async def test_list_directory_file_sizes(self, manager, tmp_path):
-        """Test that file sizes are correctly calculated"""
-        # Arrange
-        project_id = 7
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Create files with different sizes
-        small_content = "Small"
-        large_content = "Large content with more text " * 100
-
-        (project_dir / "small.txt").write_text(small_content)
-        (project_dir / "large.txt").write_text(large_content)
-        (project_dir / "empty.txt").write_text("")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        entries_by_name = {e["name"]: e for e in result["entries"]}
-
-        assert entries_by_name["small.txt"]["size"] == len(small_content)
-        assert entries_by_name["large.txt"]["size"] == len(large_content)
-        assert entries_by_name["empty.txt"]["size"] == 0
-
-    @pytest.mark.asyncio
-    async def test_list_directory_special_characters_in_names(self, manager, tmp_path):
-        """Test listing files/directories with special characters"""
-        # Arrange
-        project_id = 8
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Create files/dirs with special characters
-        (project_dir / "Nuevo Capítulo 1").mkdir()
-        (project_dir / "file with spaces.txt").write_text("Content")
-        (project_dir / "file-with-hyphens.md").write_text("Content")
-        (project_dir / "file_with_underscores.txt").write_text("Content")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        entry_names = [entry["name"] for entry in result["entries"]]
-        assert "Nuevo Capítulo 1" in entry_names
-        assert "file with spaces.txt" in entry_names
-        assert "file-with-hyphens.md" in entry_names
-        assert "file_with_underscores.txt" in entry_names
-
-    @pytest.mark.asyncio
-    async def test_list_directory_not_found(self, manager, tmp_path):
-        """Test error when directory doesn't exist"""
-        # Arrange
-        project_id = 9
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Act & Assert
-        with pytest.raises(HTTPException) as exc:
-            await manager.list_directory_contents(project_id, "nonexistent")
-
-        assert exc.value.status_code == 404
-        assert "Directory not found" in exc.value.detail
-
-    @pytest.mark.asyncio
-    async def test_list_directory_project_not_found(self, manager, tmp_path):
+    async def test_list_project_not_found(self, manager, tmp_path):
         """Test error when project doesn't exist"""
         # Arrange
         nonexistent_project_id = 999
 
         # Act & Assert
         with pytest.raises(HTTPException) as exc:
-            await manager.list_directory_contents(nonexistent_project_id, "")
+            await manager.list_directory_contents(nonexistent_project_id)
 
         assert exc.value.status_code == 404
-        assert "Directory not found: (project root)" in exc.value.detail
+        assert "Project directory not found: 999" in exc.value.detail
 
     @pytest.mark.asyncio
-    async def test_list_directory_path_is_file(self, manager, tmp_path):
-        """Test error when path points to file instead of directory"""
+    async def test_list_project_os_error(self, manager, tmp_path):
+        """Test OS error handling during directory traversal"""
         # Arrange
-        project_id = 10
+        project_id = 6
         project_dir = tmp_path / str(project_id)
         project_dir.mkdir(parents=True)
-        (project_dir / "file.txt").write_text("Content")
+
+        # Act & Assert
+        with patch("backend.app.domain.manuscript_manager.os.walk") as mock_walk:
+            mock_os_error = OSError("I/O error")
+            mock_os_error.strerror = "I/O error"
+            mock_walk.side_effect = mock_os_error
+
+            with pytest.raises(HTTPException) as exc:
+                await manager.list_directory_contents(project_id)
+
+            assert exc.value.status_code == 500
+            assert "Error reading project directory 6: I/O error" in exc.value.detail
+
+    @pytest.mark.asyncio
+    async def test_list_project_path_is_not_directory(self, manager, tmp_path):
+        """Test error when project path points to a file instead of directory"""
+        # Arrange
+        project_id = 7
+        project_file = tmp_path / str(project_id)
+        project_file.write_text("This is a file, not a directory")
 
         # Act & Assert
         with pytest.raises(HTTPException) as exc:
-            await manager.list_directory_contents(project_id, "file.txt")
+            await manager.list_directory_contents(project_id)
 
         assert exc.value.status_code == 404
-        assert "Path is not a directory" in exc.value.detail
-
-    @pytest.mark.asyncio
-    @patch("backend.app.domain.manuscript_manager.os.listdir")
-    async def test_list_directory_os_error(self, mock_listdir, manager, tmp_path):
-        """Test OS error handling during directory reading"""
-        # Arrange
-        project_id = 12
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        mock_os_error = OSError("I/O error")
-        mock_os_error.strerror = "I/O error"
-        mock_listdir.side_effect = mock_os_error
-
-        # Act & Assert
-        with pytest.raises(HTTPException) as exc:
-            await manager.list_directory_contents(project_id, "")
-
-        assert exc.value.status_code == 500
-        assert "Error reading directory" in exc.value.detail
-        assert "I/O error" in exc.value.detail
-
-    @pytest.mark.asyncio
-    @patch("backend.app.domain.manuscript_manager.os.path.getsize")
-    async def test_list_directory_file_size_error_handling(
-        self, mock_getsize, manager, tmp_path
-    ):
-        """Test file size calculation error handling"""
-        # Arrange
-        project_id = 13
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-        (project_dir / "test.txt").write_text("Content")
-
-        # Mock getsize to raise an error
-        mock_getsize.side_effect = OSError("Cannot get size")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        # Should handle the error gracefully and set size to 0
-        assert len(result["entries"]) == 1
-        assert result["entries"][0]["size"] == 0
-
-    @pytest.mark.asyncio
-    async def test_list_directory_has_children_error_handling(self, manager, tmp_path):
-        """Test hasChildren detection with permission errors"""
-        # Arrange
-        project_id = 14
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        test_dir = project_dir / "test_dir"
-        test_dir.mkdir()
-
-        # Create a child file
-        (test_dir / "child.txt").write_text("Child")
-
-        # Act
-        with patch("backend.app.domain.manuscript_manager.os.listdir") as mock_listdir:
-
-            def side_effect(path):
-                if str(path).endswith("test_dir"):
-                    raise PermissionError("No access")
-                return ["test_dir"]
-
-            mock_listdir.side_effect = side_effect
-            result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        # Should handle the error gracefully and set hasChildren to False
-        assert len(result["entries"]) == 1
-        assert result["entries"][0]["hasChildren"] is False
-
-    @pytest.mark.asyncio
-    async def test_list_directory_alphabetical_sorting(self, manager, tmp_path):
-        """Test that entries are sorted alphabetically"""
-        # Arrange
-        project_id = 15
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Create files in non-alphabetical order
-        filenames = ["zebra.txt", "apple.txt", "banana.txt", "Cherry.txt"]
-        for filename in filenames:
-            (project_dir / filename).write_text("Content")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        entry_names = [entry["name"] for entry in result["entries"]]
-        expected_order = ["Cherry.txt", "apple.txt", "banana.txt", "zebra.txt"]
-        assert entry_names == expected_order
-
-    @pytest.mark.asyncio
-    async def test_list_directory_mixed_files_and_directories_sorting(
-        self, manager, tmp_path
-    ):
-        """Test sorting of mixed files and directories"""
-        # Arrange
-        project_id = 16
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-
-        # Create mixed content
-        (project_dir / "z_directory").mkdir()
-        (project_dir / "a_file.txt").write_text("Content")
-        (project_dir / "m_directory").mkdir()
-        (project_dir / "b_file.txt").write_text("Content")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        entry_names = [entry["name"] for entry in result["entries"]]
-        expected_order = ["a_file.txt", "b_file.txt", "m_directory", "z_directory"]
-        assert entry_names == expected_order
-
-    @pytest.mark.asyncio
-    async def test_list_directory_zero_project_id(self, manager, tmp_path):
-        """Test with project_id = 0"""
-        # Arrange
-        project_id = 0
-        project_dir = tmp_path / str(project_id)
-        project_dir.mkdir(parents=True)
-        (project_dir / "test.txt").write_text("Content")
-
-        # Act
-        result = await manager.list_directory_contents(project_id, "")
-
-        # Assert
-        assert result["path"] == ""
-        assert len(result["entries"]) == 1
-        assert result["entries"][0]["name"] == "test.txt"
+        assert f"Project path is not a directory: {project_id}" in exc.value.detail

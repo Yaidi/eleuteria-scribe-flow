@@ -51,7 +51,7 @@ describe("<Manuscript />", () => {
     vi.mocked(useSectionsHooks.useManuscript).mockReturnValue({
       currentChapter: {
         title: "Title Chapter",
-        id: "",
+        path: "",
         description: "",
         scenes: [],
       },
@@ -104,11 +104,8 @@ describe("<Manuscript />", () => {
       currentChapter: undefined,
       currentScene: {
         title: "Title Scene",
-        id: "",
+        path: "",
         content: "",
-        wordCount: 0,
-        wordGoal: 0,
-        characters: [],
       },
     });
     renderWithProviders(<Manuscript />);

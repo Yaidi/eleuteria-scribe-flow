@@ -4,6 +4,7 @@ import {
   saveSceneSession,
   addChapterAndSaveScene,
   SaveSceneArgs,
+  getManuscriptList,
 } from "@/store/sections/manuscript/slice";
 import { mockChapters } from "../../../../mocks";
 import { Scene } from "@/types/sections";
@@ -15,6 +16,17 @@ global.fetch = vi.fn();
 vi.mock("@/hooks/useSections.ts", () => ({
   useProjectId: vi.fn(() => 1),
 }));
+
+vi.mock("@/store/electron/actions", () => ({
+  getManuscriptListFromStore: vi.fn(),
+  setManuscriptListToStore: vi.fn(),
+}));
+
+const { getManuscriptListFromStore, setManuscriptListToStore } = await import(
+  "@/store/electron/actions"
+);
+const mockedGetManuscriptListFromStore = getManuscriptListFromStore as ReturnType<typeof vi.fn>;
+const mockedSetManuscriptListToStore = setManuscriptListToStore as ReturnType<typeof vi.fn>;
 
 const mockedFetch = fetch as ReturnType<typeof vi.fn<typeof fetch>>;
 
@@ -51,12 +63,9 @@ describe("ManuscriptSlice", () => {
   let store: ReturnType<typeof createMockStore>;
 
   const mockScene: Scene = {
-    id: "scene-1",
+    path: "scene-1",
     title: "Opening Scene",
     content: "It was a dark and stormy night...",
-    wordCount: 100,
-    wordGoal: 500,
-    characters: ["John Doe", "Jane Smith"],
   };
 
   const mockChapterWithScenes = {
@@ -406,6 +415,181 @@ describe("ManuscriptSlice", () => {
       const result = await store.dispatch(action);
 
       expect(result.type).toBe(saveSceneSession.fulfilled.type);
+    });
+  });
+
+  describe("getManuscriptList", () => {
+    const mockProjectId = 123;
+    const mockManuscriptListResponse = {
+      path: "project-123",
+      chapters: mockChapters,
+    };
+
+    test("should handle successful manuscript list retrieval from store", async () => {
+      // Mock successful store retrieval
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(mockManuscriptListResponse);
+
+      const action = getManuscriptList(mockProjectId);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.fulfilled.type);
+      expect(result.payload).toEqual(mockManuscriptListResponse);
+
+      // Verify store was checked
+      expect(mockedGetManuscriptListFromStore).toHaveBeenCalledWith(mockProjectId);
+
+      // Should not call API when found in store
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test("should fetch from API when not found in store", async () => {
+      // Mock empty store
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(null);
+
+      // Mock successful API response
+      mockedFetch.mockResolvedValueOnce(createMockResponse(mockManuscriptListResponse));
+
+      // Mock successful store save
+      mockedSetManuscriptListToStore.mockResolvedValueOnce(undefined);
+
+      const action = getManuscriptList(mockProjectId);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.fulfilled.type);
+      expect(result.payload).toEqual(mockManuscriptListResponse);
+
+      // Verify store was checked
+      expect(mockedGetManuscriptListFromStore).toHaveBeenCalledWith(mockProjectId);
+
+      // Verify API was called
+      expect(fetch).toHaveBeenCalledWith(`/api/manuscript/list/${mockProjectId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Verify result was saved to store
+      expect(mockedSetManuscriptListToStore).toHaveBeenCalledWith(
+        mockProjectId,
+        mockManuscriptListResponse,
+      );
+    });
+
+    test("should handle API failure", async () => {
+      // Mock empty store
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(null);
+
+      // Mock failed API response
+      mockedFetch.mockResolvedValueOnce(createMockResponse(null, false));
+
+      const action = getManuscriptList(mockProjectId);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.rejected.type);
+      expect(result.payload).toBe("Failed to retrieve manuscript list");
+
+      // Verify store was checked
+      expect(mockedGetManuscriptListFromStore).toHaveBeenCalledWith(mockProjectId);
+
+      // Verify API was called
+      expect(fetch).toHaveBeenCalledWith(`/api/manuscript/list/${mockProjectId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Should not save to store on failure
+      expect(mockedSetManuscriptListToStore).not.toHaveBeenCalled();
+    });
+
+    test("should handle network errors", async () => {
+      // Mock empty store
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(null);
+
+      // Mock network error
+      mockedFetch.mockRejectedValueOnce(new Error("Network error"));
+
+      const action = getManuscriptList(mockProjectId);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.rejected.type);
+    });
+
+    test("should handle store retrieval errors", async () => {
+      // Mock store error
+      mockedGetManuscriptListFromStore.mockRejectedValueOnce(new Error("Store error"));
+
+      const action = getManuscriptList(mockProjectId);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.rejected.type);
+    });
+
+    test("should create correct action structure", async () => {
+      const dispatch = vi.fn();
+      const getState = vi.fn();
+
+      // Mock successful store retrieval
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(mockManuscriptListResponse);
+
+      const thunkAction = getManuscriptList(mockProjectId);
+      const result = await thunkAction(dispatch, getState, undefined);
+
+      expect(result.type).toBe(getManuscriptList.fulfilled.type);
+      expect(result.meta.arg).toBe(mockProjectId);
+      expect(result.payload).toEqual(mockManuscriptListResponse);
+    });
+
+    test("should handle different project IDs correctly", async () => {
+      const projectId1 = 100;
+      const projectId2 = 200;
+
+      const response1 = { ...mockManuscriptListResponse, path: "project-100" };
+      const response2 = { ...mockManuscriptListResponse, path: "project-200" };
+
+      // First project
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(response1);
+
+      const action1 = getManuscriptList(projectId1);
+      const result1 = await store.dispatch(action1);
+
+      expect(result1.payload).toEqual(response1);
+      expect(mockedGetManuscriptListFromStore).toHaveBeenCalledWith(projectId1);
+
+      // Second project
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(null);
+      mockedFetch.mockResolvedValueOnce(createMockResponse(response2));
+      mockedSetManuscriptListToStore.mockResolvedValueOnce(undefined);
+
+      const action2 = getManuscriptList(projectId2);
+      const result2 = await store.dispatch(action2);
+
+      expect(result2.payload).toEqual(response2);
+      expect(fetch).toHaveBeenCalledWith(`/api/manuscript/list/${projectId2}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    });
+
+    test("should handle zero project ID", async () => {
+      mockedGetManuscriptListFromStore.mockResolvedValueOnce(null);
+      mockedFetch.mockResolvedValueOnce(createMockResponse(mockManuscriptListResponse));
+      mockedSetManuscriptListToStore.mockResolvedValueOnce(undefined);
+
+      const action = getManuscriptList(0);
+      const result = await store.dispatch(action);
+
+      expect(result.type).toBe(getManuscriptList.fulfilled.type);
+      expect(fetch).toHaveBeenCalledWith("/api/manuscript/list/0", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     });
   });
 });

@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { IManuscriptReducer, manuscriptReducer } from "@/store/sections/manuscript/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { addChapter, removeChapter, selectChapter, selectScene } from "@/store";
-import { saveSceneSession } from "@/store/sections/manuscript/slice.ts";
+import { saveSceneSession, getManuscriptList } from "@/store/sections/manuscript/slice.ts";
 import { mockChapters } from "../../../mocks";
 import { Scene } from "@/types/sections";
 
@@ -17,12 +17,9 @@ describe("ManuscriptReducer", () => {
   };
 
   const mockScene: Scene = {
-    id: "scene-1",
+    path: "scene-1",
     title: "Opening Scene",
     content: "It was a dark and stormy night...",
-    wordCount: 100,
-    wordGoal: 500,
-    characters: ["John Doe", "Jane Smith"],
   };
 
   const mockChapterWithScenes = {
@@ -61,7 +58,7 @@ describe("ManuscriptReducer", () => {
   test("should handle remove chapter", () => {
     const action: UnknownAction = {
       type: removeChapter.type,
-      payload: mockChapters[0].id,
+      payload: mockChapters[0].path,
     };
     const result = manuscriptReducer({ ...initialState, chapters: mockChapters }, action);
     expect(result.chapters).not.toContain(mockChapters[0]);
@@ -79,7 +76,7 @@ describe("ManuscriptReducer", () => {
 
     const action: UnknownAction = {
       type: removeChapter.type,
-      payload: mockChapters[0].id,
+      payload: mockChapters[0].path,
     };
 
     const result = manuscriptReducer(stateWithCurrentChapter, action);
@@ -207,10 +204,56 @@ describe("ManuscriptReducer", () => {
 
     state = manuscriptReducer(state, {
       type: removeChapter.type,
-      payload: mockChapters[0].id,
+      payload: mockChapters[0].path,
     });
 
     expect(state.chapters).toHaveLength(1);
     expect(state.chapters[0]).toEqual(mockChapters[1]);
+  });
+
+  test("should handle getManuscriptList.pending", () => {
+    const action: UnknownAction = {
+      type: getManuscriptList.pending.type,
+      payload: undefined,
+    };
+
+    const result = manuscriptReducer(initialState, action);
+    expect(result.isSaving).toBe(false);
+    expect(result.error).toBeUndefined();
+  });
+
+  test("should handle getManuscriptList.fulfilled", () => {
+    const stateWithSaving = {
+      ...initialState,
+      isSaving: false,
+    };
+
+    const action: UnknownAction = {
+      type: getManuscriptList.fulfilled.type,
+      payload: { path: "path", chapters: mockChapters },
+    };
+
+    const result = manuscriptReducer(stateWithSaving, action);
+    expect(result.isSaving).toBe(false);
+    expect(result.chapters).toEqual(mockChapters);
+    expect(result.error).toBeUndefined();
+  });
+
+  test("should handle getManuscriptList.rejected", () => {
+    const errorMessage = "Failed to retrieve manuscript list";
+    const stateWithSaving = {
+      ...initialState,
+      isSaving: false,
+    };
+
+    const action: UnknownAction = {
+      type: getManuscriptList.rejected.type,
+      payload: errorMessage,
+    };
+
+    const result = manuscriptReducer(stateWithSaving, action);
+    expect(result.isSaving).toBe(false);
+    expect(result.error).toEqual(errorMessage);
+    expect(result.lastSavedDate).toBeUndefined();
   });
 });

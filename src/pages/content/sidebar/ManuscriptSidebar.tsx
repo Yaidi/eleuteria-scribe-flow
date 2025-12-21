@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button.tsx";
 import { Book, ChevronDown, ChevronRight, FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
-import { addChapter, selectChapter, selectScene } from "@/store";
-import { useState } from "react";
-import { useSections } from "@/hooks/useSections.ts";
+import { addChapter, getManuscriptList, selectChapter, selectScene } from "@/store";
+import { useEffect, useState } from "react";
+import { useProjectId, useSections } from "@/hooks/useSections.ts";
 import { useTranslation } from "react-i18next";
 import { IChapter, Scene } from "@/types/sections.ts";
 import { AppDispatch } from "@/store/config.ts";
@@ -15,22 +15,24 @@ const ManuscriptSidebar = () => {
   const [expandedChapters, setExpandedChapters] = useState<string[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const { manuscript } = useSections();
+  const projectId = useProjectId();
+
+  useEffect(() => {
+    dispatch(getManuscriptList(projectId));
+  }, [dispatch, projectId]);
 
   const createNewChapter = () => {
     const newChapterId = `chapter-${Date.now()}`;
     const newSceneId = `scene-${Date.now()}`;
 
     const newScene: Scene = {
-      id: newSceneId,
+      path: newSceneId,
       title: `Nueva Escena 1`,
       content: "",
-      wordCount: 0,
-      wordGoal: 0,
-      characters: [],
     };
 
     const newChapter: IChapter = {
-      id: newChapterId,
+      path: newChapterId,
       title: `Nuevo Capítulo ${manuscript.chapters.length + 1}`,
       description: "",
       scenes: [newScene],
@@ -60,16 +62,16 @@ const ManuscriptSidebar = () => {
       </div>
 
       {manuscript.chapters.map((chapter) => (
-        <div key={chapter.id} className="space-y-1">
+        <div key={chapter.path} className="space-y-1">
           <div className="flex items-center space-x-1">
             <Button
-              data-testid={`btn-chapter-${chapter.id}`}
+              data-testid={`btn-chapter-${chapter.path}`}
               variant="ghost"
               size="sm"
               className="h-6 w-6 p-0"
-              onClick={() => toggleChapter(chapter.id)}
+              onClick={() => toggleChapter(chapter.path)}
             >
-              {expandedChapters.includes(chapter.id) ? (
+              {expandedChapters.includes(chapter.path) ? (
                 <ChevronDown className="w-3 h-3" />
               ) : (
                 <ChevronRight className="w-3 h-3" />
@@ -80,7 +82,7 @@ const ManuscriptSidebar = () => {
               size="sm"
               className={cn(
                 "flex-1 justify-start h-7 px-2 text-xs",
-                manuscript.currentChapter?.id === chapter.id && "bg-blue-100 text-blue-700",
+                manuscript.currentChapter?.path === chapter.path && "bg-blue-100 text-blue-700",
               )}
               onClick={() => selectChapter(chapter)}
             >
@@ -89,16 +91,16 @@ const ManuscriptSidebar = () => {
             </Button>
           </div>
 
-          {expandedChapters.includes(chapter.id) && (
+          {expandedChapters.includes(chapter.path) && (
             <div className="ml-6 space-y-1">
               {chapter.scenes.map((scene) => (
                 <Button
-                  key={scene.id}
+                  key={scene.path}
                   variant="ghost"
                   size="sm"
                   className={cn(
                     "w-full justify-start h-6 px-2 text-xs",
-                    manuscript.currentScene?.id === scene.id && "bg-blue-100 text-blue-700",
+                    manuscript.currentScene?.path === scene.path && "bg-blue-100 text-blue-700",
                   )}
                   onClick={() => selectScene(scene)}
                 >

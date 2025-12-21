@@ -1,5 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addChapter, removeChapter, selectChapter, selectScene } from "@/store/sections";
+import {
+  addChapter,
+  getManuscriptList,
+  removeChapter,
+  selectChapter,
+  selectScene,
+} from "@/store/sections";
 import { IChapter, Scene } from "@/types/sections";
 import { saveSceneSession } from "@/store/sections/manuscript/slice.ts";
 
@@ -34,7 +40,7 @@ export const manuscriptReducer = createReducer(initialStateManuscript, (builder)
     .addCase(removeChapter, (state, { payload }) => {
       return {
         ...state,
-        chapters: state.chapters.filter((chapter) => chapter.id !== payload),
+        chapters: state.chapters.filter((chapter) => chapter.path !== payload),
         currentChapter: undefined,
         currentScene: undefined,
       };
@@ -66,6 +72,26 @@ export const manuscriptReducer = createReducer(initialStateManuscript, (builder)
       };
     })
     .addCase(saveSceneSession.rejected, (state, { payload }) => {
+      return {
+        ...state,
+        isSaving: false,
+        error: payload,
+      };
+    })
+    .addCase(getManuscriptList.pending, (state) => {
+      return {
+        ...state,
+        isSaving: false,
+      };
+    })
+    .addCase(getManuscriptList.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        isSaving: false,
+        chapters: payload.chapters,
+      };
+    })
+    .addCase(getManuscriptList.rejected, (state, { payload }) => {
       return {
         ...state,
         isSaving: false,

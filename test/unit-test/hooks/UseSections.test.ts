@@ -27,6 +27,7 @@ type MockThunk<Arg> = {
   fulfilled: { type: string };
   rejected: { type: string };
 };
+
 vi.mock("@/store/sections/manuscript/slice", () => {
   const saveSceneSession: MockThunk<SaveSceneArgs> = Object.assign(
     (args: SaveSceneArgs) => ({
@@ -40,7 +41,19 @@ vi.mock("@/store/sections/manuscript/slice", () => {
     },
   );
 
-  return { saveSceneSession };
+  const getManuscriptList: MockThunk<number> = Object.assign(
+    (projectId: number) => ({
+      type: "Section [Manuscript] Get Manuscript List",
+      payload: projectId,
+    }),
+    {
+      pending: { type: "Section [Manuscript] Get Manuscript List/pending" },
+      fulfilled: { type: "Section [Manuscript] Get Manuscript List/fulfilled" },
+      rejected: { type: "Section [Manuscript] Get Manuscript List/rejected" },
+    },
+  );
+
+  return { saveSceneSession, getManuscriptList };
 });
 
 // Mock useCallback
@@ -474,12 +487,9 @@ describe("hooks", () => {
                 chapters: mockChapters,
                 currentChapter: mockChapters[0],
                 currentScene: {
-                  id: "scene-1",
+                  path: "scene-1",
                   title: "Opening Scene",
                   content: "Original content",
-                  wordCount: 0,
-                  wordGoal: 0,
-                  characters: [],
                 },
                 isSaving: false,
                 lastSavedDate: undefined,
@@ -625,12 +635,9 @@ describe("hooks", () => {
         chapters: mockChapters,
         currentChapter: mockChapters[0],
         currentScene: {
-          id: "scene-1",
+          path: "scene-1",
           title: "Opening Scene",
           content: "Scene content",
-          wordCount: 0,
-          wordGoal: 0,
-          characters: [],
         },
         isSaving: true,
         lastSavedDate: new Date(),

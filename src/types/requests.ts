@@ -1,5 +1,5 @@
 import { ProjectData, ProjectType } from "@/types/project.ts";
-import { ICharacter } from "@/types/sections.ts";
+import { IChapter, ICharacter } from "@/types/sections.ts";
 
 export interface RequestAddProject {
   projectListID: 1;
@@ -21,4 +21,9 @@ export interface ResponseProjects {
 
 export interface ResponseId {
   id: number;
+}
+
+export interface ManuscriptListResponse {
+  path: string;
+  chapters: IChapter[];
 }

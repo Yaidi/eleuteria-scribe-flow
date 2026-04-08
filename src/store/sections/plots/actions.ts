@@ -10,7 +10,7 @@ export interface responseDelete {
 }
 
 export const updatePlot = createAsyncThunk<IPlot, requestPlot>(
-  "[Plot] Update Plot",
+  "Section [Plot] Update Plot",
   async ({ plot }) => {
     const response = await fetch(`${host}/plot/${plot.id}`, {
       method: "PATCH",

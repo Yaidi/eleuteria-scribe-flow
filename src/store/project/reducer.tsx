@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import { IProject, State } from "@/types/project.ts";
 import { ESections } from "@/types/sections.ts";
 import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
-import { setCurrentSection, updateGeneral } from "@/store";
+import { setCurrentSection } from "@/store";
 import {
   initialSectionsState,
   ISectionsReducer,
@@ -64,12 +64,6 @@ export const ProjectReducer = createReducer(initialState, (builder) => {
           words: payload.words,
         },
         sections: sectionsReducer(state.sections, action),
-      };
-    })
-    .addCase(updateGeneral.fulfilled, (state, { payload }) => {
-      return {
-        ...state,
-        currentProject: { ...state.currentProject!, projectName: payload.projectName },
       };
     })
     .addCase(setCurrentSection, (state, { payload }) => {

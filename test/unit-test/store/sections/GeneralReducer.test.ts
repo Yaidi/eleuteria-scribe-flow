@@ -1,24 +1,27 @@
 import { describe, expect, test } from "vitest";
-import { GenreType, IGeneral } from "@/types/sections.ts";
-import { generalReducer } from "@/store/sections/general/reducer.ts";
+import { GeneralSections, GenreType } from "@/types/sections.ts";
+import { generalReducer, GeneralState } from "@/store/sections/general/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
 import { updateGeneral } from "@/store";
 import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
 import { mockProjectData } from "../../../mocks";
 
 describe("GeneralReducer", () => {
-  const initialState: IGeneral = {
-    title: "",
-    author: "",
-    subtitle: "",
-    series: "",
-    volume: 0,
-    genre: GenreType.Romance,
-    license: "",
-    situation: "",
-    resumePhrase: "",
-    resumeParagraph: "",
-    resumePage: "",
+  const initialState: GeneralState = {
+    currentGeneralSection: GeneralSections.bookInfo,
+    general: {
+      author: "",
+      title: "",
+      subtitle: "",
+      series: "",
+      volume: 0,
+      genre: GenreType.Romance,
+      license: "",
+      situation: "",
+      resumePhrase: "",
+      resumeParagraph: "",
+      resumePage: "",
+    },
   };
 
   test("should handle initial state with unknown action", () => {

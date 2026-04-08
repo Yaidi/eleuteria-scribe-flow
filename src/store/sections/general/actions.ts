@@ -1,5 +1,5 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IGeneral } from "@/types/sections.ts";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { GeneralSections, IGeneral } from "@/types/sections.ts";
 import { host } from "@/https/fetch.ts";
 
 export interface requestGeneral {
@@ -29,4 +29,8 @@ export const updateGeneral = createAsyncThunk<responseUpdateGeneral, requestGene
     }
     return await response.json();
   },
+);
+
+export const setCurrentGeneral = createAction<GeneralSections>(
+  "Section [General] Set Current general section",
 );

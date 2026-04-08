@@ -35,6 +35,7 @@ describe("WorldElementNode", () => {
   test("renders element name", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}
@@ -52,6 +53,7 @@ describe("WorldElementNode", () => {
   test("dispatches setCurrentWorldElement on click", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}
@@ -69,6 +71,7 @@ describe("WorldElementNode", () => {
   test("calls handleDragStart on dragStart", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}
@@ -88,6 +91,7 @@ describe("WorldElementNode", () => {
   test("resets selectedElement on dragEnd", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}
@@ -108,6 +112,7 @@ describe("WorldElementNode", () => {
   test("calls handleEnter on dragEnter", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}
@@ -127,6 +132,7 @@ describe("WorldElementNode", () => {
   test("calls handleDrop if depth < 2", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={1}
@@ -146,6 +152,7 @@ describe("WorldElementNode", () => {
   test("does not call handleDrop if depth >= 2", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={2}
@@ -165,6 +172,7 @@ describe("WorldElementNode", () => {
   test("renders children recursively", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: { ...baseElement, childrenIds: [2] }, 2: childElement }}
         element={{ ...baseElement, childrenIds: [2] }}
         depth={0}
@@ -181,6 +189,7 @@ describe("WorldElementNode", () => {
   test("applies dragging over styles when isDraggingOver is true", () => {
     render(
       <WorldElementNode
+        currentWorldElement={null}
         worldElements={{ 1: baseElement }}
         element={baseElement}
         depth={0}

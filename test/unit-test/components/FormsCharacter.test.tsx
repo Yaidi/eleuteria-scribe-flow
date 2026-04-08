@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import FormsCharacters from "@/components/FormsCharacters";
+import FormsCharacters from "@/components/forms/FormsCharacters.tsx";
 import { mockCharacters } from "../../mocks";
 import { renderWithStore } from "../../utils/renderWithProviders.tsx";
 import { deleteCharacterFetch, updateCharacter } from "@/store";

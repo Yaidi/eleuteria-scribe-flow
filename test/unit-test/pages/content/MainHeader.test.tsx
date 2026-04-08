@@ -23,14 +23,16 @@ describe("MainHeader", () => {
         ...mockProjectData.sections,
       },
     };
-    render(<MainHeader currentProject={project} />);
+    render(<MainHeader currentProject={project} darkMode={false} toggleDarkMode={vi.fn()} />);
 
     expect(screen.getByText("The Dark Streets")).toBeInTheDocument();
     expect(screen.getByText("novel")).toBeInTheDocument();
   });
 
   test("auto saves on mount", async () => {
-    render(<MainHeader currentProject={mockProjectData} />);
+    render(
+      <MainHeader currentProject={mockProjectData} darkMode={false} toggleDarkMode={vi.fn()} />,
+    );
 
     await new Promise((r) => setTimeout(r, 10)); // wait for autosave
 
@@ -46,7 +48,9 @@ describe("MainHeader", () => {
       wordGoal: 1000,
     };
 
-    render(<MainHeader currentProject={projectWithGoal} />);
+    render(
+      <MainHeader currentProject={projectWithGoal} darkMode={false} toggleDarkMode={vi.fn()} />,
+    );
 
     const progressRoot = screen.getByTestId("progressbar");
     expect(progressRoot).toBeInTheDocument();

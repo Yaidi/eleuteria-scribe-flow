@@ -133,11 +133,11 @@ describe("hooks", () => {
 
       const { result, rerender } = renderHook(() => useSections());
 
-      expect(result.current.general.title).toBe("Initial Title");
+      expect(result.current.general.general.title).toBe("Initial Title");
 
       rerender();
 
-      expect(result.current.general.title).toBe("Updated Title");
+      expect(result.current.general.general.title).toBe("Updated Title");
     });
   });
 
@@ -579,7 +579,7 @@ describe("hooks", () => {
 
       expect(sectionsResult.current.manuscript).toEqual(manuscriptResult.current);
       expect(projectIdResult.current).toBe(mockProjectData.id);
-      expect(sectionsResult.current.general.title).toBe("The Dark Streets");
+      expect(sectionsResult.current.general.general.title).toBe("The Dark Streets");
       expect(typeof saveSceneResult.current).toBe("function");
     });
 

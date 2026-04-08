@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import { CardHeader } from "@/components/ui/card.tsx";
 import TextEditor from "@/components/ui/text-editor.tsx";
 import { useManuscript, useSaveScene } from "@/hooks/useSections.ts";
 
@@ -7,16 +7,14 @@ const Manuscript = () => {
   const manuscript = useManuscript();
 
   return (
-    <Card>
+    <section>
       <CardHeader>
-        <CardTitle className="capitalize">
+        <h1 className="capitalize text-2xl font-semibold">
           {manuscript.currentChapter?.title || manuscript.currentScene?.title}
-        </CardTitle>
+        </h1>
       </CardHeader>
-      <CardContent>
-        <TextEditor onSaveScene={saveScene} />
-      </CardContent>
-    </Card>
+      <TextEditor onSaveScene={saveScene} />
+    </section>
   );
 };
 

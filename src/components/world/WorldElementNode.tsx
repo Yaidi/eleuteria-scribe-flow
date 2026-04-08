@@ -1,4 +1,4 @@
-import { IWorldElementWithChildren } from "@/types/sections.ts";
+import { IWorldElement, IWorldElementWithChildren } from "@/types/sections.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { cn } from "@/lib/utils.ts";
 import React, { useState } from "react";
@@ -6,6 +6,7 @@ import { setCurrentWorldElement } from "@/store";
 import { UnknownAction } from "@reduxjs/toolkit";
 
 export interface WorldElementNodeProps {
+  currentWorldElement: IWorldElement | null;
   worldElements: Record<number, IWorldElementWithChildren>;
   element: IWorldElementWithChildren;
   depth: number;
@@ -23,6 +24,7 @@ export interface WorldElementNodeProps {
   isDraggingOver?: boolean;
 }
 const WorldElementNode: React.FC<WorldElementNodeProps> = ({
+  currentWorldElement,
   worldElements,
   element,
   depth,
@@ -55,6 +57,7 @@ const WorldElementNode: React.FC<WorldElementNodeProps> = ({
         className={cn(
           "w-full justify-start h-7 px-2 text-xs cursor-move transition-colors",
           selectedElement === element.id && "opacity-50",
+          currentWorldElement?.id === element.id && "bg-slate-200 dark:bg-slate-700",
           isDraggingOver && "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
         )}
       >
@@ -73,6 +76,7 @@ const WorldElementNode: React.FC<WorldElementNodeProps> = ({
               handleDrop={handleDrop}
               dispatch={dispatch}
               isDraggingOver={isDraggingOver}
+              currentWorldElement={currentWorldElement}
             />
           ))}
         </div>

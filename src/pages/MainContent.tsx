@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Moon, Sun } from "lucide-react";
 import Sidebar from "@/pages/content/Sidebar.tsx";
 import MainHeader from "@/pages/content/MainHeader.tsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +9,7 @@ import NavbarSections from "@/pages/content/NavbarSections.tsx";
 import { renderCurrentSection } from "@/pages/sections/SwitchSections.tsx";
 import { useTranslation } from "react-i18next";
 import { State } from "@/types/project.ts";
+import BackButton from "@/components/navbar/BackButton.tsx";
 
 const MainContent = () => {
   const { t } = useTranslation();
@@ -20,7 +18,6 @@ const MainContent = () => {
   );
   const [darkMode, setDarkMode] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     void getCurrentId().then((id: number) => {
@@ -47,43 +44,25 @@ const MainContent = () => {
 
   if (currentProject != undefined && status == State.SUCCESS)
     return (
-      <div className={`h-screen flex ${darkMode ? "dark" : ""}`}>
-        {/* Columna izquierda */}
-        <div className="flex flex-col h-full">
-          <header className="w-full flex items-center justify-start px-6 pb-8 pt-8">
-            <Button
-              data-testid="btn-back"
-              aria-label={t("buttons.back")}
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/")}
-              className="flex items-center space-x-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-            <h2 className="text-lg m-2 font-semibold text-slate-800 dark:text-slate-200">
-              Eleuteria
-            </h2>
-            <Button data-testid="btn-dark-mode" variant="ghost" size="sm" onClick={toggleDarkMode}>
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
-          </header>
-          <section className="flex flex-1 w-full overflow-hidden">
-            <nav className="min-w-40 max-w-64 bg-slate-50 dark:bg-slate-900 border-r border-t border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-4 overflow-auto">
-              <NavbarSections />
-            </nav>
-
-            {/* Sidebar */}
+      <section className={`h-screen flex flex-row-reverse w-full ${darkMode ? "dark" : ""}`}>
+        <article className="w-full overflow-hidden">
+          <MainHeader
+            currentProject={currentProject}
+            darkMode={darkMode}
+            toggleDarkMode={toggleDarkMode}
+          />
+          <main className="flex flex-col bg-white dark:bg-slate-800 py-8 px-4 overflow-hidden w-full h-full">
+            {renderCurrentSection(currentSection)}
+          </main>
+        </article>
+        <nav className="min-w-96 h-screen border-r border-slate-200 dark:border-slate-700 gap-4å overflow-hidden">
+          <BackButton darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          <div className="flex h-full border-t-2 bg-slate-50 dark:bg-slate-900">
+            <NavbarSections />
             <Sidebar activeSection={currentSection} />
-          </section>
-        </div>
-
-        {/* Contenido principal */}
-        <main className="flex flex-col bg-white dark:bg-slate-800 p-8 overflow-auto w-full">
-          <MainHeader currentProject={currentProject} />
-          {renderCurrentSection(currentSection)}
-        </main>
-      </div>
+          </div>
+        </nav>
+      </section>
     );
 };
 

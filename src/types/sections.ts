@@ -111,3 +111,9 @@ export enum ESections {
   Any = "Any",
   settings = "settings",
 }
+
+export enum GeneralSections {
+  bookInfo = "bookInfo",
+  goals = "goals",
+  statistics = "statistics",
+}

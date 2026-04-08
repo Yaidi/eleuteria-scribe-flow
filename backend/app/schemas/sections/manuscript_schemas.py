@@ -11,8 +11,3 @@ class SaveStartRequest(BaseModel):
 class GetManuscriptContentRequest(BaseModel):
     project_id: int
     path: str
-
-
-class ListManuscriptDirectoryRequest(BaseModel):
-    project_id: int
-    path: str = ""

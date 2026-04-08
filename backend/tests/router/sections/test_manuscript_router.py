@@ -1253,84 +1253,90 @@ class TestGetFileContentEndpoint:
 
 
 class TestListDirectoryEndpoint:
-    """Tests for POST /manuscript/list endpoint"""
+    """Tests for GET /manuscript/list/{project_id} endpoint"""
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_list_directory_success(self, mock_manager, client):
         """Test successful directory listing"""
         # Arrange
         expected_result = {
-            "path": "docs",
+            "path": "",
             "entries": [
                 {
-                    "name": "chapter1.md",
-                    "path": "docs/chapter1.md",
-                    "type": "file",
-                    "size": 1024,
+                    "name": "chapters",
+                    "path": "chapters",
+                    "type": "directory",
+                    "files": [
+                        {
+                            "name": "chapter1.md",
+                            "path": "chapters/chapter1.md",
+                            "type": "file",
+                            "size": 1024,
+                        }
+                    ],
                 },
                 {
                     "name": "scenes",
-                    "path": "docs/scenes",
+                    "path": "scenes",
                     "type": "directory",
-                    "hasChildren": True,
+                    "files": [
+                        {
+                            "name": "scene1.md",
+                            "path": "scenes/scene1.md",
+                            "type": "file",
+                            "size": 1536,
+                        }
+                    ],
                 },
             ],
         }
         mock_manager.list_directory_contents = AsyncMock(return_value=expected_result)
 
-        request_data = {"project_id": 123, "path": "docs"}
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/123")
 
         # Assert
         assert response.status_code == 200
         response_data = response.json()
         assert response_data == expected_result
-        mock_manager.list_directory_contents.assert_called_once_with(123, "docs")
+        mock_manager.list_directory_contents.assert_called_once_with(123)
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
-    def test_list_directory_project_root(self, mock_manager, client):
-        """Test listing project root"""
+    def test_list_directory_empty_project(self, mock_manager, client):
+        """Test listing empty project directory"""
         # Arrange
         expected_result = {
             "path": "",
-            "entries": [
-                {"name": "README.md", "path": "README.md", "type": "file", "size": 320}
-            ],
+            "entries": [],
         }
         mock_manager.list_directory_contents = AsyncMock(return_value=expected_result)
 
-        request_data = {"project_id": 456, "path": ""}
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/456")
 
         # Assert
         assert response.status_code == 200
         response_data = response.json()
         assert response_data == expected_result
-        mock_manager.list_directory_contents.assert_called_once_with(456, "")
+        mock_manager.list_directory_contents.assert_called_once_with(456)
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
-    def test_list_directory_not_found(self, mock_manager, client):
-        """Test directory not found error"""
+    def test_list_directory_project_not_found(self, mock_manager, client):
+        """Test project directory not found error"""
         # Arrange
         mock_manager.list_directory_contents = AsyncMock(
             side_effect=HTTPException(
-                status_code=404, detail="Directory not found: nonexistent"
+                status_code=404, detail="Project directory not found: 999"
             )
         )
 
-        request_data = {"project_id": 789, "path": "nonexistent"}
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/999")
 
         # Assert
         assert response.status_code == 404
         response_data = response.json()
-        assert response_data["detail"] == "Directory not found: nonexistent"
+        assert response_data["detail"] == "Project directory not found: 999"
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
     def test_list_directory_permission_error(self, mock_manager, client):
@@ -1339,63 +1345,90 @@ class TestListDirectoryEndpoint:
         mock_manager.list_directory_contents = AsyncMock(
             side_effect=HTTPException(
                 status_code=403,
-                detail="Insufficient permission to read directory: protected",
+                detail="Insufficient permission to read project directory: 101",
             )
         )
 
-        request_data = {"project_id": 101, "path": "protected"}
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/101")
 
         # Assert
         assert response.status_code == 403
         response_data = response.json()
         assert (
             response_data["detail"]
-            == "Insufficient permission to read directory: protected"
+            == "Insufficient permission to read project directory: 101"
         )
-
-    def test_list_directory_missing_project_id(self, client):
-        """Test request with missing project_id"""
-        # Arrange
-        request_data = {
-            "path": "docs"
-            # Missing project_id
-        }
-
-        # Act
-        response = client.post("/manuscript/list", json=request_data)
-
-        # Assert
-        assert response.status_code == 422  # Validation error
 
     def test_list_directory_invalid_project_id_type(self, client):
         """Test request with invalid project_id type"""
-        # Arrange
-        request_data = {"project_id": "not_an_integer", "path": "docs"}
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/not_an_integer")
 
         # Assert
         assert response.status_code == 422  # Validation error
 
     @patch("backend.app.router.sections.manuscript_router.manuscript_manager")
-    def test_list_directory_default_path(self, mock_manager, client):
-        """Test that path defaults to empty string"""
+    def test_list_directory_with_nested_structure(self, mock_manager, client):
+        """Test listing with complex nested directory structure"""
         # Arrange
-        expected_result = {"path": "", "entries": []}
+        expected_result = {
+            "path": "",
+            "entries": [
+                {
+                    "name": "chapters",
+                    "path": "chapters",
+                    "type": "directory",
+                    "files": [
+                        {
+                            "name": "intro.md",
+                            "path": "chapters/intro.md",
+                            "type": "file",
+                            "size": 1024,
+                        },
+                        {
+                            "name": "chapter1.md",
+                            "path": "chapters/part1/chapter1.md",
+                            "type": "file",
+                            "size": 2048,
+                        },
+                        {
+                            "name": "chapter2.md",
+                            "path": "chapters/part1/chapter2.md",
+                            "type": "file",
+                            "size": 1800,
+                        },
+                    ],
+                },
+                {
+                    "name": "drafts",
+                    "path": "drafts",
+                    "type": "directory",
+                    "files": [
+                        {
+                            "name": "draft_v1.md",
+                            "path": "drafts/draft_v1.md",
+                            "type": "file",
+                            "size": 5000,
+                        }
+                    ],
+                },
+            ],
+        }
         mock_manager.list_directory_contents = AsyncMock(return_value=expected_result)
 
-        request_data = {
-            "project_id": 123
-            # path not provided, should default to ""
-        }
-
         # Act
-        response = client.post("/manuscript/list", json=request_data)
+        response = client.get("/manuscript/list/789")
 
         # Assert
         assert response.status_code == 200
-        mock_manager.list_directory_contents.assert_called_once_with(123, "")
+        response_data = response.json()
+        assert response_data == expected_result
+        assert len(response_data["entries"]) == 2
+        assert (
+            len(response_data["entries"][0]["files"]) == 3
+        )  # chapters directory has 3 files
+        assert (
+            len(response_data["entries"][1]["files"]) == 1
+        )  # drafts directory has 1 file
+        mock_manager.list_directory_contents.assert_called_once_with(789)

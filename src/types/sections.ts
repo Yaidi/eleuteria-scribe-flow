@@ -83,15 +83,15 @@ export enum GenreType {
 }
 
 export interface IChapter {
-  id: string;
   title: string;
+  path: string;
   description: string;
   scenes: Scene[];
 }
 
 export interface Scene {
-  id: string;
   title: string;
+  path: string;
   content: string;
   wordCount: number;
   wordGoal: number;
@@ -110,6 +110,11 @@ export enum ESections {
   bibliography = "bibliography",
   Any = "Any",
   settings = "settings",
+}
+
+export enum ManuscriptEntryType {
+  file = "file",
+  directory = "directory",
 }
 
 export enum GeneralSections {

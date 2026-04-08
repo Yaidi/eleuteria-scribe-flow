@@ -3,6 +3,8 @@ import { Scene, IChapter } from "@/types/sections";
 import { addChapter } from "@/store";
 import { useProjectId } from "@/hooks/useSections.ts";
 import { host } from "@/https/fetch.ts";
+import { ManuscriptListResponse } from "@/types/requests.ts";
+import { getManuscriptListFromStore, setManuscriptListToStore } from "@/store/electron/actions.ts";
 
 /**
  * Guarda la escena editada en el backend.
@@ -16,6 +18,34 @@ export interface SaveSceneArgs {
   chapter: IChapter;
   projectId: number;
 }
+
+export const getManuscriptList = createAsyncThunk<
+  ManuscriptListResponse,
+  number,
+  { rejectValue: string }
+>("Section [Manuscript] Get Manuscript List", async (projectId: number, { rejectWithValue }) => {
+  const storedManuscriptListResponse = await getManuscriptListFromStore(projectId);
+
+  if (storedManuscriptListResponse) {
+    return storedManuscriptListResponse;
+  }
+
+  const response = await fetch(`${host}/manuscript/list/${projectId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    return rejectWithValue("Failed to retrieve manuscript list");
+  }
+
+  const manuscriptList = (await response.json()) as ManuscriptListResponse;
+  await setManuscriptListToStore(projectId, manuscriptList);
+
+  return manuscriptList;
+});
 
 export const saveSceneSession = createAsyncThunk<
   { lastSaved: Date }, // payload de éxito

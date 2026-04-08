@@ -6,7 +6,6 @@ from backend.app.domain.manuscript_manager import ManuscriptManager
 from backend.app.schemas.sections.manuscript_schemas import (
     SaveStartRequest,
     GetManuscriptContentRequest,
-    ListManuscriptDirectoryRequest,
 )
 
 manuscript_router = APIRouter(prefix="/manuscript", tags=["Manuscript API"])
@@ -76,27 +75,47 @@ async def get_file_content(request: GetManuscriptContentRequest):
     return {"content": content}
 
 
-@manuscript_router.post(
-    "/list",
+@manuscript_router.get(
+    "/list/{project_id}",
     responses={
         200: {
-            "description": "Directory listing successful",
+            "description": "Directory listing successful with grouped structure",
             "content": {
                 "application/json": {
                     "example": {
-                        "path": "docs",
+                        "path": "",
                         "entries": [
                             {
                                 "name": "chapters",
-                                "path": "docs/chapters",
+                                "path": "chapters",
                                 "type": "directory",
-                                "hasChildren": True,
+                                "files": [
+                                    {
+                                        "name": "intro.md",
+                                        "path": "chapters/intro.md",
+                                        "type": "file",
+                                        "size": 1024,
+                                    },
+                                    {
+                                        "name": "chapter1.md",
+                                        "path": "chapters/chapter1.md",
+                                        "type": "file",
+                                        "size": 2048,
+                                    },
+                                ],
                             },
                             {
-                                "name": "README.md",
-                                "path": "docs/README.md",
-                                "type": "file",
-                                "size": 1024,
+                                "name": "scenes",
+                                "path": "scenes",
+                                "type": "directory",
+                                "files": [
+                                    {
+                                        "name": "scene1.md",
+                                        "path": "scenes/scene1.md",
+                                        "type": "file",
+                                        "size": 1536,
+                                    }
+                                ],
                             },
                         ],
                     }
@@ -104,10 +123,10 @@ async def get_file_content(request: GetManuscriptContentRequest):
             },
         },
         404: {
-            "description": "Directory not found",
+            "description": "Project directory not found",
             "content": {
                 "application/json": {
-                    "example": {"detail": "Directory not found: nonexistent"}
+                    "example": {"detail": "Project directory not found: 123"}
                 }
             },
         },
@@ -116,36 +135,58 @@ async def get_file_content(request: GetManuscriptContentRequest):
             "content": {
                 "application/json": {
                     "example": {
-                        "detail": "Insufficient permission to read directory: protected"
+                        "detail": "Insufficient permission to read project directory: 123"
+                    }
+                }
+            },
+        },
+        500: {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Error reading project directory 123: Permission denied"
                     }
                 }
             },
         },
     },
 )
-async def list_directory(request: ListManuscriptDirectoryRequest):
+async def list_directory(project_id: int):
     """
-    List the contents of a directory in the manuscript storage.
+    List all directories and their files in the manuscript storage.
+
+    This endpoint returns a grouped structure where each directory contains
+    all its files (including files from subdirectories). The structure is
+    flattened to only show main directories with their complete file lists.
 
     Args:
-        request: Contains project_id and path
+        project_id (int): The project identifier
 
     Returns:
-        dict: Directory listing with path and entries
+        dict: Directory listing with grouped structure containing:
+            - path (str): Empty string (always project root)
+            - entries (list): List of directories, each containing:
+                - name (str): Directory name
+                - path (str): Directory relative path
+                - type (str): Always "directory"
+                - files (list): All files within this directory, each with:
+                    - name (str): File name
+                    - path (str): File relative path from project root
+                    - type (str): Always "file"
+                    - size (int): File size in bytes
 
     Examples:
-        POST /manuscript/list
-        {
-            "project_id": 123,
-            "path": ""  // Lists project root
-        }
+        GET /manuscript/list/123
 
-        POST /manuscript/list
-        {
-            "project_id": 123,
-            "path": "docs/chapters"  // Lists specific folder
-        }
+        Response structure groups all files by their parent directories:
+        - All files in "chapters/" directory (including subdirectories) are listed under chapters
+        - All files in "scenes/" directory (including subdirectories) are listed under scenes
+        - Each directory entry contains its complete file inventory
+
+    Raises:
+        HTTPException (404): If the project directory doesn't exist
+        HTTPException (403): If insufficient permissions to read the project directory
+        HTTPException (500): If an unexpected OSError occurs during directory traversal
     """
-    return await manuscript_manager.list_directory_contents(
-        request.project_id, request.path
-    )
+    return await manuscript_manager.list_directory_contents(project_id)

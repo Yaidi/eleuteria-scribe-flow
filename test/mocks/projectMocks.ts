@@ -160,19 +160,19 @@ export const mockGeneral: IGeneral = {
 // Mock data for IChapter
 export const mockChapters: IChapter[] = [
   {
-    id: "chap-1",
+    path: "chap-1",
     title: "The Beginning",
     description: "John takes on a new case involving a missing person.",
     scenes: [],
   },
   {
-    id: "chap-2",
+    path: "chap-2",
     title: "The Investigation",
     description: "John and Jane follow leads across the city.",
     scenes: [],
   },
   {
-    id: "chap-3",
+    path: "chap-3",
     title: "The Revelation",
     description: "The truth behind the disappearances is revealed.",
     scenes: [],

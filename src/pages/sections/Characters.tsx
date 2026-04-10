@@ -9,7 +9,7 @@ const Characters = () => {
   const { characters, currentCharacter } = useSections().characters;
   const projectId = useProjectId();
 
-  if (!projectId || !currentCharacter) return null;
+  if (!projectId) return null;
 
   return (
     <Card>

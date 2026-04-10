@@ -3,7 +3,6 @@ import { Progress } from "@/components/ui/progress.tsx";
 import React, { useEffect, useState } from "react";
 import { IProject } from "@/types/project.ts";
 import { useTranslation } from "react-i18next";
-import { useSections } from "@/hooks/useSections.ts";
 
 export interface MainHeaderProps {
   currentProject: IProject;
@@ -16,7 +15,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
 
   const [autoSave, setAutoSave] = useState(true);
   const { words, wordGoal } = currentProject;
-  const { title } = useSections().general.general;
+  const title = currentProject.projectName;
 
   useEffect(() => {
     if (autoSave) {
@@ -38,7 +37,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   return (
     <header className="flex flex-col px-6 py-6 items-center justify-around gap-y-2 backdrop-blur-sm border-b-2 w-full">
       <aside className="flex gap-2">
-        <h1 className="text-2xl font-bold dark:text-white text-gray-800">
+        <h1 data-testid="main-title" className="text-2xl font-bolddark:text-white text-gray-800">
           {title ?? t("untitled")}
         </h1>
         <Badge variant="default" className="text-xs px-1 py-0.5 justify-center dark:border-gray-50">

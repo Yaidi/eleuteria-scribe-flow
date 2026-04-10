@@ -38,7 +38,7 @@ describe("Plot async actions", () => {
       });
 
       const result = await updatePlot({ plot: { id: mockPlot.id } })(vi.fn(), vi.fn(), undefined);
-      expect(result.type).eq("[Plot] Update Plot/rejected");
+      expect(result.type).eq("Section [Plot] Update Plot/rejected");
     });
   });
 

@@ -14,13 +14,17 @@ import {
 import { getProjectFetch } from "@/store";
 
 export interface WorldState {
-  world: IWorld | null;
+  world: IWorld;
   worldElements: IWorldElementsObject;
   currentWorldElement: IWorldElement | null;
 }
 
 export const initialStateWorld: WorldState = {
-  world: null,
+  world: {
+    id: 0,
+    projectID: 0,
+    worldElements: [],
+  },
   worldElements: {},
   currentWorldElement: null,
 };

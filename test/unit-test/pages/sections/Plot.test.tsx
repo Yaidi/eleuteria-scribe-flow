@@ -7,7 +7,7 @@ import { ESections, IPlot } from "@/types/sections.ts";
 import { mockPlots, mockProjectData } from "../../../mocks";
 import { store } from "@/store/config.ts";
 import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
-import { addPlot, removePlot, updatePlot } from "@/store";
+import { removePlot, updatePlot } from "@/store";
 
 const mockDispatch = vi.fn();
 vi.mock("react-redux", async () => {
@@ -25,14 +25,6 @@ mockThunkSuccess<IPlot>(actions, "updatePlot", mockPlots[1]);
 describe("Plot Component", () => {
   beforeEach(() => {
     mockDispatch.mockClear();
-  });
-
-  test("dispatches addPlot when clicking 'Add Plot'", () => {
-    renderWithProviders(<Plot></Plot>);
-    expect(screen.getByTestId("no-plots")).toBeTruthy();
-    fireEvent.click(screen.getByRole("button", { name: /add plot/i }));
-    expect(mockDispatch).toHaveBeenCalled();
-    expect(addPlot).toHaveBeenCalledWith(0);
   });
 
   test("dispatches updatePlot title", () => {

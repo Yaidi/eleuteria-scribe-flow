@@ -74,9 +74,10 @@ const WorldSidebar = () => {
       <div className="flex items-center justify-between">
         <h3 className="dark:text-gray-50 font-semibold text-sm text-gray-700">{t("title")}</h3>
         <Button
+          data-testid="btn-add-world-element"
           aria-label={t("element.add")}
           variant="ghost"
-          onClick={() => add(world!.id)}
+          onClick={() => add(world.id)}
           size="sm"
         >
           <Plus className="w-3 h-3" />
@@ -102,7 +103,7 @@ const WorldSidebar = () => {
         onDragOver={handleDragOver}
         onDragEnter={(e) => {
           e.preventDefault();
-          setDragOverElement(0); // usamos 0 como "fake root" en UI
+          setDragOverElement(0);
         }}
         className={cn(
           "p-2 mb-3 text-xs italic text-gray-500 min-h-10",

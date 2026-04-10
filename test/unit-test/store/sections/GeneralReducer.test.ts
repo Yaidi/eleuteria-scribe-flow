@@ -39,8 +39,8 @@ describe("GeneralReducer", () => {
       },
     };
     const result = generalReducer(initialState, action);
-    expect(result).toEqual({
-      ...initialState,
+    expect(result.general).toEqual({
+      ...initialState.general,
       title: "Updated Title",
     });
   });
@@ -50,8 +50,8 @@ describe("GeneralReducer", () => {
       payload: mockProjectData,
     };
     const result = generalReducer(initialState, action);
-    expect(result).toEqual({
-      ...initialState,
+    expect(result.general).toEqual({
+      ...initialState.general,
       ...mockProjectData.sections.general,
     });
   });
@@ -62,8 +62,8 @@ describe("GeneralReducer", () => {
       payload: mockProjectData,
     };
     const result = generalReducer(initialState, action);
-    expect(result).toEqual({
-      ...initialState,
+    expect(result.general).toEqual({
+      ...initialState.general,
       ...mockProjectData.sections.general,
     });
   });

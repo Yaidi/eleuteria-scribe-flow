@@ -2,9 +2,8 @@ import { screen, fireEvent } from "@testing-library/react";
 import { vi, test, expect, describe } from "vitest";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
 import World from "@/pages/sections/World.tsx";
-import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store";
-import { mockProjectData, mockWorld, mockWorldElements } from "../../../mocks";
-import { ESections } from "@/types/sections.ts";
+import { removeWorldElement, updateWorldElement } from "@/store";
+import { mockWorld, mockWorldElements } from "../../../mocks";
 import { store } from "@/store/config.ts";
 import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
 import * as actions from "@/store";
@@ -27,28 +26,6 @@ describe("World component", () => {
     parentId: null,
     childrenIds: [],
   };
-  test("calls addWorldElement when 'Add Element' button is clicked", () => {
-    renderWithProviders(<World />, {
-      project: {
-        currentProject: mockProjectData,
-        currentSection: ESections.world,
-        sections: {
-          ...store.getState().project.sections,
-          world: {
-            world: mockWorld,
-            worldElements: {},
-            currentWorldElement: null,
-          },
-        },
-      },
-    });
-
-    const addButton = screen.getByRole("button", { name: /add element/i });
-    fireEvent.click(addButton);
-
-    expect(mockDispatch).toHaveBeenCalled();
-    expect(addWorldElement).toHaveBeenCalledWith(0);
-  });
 
   test("calls updateWorldElement when input is changed", () => {
     renderWithProviders(<World />, {

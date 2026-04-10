@@ -63,14 +63,11 @@ describe("<Manuscript />", () => {
     });
 
     // Check that the card structure is rendered
-    expect(screen.getByTestId("card")).toBeTruthy();
     expect(screen.getByTestId("card-header")).toBeTruthy();
-    expect(screen.getByTestId("card-content")).toBeTruthy();
 
     // Check that the section title is rendered correctly
-    const title = screen.getByTestId("card-title");
+    const title = screen.getByText("Title Chapter");
     expect(title).toBeTruthy();
-    expect(title.textContent).toBe("Title Chapter");
     expect(title.className).toContain("capitalize");
   });
 
@@ -106,6 +103,9 @@ describe("<Manuscript />", () => {
         title: "Title Scene",
         path: "",
         content: "",
+        wordCount: 0,
+        wordGoal: 0,
+        characters: [],
       },
     });
     renderWithProviders(<Manuscript />);

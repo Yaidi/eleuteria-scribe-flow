@@ -93,6 +93,9 @@ export interface Scene {
   title: string;
   path: string;
   content: string;
+  wordCount: number;
+  wordGoal: number;
+  characters: string[];
 }
 
 export enum ESections {
@@ -112,4 +115,10 @@ export enum ESections {
 export enum ManuscriptEntryType {
   file = "file",
   directory = "directory",
+}
+
+export enum GeneralSections {
+  bookInfo = "bookInfo",
+  goals = "goals",
+  statistics = "statistics",
 }

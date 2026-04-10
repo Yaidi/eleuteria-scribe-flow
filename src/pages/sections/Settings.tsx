@@ -11,7 +11,7 @@ const Settings = () => {
   return (
     <div
       data-testid="settings-page"
-      className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-900"
+      className="min-h-screen flex flex-col bg-white dark:bg-gray-900"
     >
       <main className="flex flex-col h-full p-4">
         <Select onValueChange={(e) => changeLanguage(e)}>

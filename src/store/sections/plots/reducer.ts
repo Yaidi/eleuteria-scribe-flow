@@ -31,6 +31,7 @@ export const plotsReducer = createReducer(initialStatePlots, (builder) => {
       return {
         ...state,
         plots: state.plots.map((plot) => (plot.id === payload.id ? { ...plot, ...payload } : plot)),
+        currentPlot: { ...state.currentPlot, ...payload },
       };
     })
     .addCase(removePlot.fulfilled, (state, { payload }) => {

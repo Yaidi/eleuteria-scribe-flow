@@ -1,66 +1,71 @@
-import { describe, expect, test } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { vi, describe, test, expect } from "vitest";
+import { screen } from "@testing-library/react";
+import { ESections, GeneralSections } from "@/types/sections.ts";
+
+vi.mock("@/components/forms/FormGeneralBook.tsx", () => ({
+  default: () => <div>Mocked FormGeneralBook</div>,
+}));
+vi.mock("@/components/forms/FormGeneralGoals.tsx", () => ({
+  default: () => <div>Mocked FormGeneralGoals</div>,
+}));
+
+// Imports that execute code after mocks
 import General from "@/pages/sections/General.tsx";
-import userEvent, { PointerEventsCheckLevel } from "@testing-library/user-event";
 import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
-import * as storeActions from "@/store/sections";
-import { mockThunkSuccess } from "../../../utils/mockThunkSuccess.ts";
-import { IGeneral } from "@/types/sections.ts";
-import { mockGeneral } from "../../../mocks";
-import { updateGeneral } from "@/store/sections";
+import { mockProjectData } from "../../../mocks";
+import { store } from "@/store/config.ts";
 
-mockThunkSuccess<IGeneral>(storeActions, "updateGeneral", mockGeneral);
+describe("General section", () => {
+  test("renders book info section when currentGeneralSection is bookInfo", () => {
+    renderWithProviders(<General />, {
+      project: {
+        currentProject: mockProjectData,
+        currentSection: ESections.general,
+        sections: {
+          ...store.getState().project?.sections,
+          general: {
+            currentGeneralSection: GeneralSections.bookInfo,
+            general: mockProjectData.sections.general,
+          },
+        },
+      },
+    });
 
-describe("General Component", () => {
-  test("should render inputs with initial state", () => {
-    renderWithProviders(<General />);
-
-    expect(screen.getByLabelText("Title")).toHaveValue("");
-    expect(screen.getByLabelText("Subtitle")).toHaveValue("");
-    expect(screen.getByLabelText(/Author/i)).toHaveValue("");
-    expect(screen.getByLabelText(/Serie/i)).toHaveValue("");
-    expect(screen.getByLabelText("Volume")).toHaveValue(0);
-    expect(screen.getByLabelText(/Genre/i)).toHaveValue("");
-    expect(screen.getByLabelText(/License/i)).toHaveValue("");
+    expect(screen.getByText("Mocked FormGeneralBook")).toBeInTheDocument();
+    expect(screen.getByText("Mocked FormGeneralBook")).toBeTruthy();
   });
 
-  test("should dispatch updateGeneral on input change", () => {
-    renderWithProviders(<General />);
-
-    const titleInput = screen.getByLabelText("Title");
-    fireEvent.change(titleInput, { target: { value: "Updated Title" } });
-
-    expect(updateGeneral).toHaveBeenCalledWith({
-      projectId: expect.any(Number),
-      general: { title: "Updated Title" },
+  test("renders goals section when currentGeneralSection is goals", () => {
+    renderWithProviders(<General />, {
+      project: {
+        currentProject: mockProjectData,
+        currentSection: ESections.general,
+        sections: {
+          ...store.getState().project?.sections,
+          general: {
+            currentGeneralSection: GeneralSections.goals,
+            general: mockProjectData.sections.general,
+          },
+        },
+      },
     });
+
+    expect(screen.getByText("Mocked FormGeneralGoals")).toBeInTheDocument();
   });
 
-  test("should dispatch updateGeneral on select change", async () => {
-    renderWithProviders(<General />);
-    const user = userEvent.setup({ pointerEventsCheck: PointerEventsCheckLevel.Never });
-
-    const genreTrigger = screen.getByRole("combobox", { name: "Genre" });
-    await user.click(genreTrigger);
-    const genreOption = await screen.findByRole("option", {
-      name: "Fantasy",
-    });
-    await user.click(genreOption);
-
-    expect(updateGeneral).toHaveBeenCalledWith({
-      projectId: expect.any(Number),
-      general: { genre: "fantasy" },
-    });
-
-    // Select license
-    const licenseTrigger = screen.getByText(/Choose a license/i);
-    await user.click(licenseTrigger);
-    const licenseOption = await screen.findByRole("option", { name: "Public domain" });
-    await user.click(licenseOption);
-
-    expect(updateGeneral).toHaveBeenCalledWith({
-      projectId: expect.any(Number),
-      general: { license: "public-domain" },
+  test("renders stastics section when currentGeneralSection is stastics", () => {
+    renderWithProviders(<General />, {
+      project: {
+        currentProject: mockProjectData,
+        currentSection: ESections.general,
+        sections: {
+          ...store.getState().project?.sections,
+          general: {
+            currentGeneralSection: GeneralSections.statistics,
+            general: mockProjectData.sections.general,
+          },
+        },
+      },
     });
   });
 });

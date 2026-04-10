@@ -4,6 +4,7 @@ import { ISectionsReducer } from "@/store/sections/sections-config.ts";
 import { IManuscriptReducer } from "@/store/sections/manuscript/reducer.ts";
 import { SaveSceneArgs, saveSceneSession } from "@/store";
 import { useCallback } from "react";
+import { IProject } from "@/types/project.ts";
 
 export const useSections = (): ISectionsReducer => {
   return useSelector((state: RootState) => state.project.sections);
@@ -11,6 +12,10 @@ export const useSections = (): ISectionsReducer => {
 
 export const useProjectId = (): number => {
   return useSelector((state: RootState) => state.project.currentProject?.id || 0);
+};
+
+export const useProjectInfo = (): IProject | undefined => {
+  return useSelector((state: RootState) => state.project.currentProject);
 };
 
 export const useManuscript = (): IManuscriptReducer => {

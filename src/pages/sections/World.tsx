@@ -1,10 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { IWorldElement } from "@/types/sections.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/config.ts";
-import { Button } from "@/components/ui/button.tsx";
-import { addWorldElement, removeWorldElement, updateWorldElement } from "@/store";
+import { removeWorldElement, updateWorldElement } from "@/store";
 import FormWorld from "@/components/forms/FormWorld.tsx";
 import { util } from "zod";
 import objectKeys = util.objectKeys;
@@ -14,12 +12,8 @@ import { useSections } from "@/hooks/useSections.ts";
 const World = () => {
   const { t } = useTranslation("world");
 
-  const { world, currentWorldElement, worldElements } = useSections().world;
+  const { currentWorldElement, worldElements } = useSections().world;
   const dispatch = useDispatch<AppDispatch>();
-
-  const add = (id: number) => {
-    dispatch(addWorldElement(id));
-  };
 
   const worldParentName = (current: IWorldElement) => {
     if (current.parentId != null) {
@@ -43,20 +37,14 @@ const World = () => {
         <CardTitle>
           {currentWorldElement != null ? worldParentName(currentWorldElement) : t("title")}
         </CardTitle>
-        <Button onClick={() => add(world!.id)} size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          {t("element.add")}
-        </Button>
       </CardHeader>
-      <CardContent>
-        {currentWorldElement && (
-          <FormWorld
-            currentWorldElement={currentWorldElement}
-            remove={remove}
-            update={update}
-          ></FormWorld>
-        )}
-      </CardContent>
+      {currentWorldElement && (
+        <FormWorld
+          currentWorldElement={currentWorldElement}
+          remove={remove}
+          update={update}
+        ></FormWorld>
+      )}
       {objectKeys(worldElements).length === 0 && (
         <div className="text-center py-8 text-slate-500">{t("element.noElements")}</div>
       )}

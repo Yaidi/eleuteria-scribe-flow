@@ -1,6 +1,9 @@
-import { IGeneral } from "@/types/sections.ts";
 import { combineReducers } from "@reduxjs/toolkit";
-import { generalReducer, initialStateGeneral } from "@/store/sections/general/reducer.ts";
+import {
+  generalReducer,
+  GeneralState,
+  initialStateGeneral,
+} from "@/store/sections/general/reducer.ts";
 import { initialStatePlots, IPlotsReducer, plotsReducer } from "@/store/sections/plots/reducer.ts";
 import { initialStateWorld, worldReducer, WorldState } from "@/store/sections/world/reducer.ts";
 import {
@@ -11,7 +14,7 @@ import {
 import { charactersReducer, ICharactersState, initialStateCharacters } from "@/store";
 
 export interface ISectionsReducer {
-  general: IGeneral;
+  general: GeneralState;
   characters: ICharactersState;
   plots: IPlotsReducer;
   world: WorldState;

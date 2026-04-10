@@ -1,4 +1,18 @@
 {
+  "information": "Información",
+  "aboutBook": "Acerca del libro",
+  "statistics": {
+    "title": "Estadísticas",
+    "wordCount": "Recuento de palabras",
+    "chapterCount": "Número de capítulos",
+    "averageWordsPerChapter": "Promedio de palabras por capítulo"
+  },
+  "goals": {
+    "title": "Metas",
+    "changeGoals": "Cambiar metas",
+    "changeWordGoal": "Cambiar meta de palabras",
+    "wordProgress": "Progreso de palabras"
+  },
   "author": {
     "name": "Autor",
     "placeholder": "Nombre del autor"

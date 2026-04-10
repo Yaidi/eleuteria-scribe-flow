@@ -66,6 +66,9 @@ describe("ManuscriptSlice", () => {
     path: "scene-1",
     title: "Opening Scene",
     content: "It was a dark and stormy night...",
+    wordCount: 0,
+    wordGoal: 0,
+    characters: [],
   };
 
   const mockChapterWithScenes = {

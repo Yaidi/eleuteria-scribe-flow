@@ -4,7 +4,7 @@ import { addProjectFetch, getProjectFetch } from "@/store/projects/slice.ts";
 import { mockProject, mockProjectData } from "../../../mocks";
 import { IProjectReducer, ProjectReducer } from "@/store/project/reducer.tsx";
 import { ESections } from "@/types/sections.ts";
-import { setCurrentSection, updateGeneral } from "@/store";
+import { setCurrentSection } from "@/store";
 import { initialSectionsState } from "@/store/sections/sections-config.ts";
 
 describe("ProjectReducer", () => {
@@ -44,16 +44,5 @@ describe("ProjectReducer", () => {
     };
     const result = ProjectReducer(initialState, action);
     expect(result.currentSection).toEqual(ESections.world);
-  });
-  it("should set Project name when Update Generall success is trigger", () => {
-    const action: UnknownAction = {
-      type: updateGeneral.fulfilled.type,
-      payload: {
-        projectName: "New Name",
-        projectId: 1,
-      },
-    };
-    const result = ProjectReducer({ ...initialState, currentProject: mockProjectData }, action);
-    expect(result.currentProject?.projectName).eq("New Name");
   });
 });

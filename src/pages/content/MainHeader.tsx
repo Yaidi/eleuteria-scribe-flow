@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 
 export interface MainHeaderProps {
   currentProject: IProject;
+  darkMode: boolean;
+  toggleDarkMode: () => void;
 }
 
 const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
@@ -13,6 +15,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
 
   const [autoSave, setAutoSave] = useState(true);
   const { words, wordGoal } = currentProject;
+  const title = currentProject.projectName;
 
   useEffect(() => {
     if (autoSave) {
@@ -32,28 +35,27 @@ const MainHeader: React.FC<MainHeaderProps> = ({ currentProject }) => {
   };
 
   return (
-    <header className="flex flex-col px-6 pb-4 backdrop-blur-sm items-start justify-between">
-      <h1 className="text-2xl font-bold dark:text-white text-gray-800">
-        {currentProject.projectName ?? "Untitled"}
-      </h1>
-      <div data-testid="words" className="flex items-center space-x-4 mt-1">
-        <div className="flex flex-col gap-y-2">
+    <header className="flex flex-col px-6 py-6 items-center justify-around gap-y-2 backdrop-blur-sm border-b-2 w-full">
+      <aside className="flex gap-2">
+        <h1 data-testid="main-title" className="text-2xl font-bolddark:text-white text-gray-800">
+          {title ?? t("untitled")}
+        </h1>
+        <Badge variant="default" className="text-xs px-1 py-0.5 justify-center dark:border-gray-50">
+          {t(`type.${currentProject.type}`)}
+        </Badge>
+      </aside>
+      <aside className="flex flex-col gap-y-4">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-gray-600">{t("writtingProgress")}</span>
           <span
             className="text-sm text-gray-500"
             aria-label={t("wordsComparisonAy11", { words: words, wordGoal: wordGoal })}
           >
             {t("wordsComparison", { words: words, wordGoal: wordGoal })}
           </span>
-          <Progress
-            data-testid="progressbar"
-            value={getProgressPercentage()}
-            className="w-32 h-2"
-          />
         </div>
-        <Badge variant="outline" className="text-xs dark:border-gray-50">
-          {t(`type.${currentProject.type}`)}
-        </Badge>
-      </div>
+        <Progress data-testid="progressbar" value={getProgressPercentage()} className="h-2" />
+      </aside>
     </header>
   );
 };

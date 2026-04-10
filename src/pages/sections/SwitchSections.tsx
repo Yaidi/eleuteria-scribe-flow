@@ -4,7 +4,7 @@ import Characters from "@/pages/sections/Characters.tsx";
 import Plot from "@/pages/sections/Plot.tsx";
 import World from "@/pages/sections/World.tsx";
 import Manuscript from "@/pages/sections/Manuscript.tsx";
-import Settings from "@/pages/Settings.tsx";
+import Settings from "@/pages/sections/Settings.tsx";
 
 export const renderCurrentSection = (currentSection: ESections) => {
   switch (currentSection) {

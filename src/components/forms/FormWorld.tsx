@@ -16,33 +16,28 @@ const FormWorld: React.FC<FormWorldProps> = ({ currentWorldElement, update, remo
   const { t } = useTranslation("world");
 
   return (
-    <div className="flex flex-col items-start w-full h-full gap-4">
-      <div
-        key={currentWorldElement.id}
-        className="border rounded-lg p-4 flex flex-col items-start gap-4 w-full"
-      >
-        <Label htmlFor={`name-world-element`}>{t("element.name.label")}</Label>
-        <Input
-          id={`name-world-element`}
-          name="title"
-          value={currentWorldElement.name}
-          onChange={(e) => update({ ...currentWorldElement, name: e.target.value })}
-          placeholder={t("element.name.placeholder")}
-        />
-        <Label htmlFor="description-world-element">{t("element.description.name")}</Label>
-        <Textarea
-          id="description-world-element"
-          name="description"
-          value={currentWorldElement.description}
-          onChange={(e) =>
-            update({
-              ...currentWorldElement,
-              description: e.target.value,
-            })
-          }
-          placeholder={t("element.name.placeholder")}
-        />
-      </div>
+    <div className="flex flex-col items-start w-full h-full gap-4 p-4">
+      <Label htmlFor={`name-world-element`}>{t("element.name.label")}</Label>
+      <Input
+        id={`name-world-element`}
+        name="title"
+        value={currentWorldElement.name ?? ""}
+        onChange={(e) => update({ ...currentWorldElement, name: e.target.value })}
+        placeholder={t("element.name.placeholder")}
+      />
+      <Label htmlFor="description-world-element">{t("element.description.name")}</Label>
+      <Textarea
+        id="description-world-element"
+        name="description"
+        value={currentWorldElement.description ?? ""}
+        onChange={(e) =>
+          update({
+            ...currentWorldElement,
+            description: e.target.value,
+          })
+        }
+        placeholder={t("element.name.placeholder")}
+      />
       <Button
         className="w-1/3 self-end"
         aria-label={t("element.delete")}

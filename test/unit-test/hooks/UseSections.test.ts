@@ -5,7 +5,7 @@ import { SaveSceneArgs, saveSceneSession } from "@/store/sections/manuscript/sli
 import { mockChapters, mockProject, mockProjectData } from "../../mocks";
 import { RootState } from "@/store/config.ts";
 import { initialSectionsState } from "@/store/sections/sections-config.ts";
-import { ESections } from "@/types/sections.ts";
+import { ESections, GeneralSections } from "@/types/sections.ts";
 import { State } from "@/types/project.ts";
 import { IManuscriptReducer } from "@/store/sections/manuscript/reducer.ts";
 
@@ -67,7 +67,7 @@ vi.mock("react", async () => {
 
 describe("hooks", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
   describe("useSections hook", () => {
     it("should return sections state from Redux store", () => {
@@ -122,14 +122,16 @@ describe("hooks", () => {
     });
 
     it("should update when sections state changes", () => {
-      const initialState = {
-        general: { title: "Initial Title" },
-        characters: [],
-        plots: [],
-        world: { worldElements: [] },
+      const mockSectionsState = {
+        general: {
+          general: mockProjectData.sections.general,
+        },
+        characters: mockProjectData.sections.characters,
+        plots: mockProjectData.sections.plots,
+        world: mockProjectData.sections.world,
         manuscript: {
-          chapters: [],
-          currentChapter: undefined,
+          chapters: mockChapters,
+          currentChapter: mockChapters[0],
           currentScene: undefined,
           isSaving: false,
           lastSavedDate: undefined,
@@ -138,27 +140,50 @@ describe("hooks", () => {
       };
 
       const updatedState = {
-        ...initialState,
-        general: { title: "Updated Title" },
+        general: {
+          general: {
+            ...mockProjectData.sections.general,
+            title: "Updated Title",
+          },
+        },
+        characters: mockProjectData.sections.characters,
+        plots: mockProjectData.sections.plots,
+        world: mockProjectData.sections.world,
+        manuscript: {
+          chapters: mockChapters,
+          currentChapter: mockChapters[0],
+          currentScene: undefined,
+          isSaving: false,
+          lastSavedDate: undefined,
+          error: undefined,
+        },
       };
 
-      mockUseSelector.mockReturnValueOnce(initialState).mockReturnValueOnce(updatedState);
+      mockUseSelector.mockReturnValueOnce(mockSectionsState).mockReturnValueOnce(updatedState);
 
       const { result, rerender } = renderHook(() => useSections());
 
-      expect(result.current.general.title).toBe("Initial Title");
+      expect(result.current.general.general.title).toBe("The Dark Streets");
 
       rerender();
 
-      expect(result.current.general.title).toBe("Updated Title");
+      expect(result.current.general.general.title).toBe("Updated Title");
     });
   });
 
   describe("useProjectId hook", () => {
     it("should return current project ID", () => {
-      const mockState = {
+      const mockState: RootState = {
         project: {
           currentProject: mockProject,
+          currentSection: ESections.general,
+          sections: {
+            ...initialSectionsState,
+          },
+        },
+        projects: {
+          projects: [],
+          status: State.LOADING,
         },
       };
 
@@ -490,6 +515,9 @@ describe("hooks", () => {
                   path: "scene-1",
                   title: "Opening Scene",
                   content: "Original content",
+                  wordCount: 0,
+                  wordGoal: 0,
+                  characters: [],
                 },
                 isSaving: false,
                 lastSavedDate: undefined,
@@ -556,27 +584,57 @@ describe("hooks", () => {
 
   describe("Integration tests", () => {
     it("should work together - all hooks with consistent state", () => {
-      const mockState = {
+      const mockState: RootState = {
         project: {
           currentProject: mockProjectData,
           sections: {
-            general: mockProjectData.sections.general,
-            characters: mockProjectData.sections.characters,
-            plots: mockProjectData.sections.plots,
-            world: mockProjectData.sections.world,
+            general: {
+              general: mockProjectData.sections.general,
+              currentGeneralSection: GeneralSections.bookInfo,
+            },
+            characters: {
+              characters: mockProjectData.sections.characters,
+              currentCharacter: null,
+            },
+            plots: {
+              plots: mockProjectData.sections.plots,
+              currentPlot: null,
+            },
+            world: {
+              worldElements: {
+                0: {
+                  ...mockProjectData.sections.world.worldElements[0],
+                  childrenIds: [],
+                },
+              },
+              currentWorldElement: null,
+              world: {
+                id: 0,
+                projectID: mockProjectData.id,
+                worldElements: mockProjectData.sections.world.worldElements,
+              },
+            },
             manuscript: {
               chapters: mockChapters,
               currentChapter: mockChapters[0],
               currentScene: {
-                id: "scene-1",
                 title: "Opening Scene",
                 content: "Scene content",
+                path: "",
+                wordCount: 0,
+                wordGoal: 0,
+                characters: [],
               },
               isSaving: false,
               lastSavedDate: undefined,
               error: undefined,
             },
           },
+          currentSection: ESections.general,
+        },
+        projects: {
+          projects: [],
+          status: State.LOADING,
         },
       };
 
@@ -589,7 +647,7 @@ describe("hooks", () => {
 
       expect(sectionsResult.current.manuscript).toEqual(manuscriptResult.current);
       expect(projectIdResult.current).toBe(mockProjectData.id);
-      expect(sectionsResult.current.general.title).toBe("The Dark Streets");
+      expect(sectionsResult.current.general.general.title).toBe("The Dark Streets");
       expect(typeof saveSceneResult.current).toBe("function");
     });
 
@@ -638,6 +696,9 @@ describe("hooks", () => {
           path: "scene-1",
           title: "Opening Scene",
           content: "Scene content",
+          wordCount: 0,
+          wordGoal: 0,
+          characters: [],
         },
         isSaving: true,
         lastSavedDate: new Date(),

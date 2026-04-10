@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { vi, describe, test, expect, beforeEach } from "vitest";
 import MainHeader from "@/pages/content/MainHeader.tsx";
 import { mockProjectData } from "../../../mocks";
 import { ProjectData } from "@/types/project.ts";
+import { renderWithProviders } from "../../../utils/renderWithProviders.tsx";
 
 // Mock use-toast
 vi.mock("@/hooks/use-toast", () => ({
@@ -23,14 +24,18 @@ describe("MainHeader", () => {
         ...mockProjectData.sections,
       },
     };
-    render(<MainHeader currentProject={project} />);
+    renderWithProviders(
+      <MainHeader currentProject={project} darkMode={false} toggleDarkMode={vi.fn()} />,
+    );
 
-    expect(screen.getByText("The Dark Streets")).toBeInTheDocument();
+    expect(screen.getByText(mockProjectData.projectName)).toBeInTheDocument();
     expect(screen.getByText("novel")).toBeInTheDocument();
   });
 
   test("auto saves on mount", async () => {
-    render(<MainHeader currentProject={mockProjectData} />);
+    renderWithProviders(
+      <MainHeader currentProject={mockProjectData} darkMode={false} toggleDarkMode={vi.fn()} />,
+    );
 
     await new Promise((r) => setTimeout(r, 10)); // wait for autosave
 
@@ -46,7 +51,9 @@ describe("MainHeader", () => {
       wordGoal: 1000,
     };
 
-    render(<MainHeader currentProject={projectWithGoal} />);
+    renderWithProviders(
+      <MainHeader currentProject={projectWithGoal} darkMode={false} toggleDarkMode={vi.fn()} />,
+    );
 
     const progressRoot = screen.getByTestId("progressbar");
     expect(progressRoot).toBeInTheDocument();

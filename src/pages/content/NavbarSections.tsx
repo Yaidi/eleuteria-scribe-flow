@@ -19,7 +19,7 @@ const NavbarSections = () => {
   const sections = useSections();
 
   return (
-    <>
+    <nav className="flex flex-col max-w-60 h-full px-4 py-6 gap-y-4 h-full">
       {Object.keys(sections).map((section) => (
         <button
           key={section}
@@ -44,7 +44,7 @@ const NavbarSections = () => {
         <Settings className="w-4 h-4 mr-2" />
         {t("settings")}
       </Button>
-    </>
+    </nav>
   );
 };
 

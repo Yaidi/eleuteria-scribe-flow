@@ -7,12 +7,12 @@ import { getCurrentId } from "@/store/electron/actions.ts";
 import { getProjectFetch } from "@/store/projects/slice.ts";
 import NavbarSections from "@/pages/content/NavbarSections.tsx";
 import { renderCurrentSection } from "@/pages/sections/SwitchSections.tsx";
-import { useTranslation } from "react-i18next";
 import { State } from "@/types/project.ts";
 import BackButton from "@/components/navbar/BackButton.tsx";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import LoadingProject from "@/pages/LoadingProject.tsx";
 
 const MainContent = () => {
-  const { t } = useTranslation();
   const { currentProject, currentSection, status } = useSelector(
     (state: RootState) => state.project,
   );
@@ -33,13 +33,7 @@ const MainContent = () => {
   };
 
   if (status == State.LOADING) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-lg font-medium text-slate-700 dark:text-slate-300">
-          {t("loading.loading_project")}
-        </p>
-      </div>
-    );
+    return <LoadingProject />;
   }
 
   if (currentProject != undefined && status == State.SUCCESS)
@@ -52,7 +46,9 @@ const MainContent = () => {
             toggleDarkMode={toggleDarkMode}
           />
           <main className="flex flex-col bg-white dark:bg-slate-800 py-8 px-4 overflow-hidden w-full h-full">
-            {renderCurrentSection(currentSection)}
+            <ScrollArea className="flex-1 overflow-y-auto">
+              {renderCurrentSection(currentSection)}
+            </ScrollArea>
           </main>
         </article>
         <nav className="min-w-96 h-screen border-r border-slate-200 dark:border-slate-700 gap-4å overflow-hidden">

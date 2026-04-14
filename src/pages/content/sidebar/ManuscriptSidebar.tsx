@@ -1,7 +1,15 @@
 import { Button } from "@/components/ui/button.tsx";
-import { Book, ChevronDown, ChevronRight, FileText, Plus } from "lucide-react";
+import { Book, ChevronDown, ChevronRight, FileText, Plus, Edit2, Trash } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
-import { addChapter, getManuscriptList, selectChapter, selectScene } from "@/store";
+import {
+  addChapter,
+  getManuscriptList,
+  selectChapter,
+  selectScene,
+  renameChapter,
+  renameScene,
+  removeSceneOrChapter,
+} from "@/store";
 import { useEffect, useState } from "react";
 import { useProjectId, useSections } from "@/hooks/useSections.ts";
 import { useTranslation } from "react-i18next";
@@ -9,6 +17,12 @@ import { IChapter, Scene } from "@/types/sections.ts";
 import { AppDispatch } from "@/store/config.ts";
 import { useDispatch } from "react-redux";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu.tsx";
 
 const ManuscriptSidebar = () => {
   const { t } = useTranslation("manuscript");
@@ -50,6 +64,32 @@ const ManuscriptSidebar = () => {
       prev.includes(chapterId) ? prev.filter((id) => id !== chapterId) : [...prev, chapterId],
     );
   };
+
+  const handleRenameChapter = (chapter: IChapter) => {
+    const newName = window.prompt(t("renameChapter", "Rename Chapter"), chapter.title);
+    if (newName && newName.trim() !== "") {
+      dispatch(renameChapter({ path: chapter.path, title: newName.trim() }));
+    }
+  };
+
+  const handleRemoveChapter = (chapter: IChapter) => {
+    if (window.confirm(t("confirmRemoveChapter"))) {
+      dispatch(removeSceneOrChapter({ path: chapter.path, projectId }));
+    }
+  };
+
+  const handleRenameScene = (chapterPath: string, scene: Scene) => {
+    const newName = window.prompt(t("renameScene", "Rename Scene"), scene.title);
+    if (newName && newName.trim() !== "") {
+      dispatch(renameScene({ chapterPath, scenePath: scene.path, title: newName.trim() }));
+    }
+  };
+
+  const handleRemoveScene = (scene: Scene) => {
+    if (window.confirm(t("confirmRemoveScene"))) {
+      dispatch(removeSceneOrChapter({ path: scene.path, projectId }));
+    }
+  };
   return (
     <div className="flex flex-col h-full w-full px-4 py-6 gap-y-2 bg-slate-50 dark:text-gray-50 dark:bg-slate-900 border-l rounded-br-md border-slate-200 dark:border-slate-700">
       <div className="flex items-center justify-between">
@@ -77,41 +117,80 @@ const ManuscriptSidebar = () => {
                 onClick={() => toggleChapter(chapter.path)}
               >
                 {expandedChapters.includes(chapter.path) ? (
-                  <ChevronDown className="w-3 h-3" />
+                  <ChevronDown className="w-3 h-3" aria-label={t("expandChapter")} />
                 ) : (
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="w-3 h-3" aria-label={t("collapsedChapter")} />
                 )}
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn(
-                  "flex-1 justify-start h-7 px-2 text-xs",
-                  manuscript.currentChapter?.path === chapter.path && "bg-blue-100 text-blue-700",
-                )}
-                onClick={() => selectChapter(chapter)}
-              >
-                <Book className="w-3 h-3 mr-1" />
-                {chapter.title}
-              </Button>
+              <ContextMenu>
+                <ContextMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      "flex-1 justify-start h-7 px-2 text-xs",
+                      manuscript.currentChapter?.path === chapter.path &&
+                        "bg-blue-100 text-blue-700",
+                    )}
+                    onClick={() => selectChapter(chapter)}
+                  >
+                    <Book className="w-3 h-3 mr-1" />
+                    {chapter.title}
+                  </Button>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                  <ContextMenuItem onClick={() => handleRenameChapter(chapter)}>
+                    <Edit2 className="w-4 h-4 mr-2" />
+                    {t("rename")}
+                  </ContextMenuItem>
+                  <ContextMenuItem
+                    onClick={() => handleRemoveChapter(chapter)}
+                    className="text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-900/50"
+                  >
+                    <Trash className="w-4 h-4 mr-2" />
+                    {t("remove")}
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
             </div>
 
             {expandedChapters.includes(chapter.path) && (
               <div className="ml-6 space-y-1">
                 {chapter.scenes.map((scene) => (
-                  <Button
-                    key={scene.path}
-                    variant="ghost"
-                    size="sm"
-                    className={cn(
-                      "w-full justify-start h-6 px-2 text-xs",
-                      manuscript.currentScene?.path === scene.path && "bg-blue-100 text-blue-700",
-                    )}
-                    onClick={() => selectScene(scene)}
-                  >
-                    <FileText className="w-3 h-3 mr-1" />
-                    {scene.title}
-                  </Button>
+                  <ContextMenu key={scene.path}>
+                    <ContextMenuTrigger asChild>
+                      <Button
+                        aria-label={t("selectScene")}
+                        variant="ghost"
+                        size="sm"
+                        className={cn(
+                          "w-full justify-start h-6 px-2 text-xs",
+                          manuscript.currentScene?.path === scene.path &&
+                            "bg-blue-100 text-blue-700",
+                        )}
+                        onClick={() => selectScene(scene)}
+                      >
+                        <FileText className="w-3 h-3 mr-1" />
+                        {scene.title}
+                      </Button>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      <ContextMenuItem
+                        data-testid="rename"
+                        onClick={() => handleRenameScene(chapter.path, scene)}
+                      >
+                        <Edit2 className="w-4 h-4 mr-2" />
+                        {t("rename")}
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onClick={() => handleRemoveScene(scene)}
+                        className="text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-900/50"
+                      >
+                        <Trash className="w-4 h-4 mr-2" />
+                        {t("remove")}
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 ))}
               </div>
             )}

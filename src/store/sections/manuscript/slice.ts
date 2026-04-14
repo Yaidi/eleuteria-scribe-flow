@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Scene, IChapter } from "@/types/sections";
-import { addChapter } from "@/store";
+import { addChapter } from "@/store/sections/manuscript/actions.ts";
 import { useProjectId } from "@/hooks/useSections.ts";
 import { host } from "@/https/fetch.ts";
 import { ManuscriptListResponse } from "@/types/requests.ts";
@@ -131,5 +131,33 @@ export const addChapterAndSaveScene = createAsyncThunk(
     };
 
     return dispatch(saveSceneSession(saveArgs));
+  },
+);
+
+export const removeSceneOrChapter = createAsyncThunk<
+  { path: string },
+  { path: string; projectId: number }
+>(
+  "Section [Manuscript] Remove Scene or Chapter",
+  async ({ path, projectId }, { rejectWithValue }) => {
+    try {
+      const endpoint = `${host}/manuscript/project/${projectId}/file/`;
+
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to remove ${path}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(`Failed to remove ${path}`);
+    }
   },
 );

@@ -1,6 +1,6 @@
 import { IProject } from "@/types/project.ts";
 import React, { useState } from "react";
-import Sidebar from "@/components/Sidebar.tsx";
+import Sidebar from "@/components/ui/Sidebar.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, Search } from "lucide-react";

@@ -1,4 +1,20 @@
 {
   "addChapter": "Add Chapter",
-  "structure": "Structure"
+  "structure": "Structure",
+  "confirmRemoveChapter": "Are you sure you want to remove this chapter? This action cannot be undone.",
+  "confirmRemoveSection": "Are you sure you want to remove this section? This action cannot be undone.",
+  "addSection": "Add Section",
+  "chapterTitle": "Chapter Title",
+  "sectionTitle": "Section Title",
+  "chapter": "Chapter",
+  "section": "Section",
+  "moveUp": "Move Up",
+  "moveDown": "Move Down",
+  "remove": "Remove",
+  "noChapters": "No chapters added yet. Click 'Add Chapter' to get started.",
+  "noSections": "No sections added yet. Click 'Add Section' to get started.",
+  "expandChapter": "Expand chapter to see scenes in the chapter",
+  "collapsedChapter": "Collapse chapter to hide scenes in the chapter",
+  "rename": "Rename",
+  "selectScene": "Click the scene to write it"
 }

@@ -1,4 +1,20 @@
 {
   "addChapter": "Anadir capítulo",
-  "structure": "Estructura"
+  "structure": "Estructura",
+  "confirmRemoveChapter": "¿Estás seguro de que quieres eliminar este capítulo? Esta acción no se puede deshacer.",
+  "confirmRemoveSection": "¿Estás seguro de que quieres eliminar esta sección? Esta acción no se puede deshacer.",
+  "addSection": "Anadir sección",
+  "chapterTitle": "Título del capítulo",
+  "sectionTitle": "Título de la sección",
+  "chapter": "Capítulo",
+  "section": "Sección",
+  "moveUp": "Mover hacia arriba",
+  "moveDown": "Mover hacia abajo",
+  "remove": "Eliminar",
+  "noChapters": "Aún no se han agregado capítulos. Haz clic en 'Anadir capítulo' para comenzar.",
+  "noSections": "Aún no se han agregado secciones. Haz clic en 'Anadir sección' para comenzar.",
+  "expandChapter": "Expandir el capítulo para mostrar las escenas en el capítulo",
+  "collapsedChapter": "Colapsar el capítulo para ocultar las escenas en el capítulo",
+  "rename": "Renombrar",
+  "selectScene": "Seleccionar escena para escribir"
 }

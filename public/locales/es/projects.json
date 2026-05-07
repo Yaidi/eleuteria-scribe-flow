@@ -3,5 +3,10 @@
   "search": {
     "placeholder": "Buscar Proyectos..."
   },
-  "title": "Proyectos"
+  "title": "Proyectos",
+  "toast": {
+    "remove": {
+      "success": "{{projectName}} eliminado"
+    }
+  }
 }

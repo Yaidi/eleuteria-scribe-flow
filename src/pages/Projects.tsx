@@ -7,19 +7,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SidebarProjects from "@/pages/projects/SidebarProjects.tsx";
 import Project from "@/pages/projects/Project.tsx";
+import { useTranslation } from "react-i18next";
 
 const Projects = () => {
   const { projects, status } = useSelector((state: RootState) => state.projects);
   const [currentProject, setCurrentProject] = useState<IProject | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const { t } = useTranslation("projects");
   const { toast } = useToast();
 
   const remove = (projectId: number, projectName: string) => {
     dispatch(removeProject(projectId)).unwrap();
     toast({
-      title: `Removed Project ${projectName}`,
-      description: "Your project was been removed!",
+      title: t("toast.remove.success", { projectName }),
     });
     setCurrentProject(null);
   };

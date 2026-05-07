@@ -32,17 +32,17 @@ const switchSection = (
   switch (section) {
     case GeneralSections.bookInfo:
       return (
-        <div>
+        <section>
           <h2 className="text-2xl font-semibold mb-4">{t("aboutBook")}</h2>
           <FormGeneralBook general={general} projectId={project.id} />
-        </div>
+        </section>
       );
     case GeneralSections.goals:
       return (
-        <div>
+        <section>
           <h2 className="text-2xl font-semibold mb-4">{t("goals.title")}</h2>
           <FormGeneralGoals project={project} />
-        </div>
+        </section>
       );
   }
 };

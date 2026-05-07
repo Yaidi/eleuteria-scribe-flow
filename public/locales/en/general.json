@@ -17,6 +17,12 @@
     },
     "placeholder": "Genre's Book"
   },
+  "goals": {
+    "title": "Goals",
+    "changeGoals": "Change goals",
+    "changeWordGoal": "Change word goal",
+    "wordProgress": "Word progress"
+  },
   "license": {
     "name": "License",
     "options": {

@@ -9,4 +9,10 @@ export const addChapter = createAction<IChapter>("Section [Manuscript] Add Chapt
 
 export const addScene = createAction<Scene>("Section [Manuscript] Add new scene");
 
-export const removeChapter = createAction<string>("Section [Manuscript] Remove Chapter");
+export const renameChapter = createAction<{ path: string; title: string }>(
+  "Section [Manuscript] Rename Chapter",
+);
+
+export const renameScene = createAction<{ chapterPath: string; scenePath: string; title: string }>(
+  "Section [Manuscript] Rename Scene",
+);

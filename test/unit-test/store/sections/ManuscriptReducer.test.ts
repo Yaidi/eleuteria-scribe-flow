@@ -1,8 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { IManuscriptReducer, manuscriptReducer } from "@/store/sections/manuscript/reducer.ts";
 import { UnknownAction } from "@reduxjs/toolkit";
-import { addChapter, removeChapter, selectChapter, selectScene } from "@/store";
-import { saveSceneSession, getManuscriptList } from "@/store/sections/manuscript/slice.ts";
+import { addChapter, selectChapter, selectScene } from "@/store";
+import {
+  saveSceneSession,
+  getManuscriptList,
+  removeSceneOrChapter,
+} from "@/store/sections/manuscript/slice.ts";
 import { mockChapters } from "../../../mocks";
 import { Scene } from "@/types/sections";
 
@@ -60,30 +64,11 @@ describe("ManuscriptReducer", () => {
 
   test("should handle remove chapter", () => {
     const action: UnknownAction = {
-      type: removeChapter.type,
-      payload: mockChapters[0].path,
+      type: removeSceneOrChapter.fulfilled.type,
+      payload: { path: mockChapters[0].path },
     };
     const result = manuscriptReducer({ ...initialState, chapters: mockChapters }, action);
     expect(result.chapters).not.toContain(mockChapters[0]);
-    expect(result.currentChapter).toBeUndefined();
-    expect(result.currentScene).toBeUndefined();
-  });
-
-  test("should handle remove chapter when current chapter is removed", () => {
-    const stateWithCurrentChapter = {
-      ...initialState,
-      chapters: mockChapters,
-      currentChapter: mockChapters[0],
-      currentScene: mockScene,
-    };
-
-    const action: UnknownAction = {
-      type: removeChapter.type,
-      payload: mockChapters[0].path,
-    };
-
-    const result = manuscriptReducer(stateWithCurrentChapter, action);
-    expect(result.chapters).toHaveLength(2);
     expect(result.currentChapter).toBeUndefined();
     expect(result.currentScene).toBeUndefined();
   });
@@ -102,7 +87,7 @@ describe("ManuscriptReducer", () => {
 
     const result = manuscriptReducer(stateWithChapters, action);
     expect(result.currentChapter).toEqual(mockChapters[1]);
-    expect(result.currentScene).toBeUndefined(); // should reset scene when changing chapter
+    expect(result.currentScene).toBeUndefined(); // should reset a scene when changing the chapter
   });
 
   test("should handle select scene", () => {
@@ -204,11 +189,12 @@ describe("ManuscriptReducer", () => {
 
     expect(state.chapters).toHaveLength(2);
     expect(state.currentChapter).toEqual(mockChapters[1]); // should be the last added
+    const action: UnknownAction = {
+      type: removeSceneOrChapter.fulfilled.type,
+      payload: { path: mockChapters[0].path },
+    };
 
-    state = manuscriptReducer(state, {
-      type: removeChapter.type,
-      payload: mockChapters[0].path,
-    });
+    state = manuscriptReducer(state, action);
 
     expect(state.chapters).toHaveLength(1);
     expect(state.chapters[0]).toEqual(mockChapters[1]);

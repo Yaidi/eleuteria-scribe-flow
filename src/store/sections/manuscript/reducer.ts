@@ -2,7 +2,9 @@ import { createReducer } from "@reduxjs/toolkit";
 import {
   addChapter,
   getManuscriptList,
-  removeChapter,
+  removeSceneOrChapter,
+  renameChapter,
+  renameScene,
   selectChapter,
   selectScene,
 } from "@/store/sections";
@@ -37,25 +39,69 @@ export const manuscriptReducer = createReducer(initialStateManuscript, (builder)
         currentScene: payload.scenes[0],
       };
     })
-    .addCase(removeChapter, (state, { payload }) => {
-      return {
-        ...state,
-        chapters: state.chapters.filter((chapter) => chapter.path !== payload),
-        currentChapter: undefined,
-        currentScene: undefined,
-      };
-    })
     .addCase(selectChapter, (state, { payload }) => {
       return {
         ...state,
         currentChapter: payload,
-        currentScene: undefined, // al cambiar de capítulo reiniciamos la escena
+        currentScene: undefined,
       };
     })
     .addCase(selectScene, (state, { payload }) => {
       return {
         ...state,
         currentScene: payload,
+      };
+    })
+    .addCase(renameChapter, (state, { payload }) => {
+      return {
+        ...state,
+        chapters: state.chapters.map((chapter) =>
+          chapter.path === payload.path ? { ...chapter, title: payload.title } : chapter,
+        ),
+      };
+    })
+    .addCase(renameScene, (state, { payload }) => {
+      const updatedChapters = state.chapters.map((chapter) => {
+        if (chapter.path !== payload.chapterPath) return chapter;
+        return {
+          ...chapter,
+          scenes: chapter.scenes.map((scene) =>
+            scene.path === payload.scenePath ? { ...scene, title: payload.title } : scene,
+          ),
+        };
+      });
+      const updatedCurrentScene =
+        state.currentScene?.path === payload.scenePath
+          ? { ...state.currentScene, title: payload.title }
+          : state.currentScene;
+      return {
+        ...state,
+        chapters: updatedChapters,
+        currentScene: updatedCurrentScene,
+      };
+    })
+    .addCase(removeSceneOrChapter.fulfilled, (state, { payload }) => {
+      const chapter = state.chapters.find((c) => c.path === payload.path);
+      if (!chapter) return state;
+
+      // If last scene, remove the entire chapter
+      if (chapter.scenes.length <= 1) {
+        return {
+          ...state,
+          chapters: state.chapters.filter((c) => c.path !== payload.path),
+          currentChapter:
+            state.currentChapter?.path === payload.path ? undefined : state.currentChapter,
+          currentScene: state.currentScene?.path === payload.path ? undefined : state.currentScene,
+        };
+      }
+
+      return {
+        ...state,
+        chapters: state.chapters.map((c) => {
+          if (c.path !== payload.path) return c;
+          return { ...c, scenes: c.scenes.filter((s) => s.path !== payload.path) };
+        }),
+        currentScene: state.currentScene?.path === payload.path ? undefined : state.currentScene,
       };
     })
     .addCase(saveSceneSession.pending, (state) => {
